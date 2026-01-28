@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visual Designer Demo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <h1 class="logo">Demo App</h1>
+      <div class="nav-links">
+        <a href="/" data-route="/" class="nav-link">Dashboard</a>
+        <a href="/settings" data-route="/settings" class="nav-link">Settings</a>
+        <a href="/profile" data-route="/profile" class="nav-link">Profile</a>
+      </div>
+      <div class="editor-toggle">
+        <button id="editorToggle" class="toggle-btn">Editor Mode: OFF</button>
+      </div>
+    </div>
+  </nav>
+
+  <main id="app">
+    <!-- Dashboard Page -->
+    <div id="dashboard" class="page active">
+      <div class="page-header">
+        <h2>Dashboard</h2>
+        <p class="subtitle">Welcome to your dashboard</p>
+      </div>
+
+      <div class="content-grid">
+        <div class="card">
+          <h3>Quick Actions</h3>
+          <div class="card-content">
+            <button id="createBtn" class="btn btn-primary" data-testid="create-button">
+              Create New Project
+            </button>
+            <button id="importBtn" class="btn btn-secondary">
+              Import Data
+            </button>
+            <button class="btn btn-secondary">
+              Export Report
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Recent Activity</h3>
+          <div class="card-content">
+            <div class="activity-item">
+              <span class="activity-icon">📊</span>
+              <div>
+                <strong>Report Generated</strong>
+                <p>2 hours ago</p>
+              </div>
+            </div>
+            <div class="activity-item">
+              <span class="activity-icon">👤</span>
+              <div>
+                <strong>User Updated</strong>
+                <p>5 hours ago</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Statistics</h3>
+          <div class="card-content">
+            <div class="stat">
+              <div class="stat-value">1,234</div>
+              <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">567</div>
+              <div class="stat-label">Active Projects</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Page -->
+    <div id="settings" class="page">
+      <div class="page-header">
+        <h2>Settings</h2>
+        <p class="subtitle">Manage your application settings</p>
+      </div>
+
+      <div class="content-grid">
+        <div class="card">
+          <h3>Account Settings</h3>
+          <form class="form">
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" value="johndoe" />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" value="john@example.com" />
+            </div>
+            <div class="form-group">
+              <label for="notifications">
+                <input type="checkbox" id="notifications" name="notifications" checked />
+                Enable email notifications
+              </label>
+            </div>
+            <button type="submit" class="btn btn-primary" id="saveSettings">
+              Save Settings
+            </button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h3>Preferences</h3>
+          <div class="card-content">
+            <div class="preference-item">
+              <label>Theme</label>
+              <select id="themeSelect">
+                <option>Light</option>
+                <option>Dark</option>
+                <option>Auto</option>
+              </select>
+            </div>
+            <div class="preference-item">
+              <label>Language</label>
+              <select id="languageSelect">
+                <option>English</option>
+                <option>Spanish</option>
+                <option>French</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Page -->
+    <div id="profile" class="page">
+      <div class="page-header">
+        <h2>Profile</h2>
+        <p class="subtitle">Your profile information</p>
+      </div>
+
+      <div class="content-grid">
+        <div class="card">
+          <h3>Personal Information</h3>
+          <div class="card-content">
+            <div class="profile-section">
+              <div class="avatar">JD</div>
+              <div>
+                <h4>John Doe</h4>
+                <p>Software Engineer</p>
+              </div>
+            </div>
+            <div class="info-row">
+              <strong>Location:</strong> San Francisco, CA
+            </div>
+            <div class="info-row">
+              <strong>Joined:</strong> January 2024
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Actions</h3>
+          <div class="card-content">
+            <button class="btn btn-primary" id="editProfile">
+              Edit Profile
+            </button>
+            <button class="btn btn-secondary" id="changePassword">
+              Change Password
+            </button>
+            <button class="btn btn-danger" id="deleteAccount">
+              Delete Account
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Skills</h3>
+          <div class="card-content">
+            <div class="tags">
+              <span class="tag">JavaScript</span>
+              <span class="tag">TypeScript</span>
+              <span class="tag">React</span>
+              <span class="tag">Node.js</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="app.ts"></script>
+</body>
+</html>

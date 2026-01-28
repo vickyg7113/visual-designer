@@ -1,0 +1,23 @@
+{
+  "name": "visual-designer",
+  "version": "1.0.0",
+  "description": "Pendo-like Visual Designer SDK POC",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:sdk": "tsc && vite build --config vite.sdk.config.ts",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "visual-designer",
+    "sdk",
+    "in-app-guides"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8"
+  }
+}

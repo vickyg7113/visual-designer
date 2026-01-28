@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visual Designer Editor</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #ffffff;
+      color: #111827;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .editor-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: #ffffff;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid #e5e7eb;
+      background: #ffffff;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .menu-icon {
+      cursor: pointer;
+      color: #6b7280;
+      font-size: 18px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .menu-icon:hover {
+      color: #111827;
+    }
+
+    .header h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .close-icon {
+      cursor: pointer;
+      color: #6b7280;
+      font-size: 18px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .close-icon:hover {
+      color: #111827;
+    }
+
+    .exit-editor-btn {
+      padding: 6px 12px;
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #374151;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      margin-left: 12px;
+    }
+
+    .exit-editor-btn:hover {
+      background: #e5e7eb;
+      border-color: #9ca3af;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #e5e7eb;
+      background: #ffffff;
+      padding: 0 20px;
+    }
+
+    .tab {
+      padding: 12px 16px;
+      background: none;
+      border: none;
+      font-size: 14px;
+      font-weight: 500;
+      color: #6b7280;
+      cursor: pointer;
+      position: relative;
+      transition: color 0.2s;
+      font-family: inherit;
+    }
+
+    .tab:hover {
+      color: #111827;
+    }
+
+    .tab.active {
+      color: #111827;
+      font-weight: 600;
+    }
+
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #111827;
+    }
+
+    /* Content */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 20px;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Form Groups */
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    .form-description {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 4px;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    /* Dropdown */
+    .dropdown {
+      position: relative;
+      width: 100%;
+    }
+
+    .dropdown-select {
+      width: 100%;
+      padding: 10px 12px;
+      padding-right: 36px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      background: #ffffff;
+      color: #111827;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      transition: border-color 0.2s;
+    }
+
+    .dropdown-select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    /* Radio Buttons */
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .radio-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .radio-input {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      cursor: pointer;
+      accent-color: #3b82f6;
+    }
+
+    .radio-label {
+      font-size: 14px;
+      color: #111827;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    /* Input Field */
+    .input-field {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      background: #f9fafb;
+      color: #111827;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: #3b82f6;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .input-field:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    /* Selector Performance */
+    .selector-performance {
+      margin-top: 8px;
+      padding: 8px 12px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .performance-bar {
+      flex: 1;
+      height: 4px;
+      background: #dcfce7;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .performance-fill {
+      height: 100%;
+      background: #22c55e;
+      width: 100%;
+      border-radius: 2px;
+    }
+
+    .performance-text {
+      font-size: 12px;
+      color: #166534;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .performance-icon {
+      width: 12px;
+      height: 12px;
+    }
+
+    /* Textarea for Content */
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 100px;
+      transition: border-color 0.2s;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #6b7280;
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .empty-state-text {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* Actions */
+    .actions {
+      padding: 16px 20px;
+      border-top: 1px solid #e5e7eb;
+      background: #ffffff;
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-cancel {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .btn-cancel:hover {
+      background: #e5e7eb;
+    }
+
+    .btn-done {
+      background: #14b8a6;
+      color: #ffffff;
+    }
+
+    .btn-done:hover {
+      background: #0d9488;
+    }
+
+    /* Error */
+    .error {
+      padding: 10px 12px;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 6px;
+      color: #991b1b;
+      font-size: 12px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .error.show {
+      display: block;
+    }
+
+    /* Styling Tab Content */
+    .styling-content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="editor-container">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-left">
+        <div class="menu-icon" id="menuIcon">⋯</div>
+        <h2>Edit Container</h2>
+      </div>
+      <div style="display: flex; align-items: center;">
+        <button class="exit-editor-btn" id="exitEditorBtn">Exit Editor</button>
+        <button class="close-icon" id="closeBtn" aria-label="Close">□</button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab" data-tab="styling">Styling</button>
+      <button class="tab active" data-tab="location">Location</button>
+      <button class="tab" data-tab="behavior">Behavior</button>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Empty State -->
+      <div id="emptyState" class="empty-state">
+        <div class="empty-state-icon">🎯</div>
+        <div class="empty-state-text">
+          Click on an element in the page<br>to create a guide
+        </div>
+      </div>
+
+      <!-- Editor Form -->
+      <div id="editorForm" style="display: none;">
+        <!-- Location Tab -->
+        <div class="tab-content active" id="locationTab">
+          <div class="form-group">
+            <label>Position On Page</label>
+            <div class="dropdown">
+              <select class="dropdown-select" id="positionOnPage">
+                <option value="relative">Relative to Element</option>
+                <option value="fixed">Fixed Position</option>
+                <option value="absolute">Absolute Position</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Position To Element</label>
+            <div class="dropdown">
+              <select class="dropdown-select" id="positionToElement">
+                <option value="auto">Auto</option>
+                <option value="top">Top</option>
+                <option value="bottom">Bottom</option>
+                <option value="left">Left</option>
+                <option value="right">Right</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Anchor To Element</label>
+            <div class="form-description">
+              Target or select tagged elements relevant to the location and/or behavior of the guide.
+            </div>
+            <div class="radio-group">
+              <div class="radio-item">
+                <input type="radio" id="suggestedMatch" name="anchorMethod" value="suggested" class="radio-input" checked>
+                <label for="suggestedMatch" class="radio-label">Suggested Match</label>
+              </div>
+              <div class="radio-item">
+                <input type="radio" id="parentElement" name="anchorMethod" value="parent" class="radio-input">
+                <label for="parentElement" class="radio-label">Parent Element</label>
+              </div>
+              <div class="radio-item">
+                <input type="radio" id="customCSS" name="anchorMethod" value="custom" class="radio-input">
+                <label for="customCSS" class="radio-label">Custom CSS</label>
+              </div>
+            </div>
+            <input type="text" class="input-field" id="selectorInput" placeholder="Selector will appear here..." readonly>
+            <div class="selector-performance" id="selectorPerformance">
+              <div class="performance-bar">
+                <div class="performance-fill"></div>
+              </div>
+              <div class="performance-text">
+                <svg class="performance-icon" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 9L1 4h10z" fill="#166534"/>
+                </svg>
+                Best selector performance
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Styling Tab -->
+        <div class="tab-content" id="stylingTab">
+          <div class="styling-content">
+            <div class="form-group">
+              <label for="guideContent">Guide Content</label>
+              <textarea
+                id="guideContent"
+                placeholder="Enter the guide text that will be shown to users..."
+                required
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Behavior Tab -->
+        <div class="tab-content" id="behaviorTab">
+          <div class="form-group">
+            <label>Guide Behavior</label>
+            <div class="form-description">
+              Configure how the guide behaves when users interact with it.
+            </div>
+            <div class="radio-group">
+              <div class="radio-item">
+                <input type="radio" id="showOnce" name="behavior" value="once" class="radio-input" checked>
+                <label for="showOnce" class="radio-label">Show Once</label>
+              </div>
+              <div class="radio-item">
+                <input type="radio" id="showAlways" name="behavior" value="always" class="radio-input">
+                <label for="showAlways" class="radio-label">Show Always</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="error" id="errorMessage"></div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button class="btn btn-cancel" id="cancelBtn">Cancel</button>
+      <button class="btn btn-done" id="saveBtn">Done</button>
+    </div>
+  </div>
+
+  <script>
+    let selectedPlacement = 'right';
+    let currentSelector = '';
+    let currentElementInfo = null;
+    let anchorMethod = 'suggested';
+
+    // Tab switching
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabName = tab.dataset.tab;
+
+        // Update tabs
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        // Update content
+        tabContents.forEach(content => content.classList.remove('active'));
+        const targetContent = document.getElementById(tabName + 'Tab');
+        if (targetContent) {
+          targetContent.classList.add('active');
+        }
+      });
+    });
+
+    // Anchor method radio buttons
+    const anchorRadios = document.querySelectorAll('input[name="anchorMethod"]');
+    const selectorInput = document.getElementById('selectorInput');
+
+    anchorRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        anchorMethod = radio.value;
+        if (radio.value === 'custom') {
+          selectorInput.removeAttribute('readonly');
+          selectorInput.style.background = '#ffffff';
+        } else {
+          selectorInput.setAttribute('readonly', 'readonly');
+          selectorInput.style.background = '#f9fafb';
+        }
+      });
+    });
+
+    // Position to element dropdown (maps to placement)
+    const positionToElement = document.getElementById('positionToElement');
+    positionToElement.addEventListener('change', (e) => {
+      const value = e.target.value;
+      if (value !== 'auto') {
+        selectedPlacement = value;
+      }
+    });
+
+    // Exit Editor Mode button
+    document.getElementById('exitEditorBtn').addEventListener('click', () => {
+      sendMessage({ type: 'EXIT_EDITOR_MODE' });
+    });
+
+    // Close button
+    document.getElementById('closeBtn').addEventListener('click', () => {
+      sendMessage({ type: 'CANCEL' });
+    });
+
+    // Cancel button
+    document.getElementById('cancelBtn').addEventListener('click', () => {
+      sendMessage({ type: 'CANCEL' });
+    });
+
+    // Save/Done button
+    document.getElementById('saveBtn').addEventListener('click', () => {
+      const content = document.getElementById('guideContent').value.trim();
+      
+      if (!content) {
+        showError('Please enter guide content');
+        // Switch to Styling tab
+        document.querySelector('[data-tab="styling"]').click();
+        return;
+      }
+
+      if (!currentSelector) {
+        showError('No element selected');
+        return;
+      }
+
+      const guide = {
+        page: window.location.pathname || '/',
+        selector: currentSelector,
+        content: content,
+        placement: selectedPlacement,
+        status: 'active',
+      };
+
+      sendMessage({
+        type: 'SAVE_GUIDE',
+        guide: guide,
+      });
+    });
+
+    // Listen for messages from parent
+    window.addEventListener('message', (event) => {
+      const message = event.data;
+
+      if (message.type === 'ELEMENT_SELECTED') {
+        currentSelector = message.selector;
+        currentElementInfo = message.elementInfo;
+
+        // Show form, hide empty state
+        document.getElementById('emptyState').style.display = 'none';
+        document.getElementById('editorForm').style.display = 'block';
+
+        // Update selector input
+        selectorInput.value = currentSelector;
+
+        // Update position dropdown based on placement if available
+        if (message.placement) {
+          positionToElement.value = message.placement;
+          selectedPlacement = message.placement;
+        }
+
+        // Clear previous content
+        document.getElementById('guideContent').value = '';
+        hideError();
+      }
+    });
+
+    function sendMessage(message) {
+      window.parent.postMessage(message, '*');
+    }
+
+    function showError(message) {
+      const errorEl = document.getElementById('errorMessage');
+      errorEl.textContent = message;
+      errorEl.classList.add('show');
+    }
+
+    function hideError() {
+      const errorEl = document.getElementById('errorMessage');
+      errorEl.classList.remove('show');
+    }
+
+    // Notify parent that editor is ready
+    window.addEventListener('load', () => {
+      sendMessage({ type: 'EDITOR_READY' });
+    });
+  </script>
+</body>
+</html>
