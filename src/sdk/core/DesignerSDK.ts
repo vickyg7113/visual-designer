@@ -287,6 +287,16 @@ export class DesignerSDK {
       return;
     }
 
+    // Ensure document.body exists
+    if (!document.body) {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => this.createExitEditorButton());
+        return;
+      }
+      setTimeout(() => this.createExitEditorButton(), 100);
+      return;
+    }
+
     this.exitEditorButton = document.createElement('button');
     this.exitEditorButton.id = 'designer-exit-editor-btn';
     this.exitEditorButton.textContent = 'Exit Editor';

@@ -53,6 +53,18 @@ export class EditorMode {
    * Create highlight overlay element
    */
   private createHighlightOverlay(): void {
+    // Ensure document.body exists
+    if (!document.body) {
+      // Wait for DOM to be ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => this.createHighlightOverlay());
+        return;
+      }
+      // Fallback: wait a bit
+      setTimeout(() => this.createHighlightOverlay(), 100);
+      return;
+    }
+
     this.highlightOverlay = document.createElement('div');
     this.highlightOverlay.id = 'designer-highlight-overlay';
     this.highlightOverlay.style.cssText = `

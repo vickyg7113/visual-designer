@@ -40,13 +40,28 @@ export class EditorFrame {
     // Set up message listener
     window.addEventListener('message', this.handleMessage);
 
-    document.body.appendChild(this.iframe);
-
-    // Wait for iframe to load
-    this.iframe.onload = () => {
-      this.isReady = true;
-      this.sendMessage({ type: 'EDITOR_READY' });
+    // Ensure document.body exists before appending
+    const appendIframe = () => {
+      if (document.body) {
+        document.body.appendChild(this.iframe!);
+        // Wait for iframe to load
+        if (this.iframe) {
+          this.iframe.onload = () => {
+            this.isReady = true;
+            this.sendMessage({ type: 'EDITOR_READY' });
+          };
+        }
+      } else {
+        // Wait for DOM to be ready
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', appendIframe);
+        } else {
+          setTimeout(appendIframe, 100);
+        }
+      }
     };
+
+    appendIframe();
   }
 
   /**
