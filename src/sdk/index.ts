@@ -9,6 +9,7 @@ export type { Guide, SDKConfig, GuideTargeting } from './types';
 
 // Global instance
 let sdkInstance: DesignerSDK | null = null;
+let isSnippetMode = false;
 
 /**
  * Initialize the SDK globally
@@ -30,18 +31,94 @@ export function getInstance(): DesignerSDK | null {
   return sdkInstance;
 }
 
-// Auto-initialize if script is loaded directly (only if not already initialized)
-// This allows manual initialization with config if needed
-if (typeof window !== 'undefined' && !sdkInstance) {
+/**
+ * Process queued calls from the snippet pattern (Pendo-style)
+ * Supports: initialize, identify, enableEditor, disableEditor, loadGuides, getGuides
+ */
+export function _processQueue(queue: any[]): void {
+  if (!queue || !Array.isArray(queue)) {
+    return;
+  }
+
+  queue.forEach((call) => {
+    if (!call || !Array.isArray(call) || call.length === 0) {
+      return;
+    }
+
+    const method = call[0];
+    const args = call.slice(1);
+
+    try {
+      switch (method) {
+        case 'initialize': {
+          const config: SDKConfig | undefined = args[0];
+          init(config);
+          break;
+        }
+        case 'identify': {
+          // For now we just log; you can wire this into SDKConfig later if needed
+          const user = args[0];
+          if (user) {
+            // eslint-disable-next-line no-console
+            console.log('[Visual Designer] identify (snippet) called with:', user);
+          }
+          break;
+        }
+        case 'enableEditor': {
+          const sdk = sdkInstance ?? init();
+          sdk.enableEditor();
+          break;
+        }
+        case 'disableEditor': {
+          if (sdkInstance) {
+            sdkInstance.disableEditor();
+          }
+          break;
+        }
+        case 'loadGuides': {
+          if (sdkInstance) {
+            sdkInstance.loadGuides();
+          }
+          break;
+        }
+        case 'getGuides': {
+          if (sdkInstance) {
+            return sdkInstance.getGuides();
+          }
+          break;
+        }
+        default: {
+          // eslint-disable-next-line no-console
+          console.warn('[Visual Designer] Unknown snippet method:', method);
+        }
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('[Visual Designer] Error processing queued call:', method, error);
+    }
+  });
+}
+
+// Detect if snippet pattern is being used (window.visualDesigner with _q queue)
+if (typeof window !== 'undefined') {
+  const globalVD = (window as any).visualDesigner;
+  if (globalVD && Array.isArray(globalVD._q)) {
+    isSnippetMode = true;
+  }
+}
+
+// Auto-initialize ONLY if NOT in snippet mode
+// Snippet mode expects the host app to call initialize() explicitly after it is ready
+if (typeof window !== 'undefined' && !sdkInstance && !isSnippetMode) {
   // Wait for DOM to be ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-      if (!sdkInstance) {
+      if (!sdkInstance && !isSnippetMode) {
         init();
       }
     });
   } else {
-    if (!sdkInstance) {
+    if (!sdkInstance && !isSnippetMode) {
       init();
     }
   }
@@ -53,5 +130,6 @@ if (typeof window !== 'undefined') {
     init,
     getInstance,
     DesignerSDK,
+    _processQueue,
   };
 }
