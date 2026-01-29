@@ -1001,7 +1001,7 @@ class x {
       }
       this.studioBadge = document.createElement("div"), this.studioBadge.id = "designer-studio-badge", this.studioBadge.textContent = "Revgain Visual Design Studio", this.studioBadge.style.cssText = `
       position: fixed;
-      top: 5px;
+      top: 10px;
       left: 50%;
       transform: translateX(-50%);
       padding: 8px 20px;
