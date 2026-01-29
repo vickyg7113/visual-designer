@@ -436,12 +436,12 @@ export class DesignerSDK {
     this.studioBadge.textContent = 'Revgain Visual Design Studio';
     this.studioBadge.style.cssText = `
       position: fixed;
-      top: 10px;
+      top: 5px;
       left: 50%;
       transform: translateX(-50%);
       padding: 8px 20px;
-      background: #ffffff;
-      color: #111827;
+      background: #3B82F6;
+      color: #ffffff;
       font-size: 14px;
       font-weight: 600;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
