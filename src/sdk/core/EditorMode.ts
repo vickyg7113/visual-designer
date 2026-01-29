@@ -122,7 +122,7 @@ export class EditorMode {
     }
 
     // Don't highlight SDK elements
-    if (target.closest('#designer-editor-frame, #designer-highlight-overlay, #designer-exit-editor-btn')) {
+    if (target.closest('#designer-editor-frame, #designer-highlight-overlay, #designer-exit-editor-btn, #designer-red-border-overlay, #designer-studio-badge')) {
       this.hideHighlight();
       return;
     }
@@ -150,7 +150,7 @@ export class EditorMode {
     }
 
     // Don't capture clicks on SDK elements
-    if (target.closest('#designer-editor-frame, #designer-highlight-overlay, #designer-exit-editor-btn')) {
+    if (target.closest('#designer-editor-frame, #designer-highlight-overlay, #designer-exit-editor-btn, #designer-red-border-overlay, #designer-studio-badge')) {
       return;
     }
 

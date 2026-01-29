@@ -1,4 +1,4 @@
-class p {
+class f {
   /**
    * Generate a stable selector for an element
    */
@@ -10,18 +10,18 @@ class p {
         method: "id"
       };
     if (e.hasAttribute("data-testid")) {
-      const r = e.getAttribute("data-testid");
+      const n = e.getAttribute("data-testid");
       return {
-        selector: `[data-testid="${this.escapeAttribute(r)}"]`,
+        selector: `[data-testid="${this.escapeAttribute(n)}"]`,
         confidence: "high",
         method: "data-testid"
       };
     }
     const t = this.getSemanticDataAttributes(e);
     if (t.length > 0) {
-      const r = t[0], s = e.getAttribute(r);
+      const n = t[0], s = e.getAttribute(n);
       return {
-        selector: `[${r}="${this.escapeAttribute(s)}"]`,
+        selector: `[${n}="${this.escapeAttribute(s)}"]`,
         confidence: "high",
         method: "data-attribute"
       };
@@ -33,9 +33,9 @@ class p {
         confidence: "medium",
         method: "aria"
       };
-    const n = this.generatePathSelector(e);
-    return n ? {
-      selector: n,
+    const r = this.generatePathSelector(e);
+    return r ? {
+      selector: r,
       confidence: "medium",
       method: "path"
     } : {
@@ -75,11 +75,11 @@ class p {
       "data-component",
       "data-element"
     ], i = [];
-    for (const n of t)
-      e.hasAttribute(n) && i.push(n);
-    for (let n = 0; n < e.attributes.length; n++) {
-      const r = e.attributes[n];
-      r.name.startsWith("data-") && !i.includes(r.name) && i.push(r.name);
+    for (const r of t)
+      e.hasAttribute(r) && i.push(r);
+    for (let r = 0; r < e.attributes.length; r++) {
+      const n = e.attributes[r];
+      n.name.startsWith("data-") && !i.includes(n.name) && i.push(n.name);
     }
     return i;
   }
@@ -87,15 +87,15 @@ class p {
    * Generate selector using ARIA attributes
    */
   static generateAriaSelector(e) {
-    var r;
-    const t = e.getAttribute("role"), i = e.getAttribute("aria-label"), n = e.getAttribute("aria-labelledby");
+    var n;
+    const t = e.getAttribute("role"), i = e.getAttribute("aria-label"), r = e.getAttribute("aria-labelledby");
     if (t) {
       let s = `[role="${this.escapeAttribute(t)}"]`;
       if (i)
         return s += `[aria-label="${this.escapeAttribute(i)}"]`, s;
-      if (n) {
-        const a = document.getElementById(n);
-        if (a && ((r = a.textContent) == null ? void 0 : r.trim()))
+      if (r) {
+        const a = document.getElementById(r);
+        if (a && ((n = a.textContent) == null ? void 0 : n.trim()))
           return s;
       }
       return s;
@@ -109,26 +109,26 @@ class p {
     const t = [];
     let i = e;
     for (; i && i !== document.body && i !== document.documentElement; ) {
-      let n = i.tagName.toLowerCase();
+      let r = i.tagName.toLowerCase();
       if (i.id) {
-        n += `#${this.escapeSelector(i.id)}`, t.unshift(n);
+        r += `#${this.escapeSelector(i.id)}`, t.unshift(r);
         break;
       }
       if (i.className && typeof i.className == "string") {
         const s = i.className.split(/\s+/).filter((a) => a && !a.startsWith("designer-")).slice(0, 2);
-        s.length > 0 && (n += "." + s.map((a) => this.escapeSelector(a)).join("."));
+        s.length > 0 && (r += "." + s.map((a) => this.escapeSelector(a)).join("."));
       }
-      const r = i.parentElement;
-      if (r) {
-        const s = i.tagName, h = Array.from(r.children).filter(
+      const n = i.parentElement;
+      if (n) {
+        const s = i.tagName, h = Array.from(n.children).filter(
           (l) => l.tagName === s
         );
         if (h.length > 1) {
           const l = h.indexOf(i) + 1;
-          n += `:nth-of-type(${l})`;
+          r += `:nth-of-type(${l})`;
         }
       }
-      if (t.unshift(n), i = r, t.length >= 5)
+      if (t.unshift(r), i = n, t.length >= 5)
         break;
     }
     return t.length > 0 ? t.join(" > ") : null;
@@ -147,22 +147,22 @@ class p {
   }
 }
 function w(o) {
-  var i, n;
+  var i, r;
   const e = o.getBoundingClientRect(), t = {};
-  for (let r = 0; r < o.attributes.length; r++) {
-    const s = o.attributes[r];
+  for (let n = 0; n < o.attributes.length; n++) {
+    const s = o.attributes[n];
     t[s.name] = s.value;
   }
   return {
     tagName: o.tagName.toLowerCase(),
     id: o.id || void 0,
     className: ((i = o.className) == null ? void 0 : i.toString()) || void 0,
-    textContent: ((n = o.textContent) == null ? void 0 : n.trim().substring(0, 50)) || void 0,
+    textContent: ((r = o.textContent) == null ? void 0 : r.trim().substring(0, 50)) || void 0,
     attributes: t,
     boundingRect: e
   };
 }
-function y(o) {
+function E(o) {
   const e = window.getComputedStyle(o);
   return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && o.getBoundingClientRect().height > 0 && o.getBoundingClientRect().width > 0;
 }
@@ -172,25 +172,25 @@ function m() {
 function S() {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
-function C(o) {
+function B(o) {
   const e = o.getBoundingClientRect();
   return e.top >= 0 && e.left >= 0 && e.bottom <= (window.innerHeight || document.documentElement.clientHeight) && e.right <= (window.innerWidth || document.documentElement.clientWidth);
 }
-function k(o) {
-  C(o) || o.scrollIntoView({ behavior: "smooth", block: "center" });
+function C(o) {
+  B(o) || o.scrollIntoView({ behavior: "smooth", block: "center" });
 }
-class I {
+class k {
   constructor() {
     this.isActive = !1, this.highlightOverlay = null, this.selectedElement = null, this.messageCallback = null, this.handleMouseOver = (e) => {
       if (!this.isActive || !this.highlightOverlay)
         return;
       const t = e.target;
       if (!(!t || t === this.highlightOverlay)) {
-        if (t.closest("#designer-editor-frame, #designer-highlight-overlay, #designer-exit-editor-btn")) {
+        if (t.closest("#designer-editor-frame, #designer-highlight-overlay, #designer-exit-editor-btn, #designer-red-border-overlay, #designer-studio-badge")) {
           this.hideHighlight();
           return;
         }
-        if (!y(t)) {
+        if (!E(t)) {
           this.hideHighlight();
           return;
         }
@@ -200,7 +200,7 @@ class I {
       if (!this.isActive)
         return;
       const t = e.target;
-      t && (t.closest("#designer-editor-frame, #designer-highlight-overlay, #designer-exit-editor-btn") || (e.preventDefault(), e.stopPropagation(), e.stopImmediatePropagation(), y(t) && this.selectElement(t)));
+      t && (t.closest("#designer-editor-frame, #designer-highlight-overlay, #designer-exit-editor-btn, #designer-red-border-overlay, #designer-studio-badge") || (e.preventDefault(), e.stopPropagation(), e.stopImmediatePropagation(), E(t) && this.selectElement(t)));
     }, this.handleKeyDown = (e) => {
       this.isActive && e.key === "Escape" && (this.messageCallback && this.messageCallback({ type: "CANCEL" }), this.selectedElement = null, this.hideHighlight());
     };
@@ -270,8 +270,8 @@ class I {
   highlightElement(e) {
     if (!this.highlightOverlay)
       return;
-    const t = e.getBoundingClientRect(), i = window.pageXOffset || document.documentElement.scrollLeft, n = window.pageYOffset || document.documentElement.scrollTop;
-    this.highlightOverlay.style.display = "block", this.highlightOverlay.style.left = `${t.left + i}px`, this.highlightOverlay.style.top = `${t.top + n}px`, this.highlightOverlay.style.width = `${t.width}px`, this.highlightOverlay.style.height = `${t.height}px`;
+    const t = e.getBoundingClientRect(), i = window.pageXOffset || document.documentElement.scrollLeft, r = window.pageYOffset || document.documentElement.scrollTop;
+    this.highlightOverlay.style.display = "block", this.highlightOverlay.style.left = `${t.left + i}px`, this.highlightOverlay.style.top = `${t.top + r}px`, this.highlightOverlay.style.width = `${t.width}px`, this.highlightOverlay.style.height = `${t.height}px`;
   }
   /**
    * Hide highlight
@@ -284,7 +284,7 @@ class I {
    */
   selectElement(e) {
     this.selectedElement = e, this.highlightElement(e);
-    const t = p.generateSelector(e), i = w(e);
+    const t = f.generateSelector(e), i = w(e);
     this.messageCallback && this.messageCallback({
       type: "ELEMENT_SELECTED",
       selector: t.selector,
@@ -316,7 +316,7 @@ class I {
     e && e.remove();
   }
 }
-class B {
+class I {
   constructor() {
     this.renderedGuides = /* @__PURE__ */ new Map(), this.container = null;
   }
@@ -327,21 +327,21 @@ class B {
     this.clear();
     const t = m();
     e.filter(
-      (n) => n.page === t && n.status === "active"
-    ).forEach((n) => {
-      this.renderGuide(n);
+      (r) => r.page === t && r.status === "active"
+    ).forEach((r) => {
+      this.renderGuide(r);
     });
   }
   /**
    * Render a single guide
    */
   renderGuide(e) {
-    const t = p.findElement(e.selector);
+    const t = f.findElement(e.selector);
     if (!t) {
       console.warn(`Guide "${e.id}" target not found: ${e.selector}`);
       return;
     }
-    k(t);
+    C(t);
     const i = this.createTooltip(e, t);
     this.renderedGuides.set(e.id, i), this.container || this.createContainer(), this.container && this.container.appendChild(i), this.positionTooltip(i, t, e.placement);
   }
@@ -377,10 +377,10 @@ class B {
       line-height: 1.5;
       color: #111827;
     `;
-    const n = document.createElement("div");
-    n.style.cssText = "margin-bottom: 8px;", n.textContent = e.content, i.appendChild(n);
-    const r = document.createElement("button");
-    r.textContent = "Got it", r.style.cssText = `
+    const r = document.createElement("div");
+    r.style.cssText = "margin-bottom: 8px;", r.textContent = e.content, i.appendChild(r);
+    const n = document.createElement("button");
+    n.textContent = "Got it", n.style.cssText = `
       background: #3b82f6;
       color: white;
       border: none;
@@ -390,13 +390,13 @@ class B {
       font-weight: 500;
       cursor: pointer;
       transition: background 0.2s;
-    `, r.onmouseover = () => {
-      r.style.background = "#2563eb";
-    }, r.onmouseout = () => {
-      r.style.background = "#3b82f6";
-    }, r.onclick = () => {
+    `, n.onmouseover = () => {
+      n.style.background = "#2563eb";
+    }, n.onmouseout = () => {
+      n.style.background = "#3b82f6";
+    }, n.onclick = () => {
       this.dismissGuide(e.id);
-    }, i.appendChild(r);
+    }, i.appendChild(n);
     const s = document.createElement("div");
     return s.className = "designer-guide-arrow", s.style.cssText = `
       position: absolute;
@@ -409,11 +409,11 @@ class B {
    * Position tooltip relative to target element
    */
   positionTooltip(e, t, i) {
-    const n = t.getBoundingClientRect(), r = e.getBoundingClientRect(), s = window.pageXOffset || document.documentElement.scrollLeft, a = window.pageYOffset || document.documentElement.scrollTop, h = e.querySelector(".designer-guide-arrow");
+    const r = t.getBoundingClientRect(), n = e.getBoundingClientRect(), s = window.pageXOffset || document.documentElement.scrollLeft, a = window.pageYOffset || document.documentElement.scrollTop, h = e.querySelector(".designer-guide-arrow");
     let l = 0, c = 0, u = "";
     switch (i) {
       case "top":
-        l = n.top + a - r.height - 12, c = n.left + s + n.width / 2 - r.width / 2, u = `
+        l = r.top + a - n.height - 12, c = r.left + s + r.width / 2 - n.width / 2, u = `
           bottom: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -422,7 +422,7 @@ class B {
         `;
         break;
       case "bottom":
-        l = n.bottom + a + 12, c = n.left + s + n.width / 2 - r.width / 2, u = `
+        l = r.bottom + a + 12, c = r.left + s + r.width / 2 - n.width / 2, u = `
           top: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -431,7 +431,7 @@ class B {
         `;
         break;
       case "left":
-        l = n.top + a + n.height / 2 - r.height / 2, c = n.left + s - r.width - 12, u = `
+        l = r.top + a + r.height / 2 - n.height / 2, c = r.left + s - n.width - 12, u = `
           right: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -440,7 +440,7 @@ class B {
         `;
         break;
       case "right":
-        l = n.top + a + n.height / 2 - r.height / 2, c = n.right + s + 12, u = `
+        l = r.top + a + r.height / 2 - n.height / 2, c = r.right + s + 12, u = `
           left: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -449,8 +449,8 @@ class B {
         `;
         break;
     }
-    const b = window.innerWidth, E = window.innerHeight;
-    c < s ? c = s + 10 : c + r.width > s + b && (c = s + b - r.width - 10), l < a ? l = a + 10 : l + r.height > a + E && (l = a + E - r.height - 10), e.style.top = `${l}px`, e.style.left = `${c}px`, h && (h.style.cssText += u);
+    const b = window.innerWidth, y = window.innerHeight;
+    c < s ? c = s + 10 : c + n.width > s + b && (c = s + b - n.width - 10), l < a ? l = a + 10 : l + n.height > a + y && (l = a + y - n.height - 10), e.style.top = `${l}px`, e.style.left = `${c}px`, h && (h.style.cssText += u);
   }
   /**
    * Create container for guides
@@ -471,15 +471,15 @@ class B {
    */
   updatePositions(e) {
     this.renderedGuides.forEach((t, i) => {
-      const n = e.find((s) => s.id === i);
-      if (!n)
+      const r = e.find((s) => s.id === i);
+      if (!r)
         return;
-      const r = p.findElement(n.selector);
-      r && this.positionTooltip(t, r, n.placement);
+      const n = f.findElement(r.selector);
+      n && this.positionTooltip(t, n, r.placement);
     });
   }
 }
-class G {
+class O {
   constructor() {
     this.iframe = null, this.messageCallback = null, this.isReady = !1, this.handleMessage = (e) => {
       const t = e.data;
@@ -685,8 +685,8 @@ class G {
 </html>`;
   }
 }
-const L = "visual-designer-guides", x = "1.0.0";
-class M {
+const L = "visual-designer-guides", v = "1.0.0";
+class G {
   constructor(e = L) {
     this.storageKey = e;
   }
@@ -699,7 +699,7 @@ class M {
       if (!e)
         return [];
       const t = JSON.parse(e);
-      return t.version !== x ? (console.warn("Storage version mismatch, clearing old data"), this.clear(), []) : t.guides || [];
+      return t.version !== v ? (console.warn("Storage version mismatch, clearing old data"), this.clear(), []) : t.guides || [];
     } catch (e) {
       return console.error("Error reading guides from storage:", e), [];
     }
@@ -715,12 +715,12 @@ class M {
    */
   saveGuide(e) {
     try {
-      const t = this.getGuides(), i = t.findIndex((r) => r.id === e.id), n = {
+      const t = this.getGuides(), i = t.findIndex((n) => n.id === e.id), r = {
         ...e,
         updatedAt: (/* @__PURE__ */ new Date()).toISOString(),
         createdAt: e.createdAt || (/* @__PURE__ */ new Date()).toISOString()
       };
-      i >= 0 ? t[i] = n : t.push(n), this.saveGuides(t);
+      i >= 0 ? t[i] = r : t.push(r), this.saveGuides(t);
     } catch (t) {
       throw console.error("Error saving guide:", t), t;
     }
@@ -730,7 +730,7 @@ class M {
    */
   deleteGuide(e) {
     try {
-      const i = this.getGuides().filter((n) => n.id !== e);
+      const i = this.getGuides().filter((r) => r.id !== e);
       this.saveGuides(i);
     } catch (t) {
       throw console.error("Error deleting guide:", t), t;
@@ -742,7 +742,7 @@ class M {
   saveGuides(e) {
     const t = {
       guides: e,
-      version: x
+      version: v
     };
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(t));
@@ -767,9 +767,9 @@ class M {
     return this.getGuides().find((i) => i.id === e) || null;
   }
 }
-class v {
+class x {
   constructor(e = {}) {
-    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.config = e, this.storage = new M(e.storageKey), this.editorMode = new I(), this.guideRenderer = new B(), this.editorFrame = new G();
+    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.config = e, this.storage = new G(e.storageKey), this.editorMode = new k(), this.guideRenderer = new I(), this.editorFrame = new O();
   }
   /**
    * Initialize the SDK
@@ -785,13 +785,13 @@ class v {
    * Enable editor mode
    */
   enableEditor() {
-    this.isEditorMode || (this.isEditorMode = !0, this.editorFrame.create((e) => this.handleEditorMessage(e)), this.editorMode.activate((e) => this.handleEditorMessage(e)), this.createExitEditorButton(), localStorage.setItem("designerMode", "true"));
+    this.isEditorMode || (this.isEditorMode = !0, this.editorFrame.create((e) => this.handleEditorMessage(e)), this.editorMode.activate((e) => this.handleEditorMessage(e)), this.createExitEditorButton(), this.createRedBorderOverlay(), this.createStudioBadge(), localStorage.setItem("designerMode", "true"));
   }
   /**
    * Disable editor mode
    */
   disableEditor() {
-    this.isEditorMode && (this.isEditorMode = !1, this.editorMode.deactivate(), this.editorFrame.destroy(), this.removeExitEditorButton(), localStorage.removeItem("designerMode"), this.loadGuides());
+    this.isEditorMode && (this.isEditorMode = !1, this.editorMode.deactivate(), this.editorFrame.destroy(), this.removeExitEditorButton(), this.removeRedBorderOverlay(), this.removeStudioBadge(), localStorage.removeItem("designerMode"), this.loadGuides());
   }
   /**
    * Get all guides
@@ -894,8 +894,8 @@ class v {
   setupEventListeners() {
     let e, t;
     const i = () => {
-      const n = this.storage.getGuides();
-      this.guideRenderer.updatePositions(n);
+      const r = this.storage.getGuides();
+      this.guideRenderer.updatePositions(r);
     };
     window.addEventListener("resize", () => {
       clearTimeout(e), e = window.setTimeout(i, 100);
@@ -954,15 +954,85 @@ class v {
   removeExitEditorButton() {
     this.exitEditorButton && (this.exitEditorButton.remove(), this.exitEditorButton = null);
   }
+  /**
+   * Create red border overlay around the entire page
+   */
+  createRedBorderOverlay() {
+    if (!this.redBorderOverlay) {
+      if (!document.body) {
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", () => this.createRedBorderOverlay());
+          return;
+        }
+        setTimeout(() => this.createRedBorderOverlay(), 100);
+        return;
+      }
+      this.redBorderOverlay = document.createElement("div"), this.redBorderOverlay.id = "designer-red-border-overlay", this.redBorderOverlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 3px solid #ef4444;
+      pointer-events: none;
+      z-index: 999997;
+      box-sizing: border-box;
+    `, document.body.appendChild(this.redBorderOverlay);
+    }
+  }
+  /**
+   * Remove red border overlay
+   */
+  removeRedBorderOverlay() {
+    this.redBorderOverlay && (this.redBorderOverlay.remove(), this.redBorderOverlay = null);
+  }
+  /**
+   * Create studio badge at the top center
+   */
+  createStudioBadge() {
+    if (!this.studioBadge) {
+      if (!document.body) {
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", () => this.createStudioBadge());
+          return;
+        }
+        setTimeout(() => this.createStudioBadge(), 100);
+        return;
+      }
+      this.studioBadge = document.createElement("div"), this.studioBadge.id = "designer-studio-badge", this.studioBadge.textContent = "Revgain Visual Design Studio", this.studioBadge.style.cssText = `
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 8px 20px;
+      background: #ef4444;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      border-radius: 6px;
+      z-index: 1000001;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+      pointer-events: none;
+      white-space: nowrap;
+    `, document.body.appendChild(this.studioBadge);
+    }
+  }
+  /**
+   * Remove studio badge
+   */
+  removeStudioBadge() {
+    this.studioBadge && (this.studioBadge.remove(), this.studioBadge = null);
+  }
 }
-let d = null, f = !1;
+let d = null, p = !1;
 function g(o) {
-  return d || (d = new v(o), d.init(), d);
+  return d || (d = new x(o), d.init(), d);
 }
-function A() {
+function M() {
   return d;
 }
-function O(o) {
+function A(o) {
   !o || !Array.isArray(o) || o.forEach((e) => {
     if (!e || !Array.isArray(e) || e.length === 0)
       return;
@@ -970,13 +1040,13 @@ function O(o) {
     try {
       switch (t) {
         case "initialize": {
-          const n = i[0];
-          g(n);
+          const r = i[0];
+          g(r);
           break;
         }
         case "identify": {
-          const n = i[0];
-          n && console.log("[Visual Designer] identify (snippet) called with:", n);
+          const r = i[0];
+          r && console.log("[Visual Designer] identify (snippet) called with:", r);
           break;
         }
         case "enableEditor": {
@@ -999,14 +1069,14 @@ function O(o) {
         default:
           console.warn("[Visual Designer] Unknown snippet method:", t);
       }
-    } catch (n) {
-      console.error("[Visual Designer] Error processing queued call:", t, n);
+    } catch (r) {
+      console.error("[Visual Designer] Error processing queued call:", t, r);
     }
   });
 }
 if (typeof window < "u") {
   const o = window.visualDesigner;
-  o && Array.isArray(o._q) && (f = !0);
+  o && Array.isArray(o._q) && (p = !0);
   try {
     const e = new URL(window.location.href);
     if (e.searchParams.get("designer") === "true") {
@@ -1019,22 +1089,22 @@ if (typeof window < "u") {
 }
 if (typeof window < "u" && !d) {
   const o = window.__visualDesignerWasLaunched === !0;
-  if (!f || o) {
+  if (!p || o) {
     const e = () => {
-      !d && (!f || o) && g();
+      !d && (!p || o) && g();
     };
     document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", e) : e();
   }
 }
 typeof window < "u" && (window.VisualDesigner = {
   init: g,
-  getInstance: A,
-  DesignerSDK: v,
-  _processQueue: O
+  getInstance: M,
+  DesignerSDK: x,
+  _processQueue: A
 });
 export {
-  v as DesignerSDK,
-  O as _processQueue,
-  A as getInstance,
+  x as DesignerSDK,
+  A as _processQueue,
+  M as getInstance,
   g as init
 };

@@ -23,6 +23,8 @@ export class DesignerSDK {
   private isInitialized: boolean = false;
   private isEditorMode: boolean = false;
   private exitEditorButton: HTMLElement | null = null;
+  private redBorderOverlay: HTMLElement | null = null;
+  private studioBadge: HTMLElement | null = null;
 
   constructor(config: SDKConfig = {}) {
     this.config = config;
@@ -76,6 +78,12 @@ export class DesignerSDK {
     // Create exit editor button
     this.createExitEditorButton();
     
+    // Create red border overlay
+    this.createRedBorderOverlay();
+    
+    // Create studio badge
+    this.createStudioBadge();
+    
     // Store editor mode in localStorage
     localStorage.setItem('designerMode', 'true');
   }
@@ -94,6 +102,12 @@ export class DesignerSDK {
     
     // Remove exit editor button
     this.removeExitEditorButton();
+    
+    // Remove red border overlay
+    this.removeRedBorderOverlay();
+    
+    // Remove studio badge
+    this.removeStudioBadge();
     
     // Remove editor mode from localStorage
     localStorage.removeItem('designerMode');
@@ -352,6 +366,101 @@ export class DesignerSDK {
     if (this.exitEditorButton) {
       this.exitEditorButton.remove();
       this.exitEditorButton = null;
+    }
+  }
+
+  /**
+   * Create red border overlay around the entire page
+   */
+  private createRedBorderOverlay(): void {
+    if (this.redBorderOverlay) {
+      return;
+    }
+
+    // Ensure document.body exists
+    if (!document.body) {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => this.createRedBorderOverlay());
+        return;
+      }
+      setTimeout(() => this.createRedBorderOverlay(), 100);
+      return;
+    }
+
+    this.redBorderOverlay = document.createElement('div');
+    this.redBorderOverlay.id = 'designer-red-border-overlay';
+    this.redBorderOverlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 3px solid #ef4444;
+      pointer-events: none;
+      z-index: 999997;
+      box-sizing: border-box;
+    `;
+    document.body.appendChild(this.redBorderOverlay);
+  }
+
+  /**
+   * Remove red border overlay
+   */
+  private removeRedBorderOverlay(): void {
+    if (this.redBorderOverlay) {
+      this.redBorderOverlay.remove();
+      this.redBorderOverlay = null;
+    }
+  }
+
+  /**
+   * Create studio badge at the top center
+   */
+  private createStudioBadge(): void {
+    if (this.studioBadge) {
+      return;
+    }
+
+    // Ensure document.body exists
+    if (!document.body) {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => this.createStudioBadge());
+        return;
+      }
+      setTimeout(() => this.createStudioBadge(), 100);
+      return;
+    }
+
+    this.studioBadge = document.createElement('div');
+    this.studioBadge.id = 'designer-studio-badge';
+    this.studioBadge.textContent = 'Revgain Visual Design Studio';
+    this.studioBadge.style.cssText = `
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 8px 20px;
+      background: #ef4444;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      border-radius: 6px;
+      z-index: 1000001;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+      pointer-events: none;
+      white-space: nowrap;
+    `;
+    document.body.appendChild(this.studioBadge);
+  }
+
+  /**
+   * Remove studio badge
+   */
+  private removeStudioBadge(): void {
+    if (this.studioBadge) {
+      this.studioBadge.remove();
+      this.studioBadge = null;
     }
   }
 }
