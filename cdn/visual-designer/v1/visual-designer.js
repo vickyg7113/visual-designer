@@ -1,4 +1,4 @@
-class m {
+class p {
   /**
    * Generate a stable selector for an element
    */
@@ -166,7 +166,7 @@ function y(o) {
   const e = window.getComputedStyle(o);
   return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && o.getBoundingClientRect().height > 0 && o.getBoundingClientRect().width > 0;
 }
-function f() {
+function m() {
   return window.location.pathname || "/";
 }
 function S() {
@@ -284,7 +284,7 @@ class I {
    */
   selectElement(e) {
     this.selectedElement = e, this.highlightElement(e);
-    const t = m.generateSelector(e), i = w(e);
+    const t = p.generateSelector(e), i = w(e);
     this.messageCallback && this.messageCallback({
       type: "ELEMENT_SELECTED",
       selector: t.selector,
@@ -325,7 +325,7 @@ class B {
    */
   renderGuides(e) {
     this.clear();
-    const t = f();
+    const t = m();
     e.filter(
       (n) => n.page === t && n.status === "active"
     ).forEach((n) => {
@@ -336,7 +336,7 @@ class B {
    * Render a single guide
    */
   renderGuide(e) {
-    const t = m.findElement(e.selector);
+    const t = p.findElement(e.selector);
     if (!t) {
       console.warn(`Guide "${e.id}" target not found: ${e.selector}`);
       return;
@@ -474,7 +474,7 @@ class B {
       const n = e.find((s) => s.id === i);
       if (!n)
         return;
-      const r = m.findElement(n.selector);
+      const r = p.findElement(n.selector);
       r && this.positionTooltip(t, r, n.placement);
     });
   }
@@ -803,7 +803,7 @@ class v {
    * Get guides for current page
    */
   getGuidesForCurrentPage() {
-    const e = f();
+    const e = m();
     return this.storage.getGuidesByPage(e);
   }
   /**
@@ -872,7 +872,7 @@ class v {
   handleSaveGuide(e) {
     const t = this.saveGuide({
       ...e.guide,
-      page: f()
+      page: m()
     });
     console.log("Guide saved:", t);
   }
@@ -955,7 +955,7 @@ class v {
     this.exitEditorButton && (this.exitEditorButton.remove(), this.exitEditorButton = null);
   }
 }
-let d = null, p = !1;
+let d = null, f = !1;
 function g(o) {
   return d || (d = new v(o), d.init(), d);
 }
@@ -1006,7 +1006,7 @@ function O(o) {
 }
 if (typeof window < "u") {
   const o = window.visualDesigner;
-  o && Array.isArray(o._q) && (p = !0);
+  o && Array.isArray(o._q) && (f = !0);
   try {
     const e = new URL(window.location.href);
     if (e.searchParams.get("designer") === "true") {
@@ -1017,9 +1017,15 @@ if (typeof window < "u") {
   } catch {
   }
 }
-typeof window < "u" && !d && !p && (document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", () => {
-  !d && !p && g();
-}) : !d && !p && g());
+if (typeof window < "u" && !d) {
+  const o = window.__visualDesignerWasLaunched === !0;
+  if (!f || o) {
+    const e = () => {
+      !d && (!f || o) && g();
+    };
+    document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", e) : e();
+  }
+}
 typeof window < "u" && (window.VisualDesigner = {
   init: g,
   getInstance: A,

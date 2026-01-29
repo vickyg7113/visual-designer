@@ -126,19 +126,25 @@ if (typeof window !== 'undefined') {
   }
 }
 
-// Auto-initialize ONLY if NOT in snippet mode
-// Snippet mode expects the host app to call initialize() explicitly after it is ready
-if (typeof window !== 'undefined' && !sdkInstance && !isSnippetMode) {
-  // Wait for DOM to be ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!sdkInstance && !isSnippetMode) {
+// Auto-initialize rules:
+// - Normal case (no snippet): auto-init as before
+// - Snippet mode: DO NOT auto-init normally, BUT
+//   if the page was launched via ?designer=true (flag set in __visualDesignerWasLaunched),
+//   we auto-init so editor comes up even if the host app doesn't explicitly call initialize().
+if (typeof window !== 'undefined' && !sdkInstance) {
+  const wasLaunched = (window as any).__visualDesignerWasLaunched === true;
+
+  if (!isSnippetMode || wasLaunched) {
+    const doInit = () => {
+      if (!sdkInstance && (!isSnippetMode || wasLaunched)) {
         init();
       }
-    });
-  } else {
-    if (!sdkInstance && !isSnippetMode) {
-      init();
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', doInit);
+    } else {
+      doInit();
     }
   }
 }
