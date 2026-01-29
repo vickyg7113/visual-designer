@@ -395,7 +395,7 @@ export class DesignerSDK {
       left: 0;
       right: 0;
       bottom: 0;
-      border: 3px solid #ef4444;
+      border: 5px solid #ef4444;
       pointer-events: none;
       z-index: 999997;
       box-sizing: border-box;
@@ -436,16 +436,17 @@ export class DesignerSDK {
     this.studioBadge.textContent = 'Revgain Visual Design Studio';
     this.studioBadge.style.cssText = `
       position: fixed;
-      top: 20px;
+      top: 0;
       left: 50%;
-      transform: translateX(-50%);
-      padding: 8px 20px;
+      transform: translateX(-50%) translateY(-50%);
+      padding: 6px 20px;
       background: #ef4444;
       color: #ffffff;
       font-size: 14px;
       font-weight: 600;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      border-radius: 6px;
+      border-radius: 0 0 6px 6px;
+      border-top: none;
       z-index: 1000001;
       box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
       pointer-events: none;
