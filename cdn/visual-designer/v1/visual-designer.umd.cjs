@@ -235,19 +235,20 @@
       box-sizing: border-box;
     `,document.body.appendChild(this.redBorderOverlay)}}removeRedBorderOverlay(){this.redBorderOverlay&&(this.redBorderOverlay.remove(),this.redBorderOverlay=null)}createStudioBadge(){if(!this.studioBadge){if(!document.body){if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",()=>this.createStudioBadge());return}setTimeout(()=>this.createStudioBadge(),100);return}this.studioBadge=document.createElement("div"),this.studioBadge.id="designer-studio-badge",this.studioBadge.textContent="Revgain Visual Design Studio",this.studioBadge.style.cssText=`
       position: fixed;
-      top: 0;
+      top: 5px;
       left: 50%;
-      transform: translateX(-50%) translateY(-50%);
-      padding: 6px 20px;
-      background: #3B82F6;
-      color: #ffffff;
+      transform: translateX(-50%);
+      padding: 8px 20px;
+      background: #ffffff;
+      color: #111827;
       font-size: 14px;
       font-weight: 600;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
       border-radius: 0 0 6px 6px;
+      border: 5px solid #3B82F6;
       border-top: none;
       z-index: 1000001;
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
       pointer-events: none;
       white-space: nowrap;
     `,document.body.appendChild(this.studioBadge)}}removeStudioBadge(){this.studioBadge&&(this.studioBadge.remove(),this.studioBadge=null)}}let d=null,y=!1;function f(o){return d||(d=new b(o),d.init(),d)}function x(){return d}function w(o){!o||!Array.isArray(o)||o.forEach(e=>{if(!e||!Array.isArray(e)||e.length===0)return;const t=e[0],i=e.slice(1);try{switch(t){case"initialize":{const r=i[0];f(r);break}case"identify":{const r=i[0];r&&console.log("[Visual Designer] identify (snippet) called with:",r);break}case"enableEditor":{(d??f()).enableEditor();break}case"disableEditor":{d&&d.disableEditor();break}case"loadGuides":{d&&d.loadGuides();break}case"getGuides":{if(d)return d.getGuides();break}default:console.warn("[Visual Designer] Unknown snippet method:",t)}}catch(r){console.error("[Visual Designer] Error processing queued call:",t,r)}})}if(typeof window<"u"){const o=window.visualDesigner;o&&Array.isArray(o._q)&&(y=!0);try{const e=new URL(window.location.href);if(e.searchParams.get("designer")==="true"){e.searchParams.delete("designer");const i=e.toString();window.history.replaceState({},"",i),window.__visualDesignerWasLaunched=!0}}catch{}}if(typeof window<"u"&&!d){const o=window.__visualDesignerWasLaunched===!0;if(!y||o){const e=()=>{!d&&(!y||o)&&f()};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",e):e()}}typeof window<"u"&&(window.VisualDesigner={init:f,getInstance:x,DesignerSDK:b,_processQueue:w}),c.DesignerSDK=b,c._processQueue=w,c.getInstance=x,c.init=f,Object.defineProperty(c,Symbol.toStringTag,{value:"Module"})});

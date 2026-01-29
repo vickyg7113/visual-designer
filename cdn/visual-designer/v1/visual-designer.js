@@ -1,4 +1,4 @@
-class m {
+class p {
   /**
    * Generate a stable selector for an element
    */
@@ -166,7 +166,7 @@ function E(o) {
   const e = window.getComputedStyle(o);
   return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && o.getBoundingClientRect().height > 0 && o.getBoundingClientRect().width > 0;
 }
-function p() {
+function m() {
   return window.location.pathname || "/";
 }
 function S() {
@@ -284,7 +284,7 @@ class k {
    */
   selectElement(e) {
     this.selectedElement = e, this.highlightElement(e);
-    const t = m.generateSelector(e), i = w(e);
+    const t = p.generateSelector(e), i = w(e);
     this.messageCallback && this.messageCallback({
       type: "ELEMENT_SELECTED",
       selector: t.selector,
@@ -325,7 +325,7 @@ class I {
    */
   renderGuides(e) {
     this.clear();
-    const t = p();
+    const t = m();
     e.filter(
       (r) => r.page === t && r.status === "active"
     ).forEach((r) => {
@@ -336,7 +336,7 @@ class I {
    * Render a single guide
    */
   renderGuide(e) {
-    const t = m.findElement(e.selector);
+    const t = p.findElement(e.selector);
     if (!t) {
       console.warn(`Guide "${e.id}" target not found: ${e.selector}`);
       return;
@@ -474,7 +474,7 @@ class I {
       const r = e.find((s) => s.id === i);
       if (!r)
         return;
-      const n = m.findElement(r.selector);
+      const n = p.findElement(r.selector);
       n && this.positionTooltip(t, n, r.placement);
     });
   }
@@ -803,7 +803,7 @@ class x {
    * Get guides for current page
    */
   getGuidesForCurrentPage() {
-    const e = p();
+    const e = m();
     return this.storage.getGuidesByPage(e);
   }
   /**
@@ -872,7 +872,7 @@ class x {
   handleSaveGuide(e) {
     const t = this.saveGuide({
       ...e.guide,
-      page: p()
+      page: m()
     });
     console.log("Guide saved:", t);
   }
@@ -1001,19 +1001,20 @@ class x {
       }
       this.studioBadge = document.createElement("div"), this.studioBadge.id = "designer-studio-badge", this.studioBadge.textContent = "Revgain Visual Design Studio", this.studioBadge.style.cssText = `
       position: fixed;
-      top: 0;
+      top: 5px;
       left: 50%;
-      transform: translateX(-50%) translateY(-50%);
-      padding: 6px 20px;
-      background: #3B82F6;
-      color: #ffffff;
+      transform: translateX(-50%);
+      padding: 8px 20px;
+      background: #ffffff;
+      color: #111827;
       font-size: 14px;
       font-weight: 600;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
       border-radius: 0 0 6px 6px;
+      border: 5px solid #3B82F6;
       border-top: none;
       z-index: 1000001;
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
       pointer-events: none;
       white-space: nowrap;
     `, document.body.appendChild(this.studioBadge);
