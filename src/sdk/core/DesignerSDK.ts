@@ -168,23 +168,9 @@ export class DesignerSDK {
       return this.config.editorMode;
     }
 
-    // Check query parameter ?designer=true (launcher / snippet trigger)
-    try {
-      const url = new URL(window.location.href);
-      const designerParam = url.searchParams.get('designer');
-
-      if (designerParam === 'true') {
-        // Remove the parameter from the URL so end-users don't see it
-        url.searchParams.delete('designer');
-        const cleanUrl = url.toString();
-        window.history.replaceState({}, '', cleanUrl);
-
-        // eslint-disable-next-line no-console
-        console.log('[Visual Designer] Detected ?designer=true in URL. Enabling editor mode and cleaning URL.');
-        return true;
-      }
-    } catch {
-      // Ignore URL parsing errors (e.g. non-browser environments)
+    // If script saw ?designer=true at load time (cleaned in index.ts), respect that flag
+    if (typeof window !== 'undefined' && (window as any).__visualDesignerWasLaunched) {
+      return true;
     }
 
     // Check localStorage

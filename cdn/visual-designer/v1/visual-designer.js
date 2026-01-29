@@ -1,4 +1,4 @@
-class p {
+class m {
   /**
    * Generate a stable selector for an element
    */
@@ -284,7 +284,7 @@ class I {
    */
   selectElement(e) {
     this.selectedElement = e, this.highlightElement(e);
-    const t = p.generateSelector(e), i = w(e);
+    const t = m.generateSelector(e), i = w(e);
     this.messageCallback && this.messageCallback({
       type: "ELEMENT_SELECTED",
       selector: t.selector,
@@ -336,7 +336,7 @@ class B {
    * Render a single guide
    */
   renderGuide(e) {
-    const t = p.findElement(e.selector);
+    const t = m.findElement(e.selector);
     if (!t) {
       console.warn(`Guide "${e.id}" target not found: ${e.selector}`);
       return;
@@ -474,7 +474,7 @@ class B {
       const n = e.find((s) => s.id === i);
       if (!n)
         return;
-      const r = p.findElement(n.selector);
+      const r = m.findElement(n.selector);
       r && this.positionTooltip(t, r, n.placement);
     });
   }
@@ -835,18 +835,7 @@ class v {
    * Check if editor mode should be enabled
    */
   shouldEnableEditorMode() {
-    if (this.config.editorMode !== void 0)
-      return this.config.editorMode;
-    try {
-      const e = new URL(window.location.href);
-      if (e.searchParams.get("designer") === "true") {
-        e.searchParams.delete("designer");
-        const i = e.toString();
-        return window.history.replaceState({}, "", i), console.log("[Visual Designer] Detected ?designer=true in URL. Enabling editor mode and cleaning URL."), !0;
-      }
-    } catch {
-    }
-    return localStorage.getItem("designerMode") === "true";
+    return this.config.editorMode !== void 0 ? this.config.editorMode : !!(typeof window < "u" && window.__visualDesignerWasLaunched || localStorage.getItem("designerMode") === "true");
   }
   /**
    * Handle messages from editor
@@ -966,7 +955,7 @@ class v {
     this.exitEditorButton && (this.exitEditorButton.remove(), this.exitEditorButton = null);
   }
 }
-let d = null, m = !1;
+let d = null, p = !1;
 function g(o) {
   return d || (d = new v(o), d.init(), d);
 }
@@ -1017,11 +1006,20 @@ function O(o) {
 }
 if (typeof window < "u") {
   const o = window.visualDesigner;
-  o && Array.isArray(o._q) && (m = !0);
+  o && Array.isArray(o._q) && (p = !0);
+  try {
+    const e = new URL(window.location.href);
+    if (e.searchParams.get("designer") === "true") {
+      e.searchParams.delete("designer");
+      const i = e.toString();
+      window.history.replaceState({}, "", i), window.__visualDesignerWasLaunched = !0;
+    }
+  } catch {
+  }
 }
-typeof window < "u" && !d && !m && (document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", () => {
-  !d && !m && g();
-}) : !d && !m && g());
+typeof window < "u" && !d && !p && (document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", () => {
+  !d && !p && g();
+}) : !d && !p && g());
 typeof window < "u" && (window.VisualDesigner = {
   init: g,
   getInstance: A,

@@ -100,10 +100,29 @@ export function _processQueue(queue: any[]): void {
 }
 
 // Detect if snippet pattern is being used (window.visualDesigner with _q queue)
+// Also, if ?designer=true is present at script load time, remove it from the URL
+// and mark a flag so the SDK can still enable editor mode later.
 if (typeof window !== 'undefined') {
   const globalVD = (window as any).visualDesigner;
   if (globalVD && Array.isArray(globalVD._q)) {
     isSnippetMode = true;
+  }
+
+  try {
+    const url = new URL(window.location.href);
+    const designerParam = url.searchParams.get('designer');
+
+    if (designerParam === 'true') {
+      // Remove the parameter from the URL immediately so it never "sticks"
+      url.searchParams.delete('designer');
+      const cleanUrl = url.toString();
+      window.history.replaceState({}, '', cleanUrl);
+
+      // Set a flag so DesignerSDK.can still know that designer=true was present
+      (window as any).__visualDesignerWasLaunched = true;
+    }
+  } catch {
+    // ignore URL parsing errors
   }
 }
 
