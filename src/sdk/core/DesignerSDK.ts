@@ -395,7 +395,7 @@ export class DesignerSDK {
       left: 0;
       right: 0;
       bottom: 0;
-      border: 5px solid #ef4444;
+      border: 5px solid #3B82F6;
       pointer-events: none;
       z-index: 999997;
       box-sizing: border-box;
@@ -440,7 +440,7 @@ export class DesignerSDK {
       left: 50%;
       transform: translateX(-50%) translateY(-50%);
       padding: 6px 20px;
-      background: #ef4444;
+      background: #3B82F6;
       color: #ffffff;
       font-size: 14px;
       font-weight: 600;

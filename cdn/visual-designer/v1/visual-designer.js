@@ -1,4 +1,4 @@
-class f {
+class m {
   /**
    * Generate a stable selector for an element
    */
@@ -166,7 +166,7 @@ function E(o) {
   const e = window.getComputedStyle(o);
   return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && o.getBoundingClientRect().height > 0 && o.getBoundingClientRect().width > 0;
 }
-function m() {
+function p() {
   return window.location.pathname || "/";
 }
 function S() {
@@ -284,7 +284,7 @@ class k {
    */
   selectElement(e) {
     this.selectedElement = e, this.highlightElement(e);
-    const t = f.generateSelector(e), i = w(e);
+    const t = m.generateSelector(e), i = w(e);
     this.messageCallback && this.messageCallback({
       type: "ELEMENT_SELECTED",
       selector: t.selector,
@@ -325,7 +325,7 @@ class I {
    */
   renderGuides(e) {
     this.clear();
-    const t = m();
+    const t = p();
     e.filter(
       (r) => r.page === t && r.status === "active"
     ).forEach((r) => {
@@ -336,7 +336,7 @@ class I {
    * Render a single guide
    */
   renderGuide(e) {
-    const t = f.findElement(e.selector);
+    const t = m.findElement(e.selector);
     if (!t) {
       console.warn(`Guide "${e.id}" target not found: ${e.selector}`);
       return;
@@ -474,7 +474,7 @@ class I {
       const r = e.find((s) => s.id === i);
       if (!r)
         return;
-      const n = f.findElement(r.selector);
+      const n = m.findElement(r.selector);
       n && this.positionTooltip(t, n, r.placement);
     });
   }
@@ -803,7 +803,7 @@ class x {
    * Get guides for current page
    */
   getGuidesForCurrentPage() {
-    const e = m();
+    const e = p();
     return this.storage.getGuidesByPage(e);
   }
   /**
@@ -872,7 +872,7 @@ class x {
   handleSaveGuide(e) {
     const t = this.saveGuide({
       ...e.guide,
-      page: m()
+      page: p()
     });
     console.log("Guide saved:", t);
   }
@@ -973,7 +973,7 @@ class x {
       left: 0;
       right: 0;
       bottom: 0;
-      border: 5px solid #ef4444;
+      border: 5px solid #3B82F6;
       pointer-events: none;
       z-index: 999997;
       box-sizing: border-box;
@@ -1005,7 +1005,7 @@ class x {
       left: 50%;
       transform: translateX(-50%) translateY(-50%);
       padding: 6px 20px;
-      background: #ef4444;
+      background: #3B82F6;
       color: #ffffff;
       font-size: 14px;
       font-weight: 600;
@@ -1026,7 +1026,7 @@ class x {
     this.studioBadge && (this.studioBadge.remove(), this.studioBadge = null);
   }
 }
-let d = null, p = !1;
+let d = null, f = !1;
 function g(o) {
   return d || (d = new x(o), d.init(), d);
 }
@@ -1077,7 +1077,7 @@ function A(o) {
 }
 if (typeof window < "u") {
   const o = window.visualDesigner;
-  o && Array.isArray(o._q) && (p = !0);
+  o && Array.isArray(o._q) && (f = !0);
   try {
     const e = new URL(window.location.href);
     if (e.searchParams.get("designer") === "true") {
@@ -1090,9 +1090,9 @@ if (typeof window < "u") {
 }
 if (typeof window < "u" && !d) {
   const o = window.__visualDesignerWasLaunched === !0;
-  if (!p || o) {
+  if (!f || o) {
     const e = () => {
-      !d && (!p || o) && g();
+      !d && (!f || o) && g();
     };
     document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", e) : e();
   }
