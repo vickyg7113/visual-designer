@@ -166,7 +166,7 @@ function E(s) {
   const e = window.getComputedStyle(s);
   return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && s.getBoundingClientRect().height > 0 && s.getBoundingClientRect().width > 0;
 }
-function p() {
+function m() {
   return window.location.pathname || "/";
 }
 function w() {
@@ -227,6 +227,14 @@ class k {
    * Create highlight overlay element
    */
   createHighlightOverlay() {
+    if (!document.body) {
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => this.createHighlightOverlay());
+        return;
+      }
+      setTimeout(() => this.createHighlightOverlay(), 100);
+      return;
+    }
     this.highlightOverlay = document.createElement("div"), this.highlightOverlay.id = "designer-highlight-overlay", this.highlightOverlay.style.cssText = `
       position: absolute;
       pointer-events: none;
@@ -317,7 +325,7 @@ class I {
    */
   renderGuides(e) {
     this.clear();
-    const t = p();
+    const t = m();
     e.filter(
       (n) => n.page === t && n.status === "active"
     ).forEach((n) => {
@@ -482,7 +490,9 @@ class B {
    * Create and show editor iframe
    */
   create(e) {
-    this.iframe || (this.messageCallback = e, this.iframe = document.createElement("iframe"), this.iframe.id = "designer-editor-frame", this.iframe.style.cssText = `
+    if (this.iframe)
+      return;
+    this.messageCallback = e, this.iframe = document.createElement("iframe"), this.iframe.id = "designer-editor-frame", this.iframe.style.cssText = `
       position: fixed;
       top: 0;
       left: 0;
@@ -494,9 +504,13 @@ class B {
       box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
       z-index: 999999;
       display: none;
-    `, this.loadEditorHtml(), window.addEventListener("message", this.handleMessage), document.body.appendChild(this.iframe), this.iframe.onload = () => {
-      this.isReady = !0, this.sendMessage({ type: "EDITOR_READY" });
-    });
+    `, this.loadEditorHtml(), window.addEventListener("message", this.handleMessage);
+    const t = () => {
+      document.body ? (document.body.appendChild(this.iframe), this.iframe && (this.iframe.onload = () => {
+        this.isReady = !0, this.sendMessage({ type: "EDITOR_READY" });
+      })) : document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", t) : setTimeout(t, 100);
+    };
+    t();
   }
   /**
    * Show editor frame
@@ -671,8 +685,8 @@ class B {
 </html>`;
   }
 }
-const G = "visual-designer-guides", x = "1.0.0";
-class M {
+const G = "visual-designer-guides", y = "1.0.0";
+class L {
   constructor(e = G) {
     this.storageKey = e;
   }
@@ -685,7 +699,7 @@ class M {
       if (!e)
         return [];
       const t = JSON.parse(e);
-      return t.version !== x ? (console.warn("Storage version mismatch, clearing old data"), this.clear(), []) : t.guides || [];
+      return t.version !== y ? (console.warn("Storage version mismatch, clearing old data"), this.clear(), []) : t.guides || [];
     } catch (e) {
       return console.error("Error reading guides from storage:", e), [];
     }
@@ -728,7 +742,7 @@ class M {
   saveGuides(e) {
     const t = {
       guides: e,
-      version: x
+      version: y
     };
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(t));
@@ -753,9 +767,9 @@ class M {
     return this.getGuides().find((i) => i.id === e) || null;
   }
 }
-class y {
+class x {
   constructor(e = {}) {
-    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.config = e, this.storage = new M(e.storageKey), this.editorMode = new k(), this.guideRenderer = new I(), this.editorFrame = new B();
+    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.config = e, this.storage = new L(e.storageKey), this.editorMode = new k(), this.guideRenderer = new I(), this.editorFrame = new B();
   }
   /**
    * Initialize the SDK
@@ -789,7 +803,7 @@ class y {
    * Get guides for current page
    */
   getGuidesForCurrentPage() {
-    const e = p();
+    const e = m();
     return this.storage.getGuidesByPage(e);
   }
   /**
@@ -858,7 +872,7 @@ class y {
   handleSaveGuide(e) {
     const t = this.saveGuide({
       ...e.guide,
-      page: p()
+      page: m()
     });
     console.log("Guide saved:", t);
   }
@@ -899,7 +913,16 @@ class y {
    * Create exit editor button
    */
   createExitEditorButton() {
-    this.exitEditorButton || (this.exitEditorButton = document.createElement("button"), this.exitEditorButton.id = "designer-exit-editor-btn", this.exitEditorButton.textContent = "Exit Editor", this.exitEditorButton.style.cssText = `
+    if (!this.exitEditorButton) {
+      if (!document.body) {
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", () => this.createExitEditorButton());
+          return;
+        }
+        setTimeout(() => this.createExitEditorButton(), 100);
+        return;
+      }
+      this.exitEditorButton = document.createElement("button"), this.exitEditorButton.id = "designer-exit-editor-btn", this.exitEditorButton.textContent = "Exit Editor", this.exitEditorButton.style.cssText = `
       position: fixed;
       top: 20px;
       right: 20px;
@@ -917,12 +940,13 @@ class y {
       transition: all 0.2s ease;
       pointer-events: auto;
     `, this.exitEditorButton.onmouseenter = () => {
-      this.exitEditorButton && (this.exitEditorButton.style.background = "#3b82f6", this.exitEditorButton.style.color = "#ffffff", this.exitEditorButton.style.transform = "translateY(-2px)", this.exitEditorButton.style.boxShadow = "0 6px 16px rgba(0, 0, 0, 0.2)");
-    }, this.exitEditorButton.onmouseleave = () => {
-      this.exitEditorButton && (this.exitEditorButton.style.background = "#ffffff", this.exitEditorButton.style.color = "#3b82f6", this.exitEditorButton.style.transform = "translateY(0)", this.exitEditorButton.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)");
-    }, this.exitEditorButton.onclick = () => {
-      this.disableEditor();
-    }, document.body.appendChild(this.exitEditorButton));
+        this.exitEditorButton && (this.exitEditorButton.style.background = "#3b82f6", this.exitEditorButton.style.color = "#ffffff", this.exitEditorButton.style.transform = "translateY(-2px)", this.exitEditorButton.style.boxShadow = "0 6px 16px rgba(0, 0, 0, 0.2)");
+      }, this.exitEditorButton.onmouseleave = () => {
+        this.exitEditorButton && (this.exitEditorButton.style.background = "#ffffff", this.exitEditorButton.style.color = "#3b82f6", this.exitEditorButton.style.transform = "translateY(0)", this.exitEditorButton.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)");
+      }, this.exitEditorButton.onclick = () => {
+        this.disableEditor();
+      }, document.body.appendChild(this.exitEditorButton);
+    }
   }
   /**
    * Remove exit editor button
@@ -932,22 +956,22 @@ class y {
   }
 }
 let c = null;
-function m(s) {
-  return c || (c = new y(s), c.init(), c);
+function p(s) {
+  return c || (c = new x(s), c.init(), c);
 }
-function L() {
+function M() {
   return c;
 }
 typeof window < "u" && !c && (document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", () => {
-  c || m();
-}) : c || m());
+  c || p();
+}) : c || p());
 typeof window < "u" && (window.VisualDesigner = {
-  init: m,
-  getInstance: L,
-  DesignerSDK: y
+  init: p,
+  getInstance: M,
+  DesignerSDK: x
 });
 export {
-  y as DesignerSDK,
-  L as getInstance,
-  m as init
+  x as DesignerSDK,
+  M as getInstance,
+  p as init
 };

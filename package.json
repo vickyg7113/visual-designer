@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "build:sdk": "tsc && vite build --config vite.sdk.config.ts",
+    "build:sdk": "tsc && vite build --config vite.sdk.config.ts && copy /Y \"dist\\sdk\\visual-designer.js\" \"cdn\\visual-designer\\v1\\visual-designer.js\" && copy /Y \"dist\\sdk\\visual-designer.umd.cjs\" \"cdn\\visual-designer\\v1\\visual-designer.umd.cjs\"",
     "preview": "vite preview"
   },
   "keywords": [
