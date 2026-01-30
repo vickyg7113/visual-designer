@@ -162,7 +162,7 @@ function k(s) {
     boundingRect: e
   };
 }
-function x(s) {
+function v(s) {
   const e = window.getComputedStyle(s);
   return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && s.getBoundingClientRect().height > 0 && s.getBoundingClientRect().width > 0;
 }
@@ -190,7 +190,7 @@ class D {
           this.hideHighlight();
           return;
         }
-        if (!x(t)) {
+        if (!v(t)) {
           this.hideHighlight();
           return;
         }
@@ -200,7 +200,7 @@ class D {
       if (!this.isActive)
         return;
       const t = e.target;
-      t && (t.closest("#designer-editor-frame, #designer-highlight-overlay, #designer-exit-editor-btn, #designer-red-border-overlay, #designer-studio-badge") || (e.preventDefault(), e.stopPropagation(), e.stopImmediatePropagation(), x(t) && this.selectElement(t)));
+      t && (t.closest("#designer-editor-frame, #designer-highlight-overlay, #designer-exit-editor-btn, #designer-red-border-overlay, #designer-studio-badge") || (e.preventDefault(), e.stopPropagation(), e.stopImmediatePropagation(), v(t) && this.selectElement(t)));
     }, this.handleKeyDown = (e) => {
       this.isActive && e.key === "Escape" && (this.messageCallback && this.messageCallback({ type: "CANCEL" }), this.selectedElement = null, this.hideHighlight());
     };
@@ -449,8 +449,8 @@ class L {
         `;
         break;
     }
-    const b = window.innerWidth, v = window.innerHeight;
-    c < r ? c = r + 10 : c + o.width > r + b && (c = r + b - o.width - 10), l < d ? l = d + 10 : l + o.height > d + v && (l = d + v - o.height - 10), e.style.top = `${l}px`, e.style.left = `${c}px`, h && (h.style.cssText += g);
+    const m = window.innerWidth, b = window.innerHeight;
+    c < r ? c = r + 10 : c + o.width > r + m && (c = r + m - o.width - 10), l < d ? l = d + 10 : l + o.height > d + b && (l = d + b - o.height - 10), e.style.top = `${l}px`, e.style.left = `${c}px`, h && (h.style.cssText += g);
   }
   /**
    * Create container for guides
@@ -963,7 +963,7 @@ class I {
     this.dragHandle.style.top = `${e.top}px`, this.dragHandle.style.left = `${e.left}px`, this.dragHandle.style.width = `${e.width}px`;
   }
 }
-const O = "visual-designer-guides", y = "1.0.0";
+const O = "visual-designer-guides", x = "1.0.0";
 class T {
   constructor(e = O) {
     this.storageKey = e;
@@ -977,7 +977,7 @@ class T {
       if (!e)
         return [];
       const t = JSON.parse(e);
-      return t.version !== y ? (console.warn("Storage version mismatch, clearing old data"), this.clear(), []) : t.guides || [];
+      return t.version !== x ? (console.warn("Storage version mismatch, clearing old data"), this.clear(), []) : t.guides || [];
     } catch (e) {
       return console.error("Error reading guides from storage:", e), [];
     }
@@ -1020,7 +1020,7 @@ class T {
   saveGuides(e) {
     const t = {
       guides: e,
-      version: y
+      version: x
     };
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(t));
@@ -1045,7 +1045,7 @@ class T {
     return this.getGuides().find((i) => i.id === e) || null;
   }
 }
-class E {
+class y {
   constructor(e = {}) {
     this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.loadingOverlay = null, this.config = e, this.storage = new T(e.storageKey), this.editorMode = new D(), this.guideRenderer = new L(), this.editorFrame = new I();
   }
@@ -1373,9 +1373,9 @@ class E {
     this.loadingOverlay && (this.loadingOverlay.remove(), this.loadingOverlay = null);
   }
 }
-let a = null, m = !1;
+let a = null, E = !1;
 function u(s) {
-  return a || (a = new E(s), a.init(), a);
+  return a || (a = new y(s), a.init(), a);
 }
 function w() {
   return a;
@@ -1424,7 +1424,7 @@ function S(s) {
 }
 if (typeof window < "u") {
   const s = window.visualDesigner;
-  s && Array.isArray(s._q) && (m = !0, s.initialize = (e) => {
+  s && Array.isArray(s._q) && (E = !0, s.initialize = (e) => {
     u(e);
   }, s.identify = (e) => {
     e && console.log("[Visual Designer] identify (snippet) called with:", e);
@@ -1445,24 +1445,21 @@ if (typeof window < "u") {
   } catch {
   }
 }
-if (typeof window < "u" && !a) {
-  const s = window.__visualDesignerWasLaunched === !0;
-  if (typeof localStorage < "u" && localStorage.getItem("designerMode"), !m || s) {
-    const e = () => {
-      !a && (!m || s) && u();
-    };
-    document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", e) : e();
-  }
+if (typeof window < "u" && !a && !E) {
+  const s = () => {
+    a || u();
+  };
+  document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", s) : s();
 }
 typeof window < "u" && (window.VisualDesigner = {
   init: u,
   initialize: u,
   getInstance: w,
-  DesignerSDK: E,
+  DesignerSDK: y,
   _processQueue: S
 });
 export {
-  E as DesignerSDK,
+  y as DesignerSDK,
   S as _processQueue,
   w as getInstance,
   u as init

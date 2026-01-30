@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<!--
+  Target Simulator – replicates your target URL flow (snippet + init after login).
+  How to test:
+  1. Run: npm run build:sdk   (so cdn/ has visual-designer.umd.cjs)
+  2. Run: npm run dev
+  3. Open launcher: http://localhost:3000/launcher.html
+  4. Click "Use Target Simulator (snippet + login)", then "Launch Designer" (Guide) or "Launch Tag Feature"
+  5. You get this page with ?designer=true&mode=... → localStorage is set, login screen shows
+  6. Sign in → initializeVisualDesigner runs → VisualDesigner.init() → designer should appear
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Target Simulator (Snippet + Login → Init)</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    }
+    .login-card {
+      background: white;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    .login-card h1 { margin-bottom: 8px; font-size: 24px; color: #0f172a; }
+    .login-card p { color: #64748b; margin-bottom: 24px; font-size: 14px; }
+    .login-card .form-group { margin-bottom: 16px; }
+    .login-card label { display: block; margin-bottom: 6px; font-weight: 500; color: #374151; }
+    .login-card input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .login-card button {
+      width: 100%;
+      padding: 12px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .login-card button:hover { background: #2563eb; }
+    .app-screen { display: none; min-height: 100vh; }
+    .app-screen.visible { display: block; }
+    .target-nav {
+      background: white;
+      padding: 16px 24px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .target-nav .user { font-size: 14px; color: #64748b; }
+    .target-nav .logout {
+      padding: 8px 16px;
+      background: #f1f5f9;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .target-content { padding: 24px; max-width: 800px; margin: 0 auto; }
+    .target-content h2 { margin-bottom: 16px; }
+    .target-content p { color: #64748b; margin-bottom: 24px; }
+    .debug-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 24px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #475569;
+    }
+    .debug-box strong { color: #0f172a; }
+  </style>
+</head>
+<body>
+  <!-- Login screen (shown when not "logged in") -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <h1>Sign in</h1>
+      <p>Target simulator – same flow as your app (snippet + init after login)</p>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" value="user@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" value="password123" required />
+        </div>
+        <button type="submit">Sign in</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- App screen (shown after "login") -->
+  <div id="appScreen" class="app-screen">
+    <nav class="target-nav">
+      <span class="logo">Target App</span>
+      <div>
+        <span class="user" id="userEmail">user@example.com</span>
+        <button type="button" class="logout" id="logoutBtn">Log out</button>
+      </div>
+    </nav>
+    <main class="target-content">
+      <h2>Support</h2>
+      <p>This page replicates your target URL: SDK loaded via snippet, then initialized after login.</p>
+      <div class="card">
+        <h3>Tickets</h3>
+        <div class="card-content">
+          <p>If you launched from the launcher with "Guide" or "Tag Feature", the designer should appear after you sign in.</p>
+        </div>
+      </div>
+      <div class="debug-box" id="debugBox">
+        <strong>Debug</strong><br>
+        localStorage.designerMode: <span id="debugDesignerMode">-</span><br>
+        localStorage.designerModeType: <span id="debugDesignerModeType">-</span><br>
+        VisualDesigner loaded: <span id="debugVD">-</span><br>
+        getInstance(): <span id="debugInstance">-</span>
+      </div>
+    </main>
+  </div>
+
+  <!-- Same snippet as your target URL – creates stub, then loads UMD -->
+  <script>
+    (function (cdnUrl) {
+      (function (r, e, v, a, i) {
+        var w, x, y, z, t;
+        a = r[i] = r[i] || {};
+        a._q = a._q || [];
+        w = ["initialize", "identify", "enableEditor", "disableEditor", "loadGuides", "getGuides"];
+        for (x = 0, y = w.length; x < y; ++x) {
+          (function (m) {
+            a[m] = a[m] || function () {
+              a._q[m === w[0] ? "unshift" : "push"]([m].concat([].slice.call(arguments, 0)));
+            };
+          })(w[x]);
+        }
+        z = e.createElement(v);
+        z.async = !0;
+        z.src = cdnUrl;
+        z.onload = function() {
+          setTimeout(function() {
+            if (r.VisualDesigner && r.VisualDesigner._processQueue) {
+              r.VisualDesigner._processQueue(a._q);
+            }
+          }, 100);
+        };
+        t = e.getElementsByTagName(v)[0];
+        t.parentNode.insertBefore(z, t);
+      })(window, document, "script", null, "visualDesigner");
+    })("/visual-designer/v1/visual-designer.umd.cjs");
+  </script>
+
+  <script>
+    (function() {
+      var loginScreen = document.getElementById('loginScreen');
+      var appScreen = document.getElementById('appScreen');
+      var loginForm = document.getElementById('loginForm');
+      var logoutBtn = document.getElementById('logoutBtn');
+      var userEmailEl = document.getElementById('userEmail');
+      var debugDesignerMode = document.getElementById('debugDesignerMode');
+      var debugDesignerModeType = document.getElementById('debugDesignerModeType');
+      var debugVD = document.getElementById('debugVD');
+      var debugInstance = document.getElementById('debugInstance');
+
+      var isAuthenticated = false;
+      var currentUser = null;
+
+      function updateDebug() {
+        debugDesignerMode.textContent = localStorage.getItem('designerMode') || '(empty)';
+        debugDesignerModeType.textContent = localStorage.getItem('designerModeType') || '(empty)';
+        debugVD.textContent = window.VisualDesigner ? 'yes' : 'no';
+        debugInstance.textContent = window.VisualDesigner && window.VisualDesigner.getInstance ? (window.VisualDesigner.getInstance() ? 'instance' : 'null') : 'N/A';
+      }
+
+      function showScreen(loggedIn) {
+        loginScreen.style.display = loggedIn ? 'none' : 'flex';
+        appScreen.classList.toggle('visible', loggedIn);
+        if (loggedIn) {
+          userEmailEl.textContent = currentUser && currentUser.email ? currentUser.email : 'user@example.com';
+        }
+        updateDebug();
+      }
+
+      // Same as AuthConfig: initialize Visual Designer only after login (read from window at call time)
+      function initializeVisualDesigner(userData) {
+        try {
+          var VD = window.VisualDesigner;
+          if (!VD || typeof VD.init !== 'function') {
+            console.warn('[Target Simulator] Visual Designer SDK not loaded yet.');
+            return;
+          }
+          console.log('[Target Simulator] Initializing Visual Designer with user data');
+          var config = userData && typeof userData === 'object' ? userData : {};
+          VD.init(config);
+          console.log('[Target Simulator] Visual Designer initialized');
+        } catch (e) {
+          console.error('[Target Simulator] Visual Designer init error:', e);
+        }
+      }
+
+      loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        currentUser = {
+          sub: 'user-123',
+          id: 'user-123',
+          email: email,
+          given_name: 'Demo',
+          family_name: 'User',
+          organizationId: 'org-1',
+          organizationName: 'Demo Org'
+        };
+        isAuthenticated = true;
+        showScreen(true);
+
+        // Same as your AuthConfig: init after login (at call time, so we get real SDK)
+        initializeVisualDesigner(currentUser);
+        updateDebug();
+      });
+
+      logoutBtn.addEventListener('click', function() {
+        isAuthenticated = false;
+        currentUser = null;
+        showScreen(false);
+        updateDebug();
+      });
+
+      // Initial state
+      showScreen(false);
+      setInterval(updateDebug, 2000);
+    })();
+  </script>
+</body>
+</html>

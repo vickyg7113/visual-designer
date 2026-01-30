@@ -167,24 +167,15 @@ if (typeof window !== 'undefined') {
 }
 
 // Auto-initialize rules:
-// - Normal case (no snippet): auto-init as before
-// - Snippet mode: DO NOT auto-init normally, BUT
-//   if the page was launched via ?designer=true (flag set in __visualDesignerWasLaunched),
-//   OR if designerMode exists in localStorage (stored intent from previous launch),
-//   we auto-init so editor comes up even if the host app doesn't explicitly call initialize().
-//   NOTE: In snippet mode, the host app should call init() after login, which will check localStorage.
+// - Normal case (no snippet): auto-init so editor works without explicit init().
+// - Snippet mode: NEVER auto-init. Wait for explicit init() call after login.
+//   This prevents the editor from showing on the login page. When the host app
+//   calls init() after login, the SDK will check localStorage and enable the designer.
 if (typeof window !== 'undefined' && !sdkInstance) {
-  const wasLaunched = (window as any).__visualDesignerWasLaunched === true;
-  // Check localStorage for stored designerMode (Pendo-style: stored intent)
-  const hasDesignerMode = typeof localStorage !== 'undefined' && localStorage.getItem('designerMode') === 'true';
-
-  // Auto-init if:
-  // 1. Not in snippet mode (normal case), OR
-  // 2. Was launched via URL params (wasLaunched flag), OR
-  // 3. Has designerMode in localStorage (stored intent - but only if not in snippet mode to avoid showing on login page)
-  if (!isSnippetMode || wasLaunched) {
+  // In snippet mode, do NOT auto-init – editor must only show after init() is called (e.g. after login)
+  if (!isSnippetMode) {
     const doInit = () => {
-      if (!sdkInstance && (!isSnippetMode || wasLaunched)) {
+      if (!sdkInstance) {
         init();
       }
     };
@@ -195,9 +186,6 @@ if (typeof window !== 'undefined' && !sdkInstance) {
       doInit();
     }
   }
-  // In snippet mode, if localStorage has designerMode but wasLaunched is false,
-  // we DON'T auto-init here - we wait for explicit init() call after login
-  // This prevents showing designer on login page
 }
 
 // For UMD builds, expose globally

@@ -127,6 +127,117 @@ if (visualDesigner && visualDesigner.initialize) {
 
 When the launcher opens the target URL with `?designer=true&mode=guide`, the SDK stores `designerMode` and `designerModeType` in localStorage. After login, when you call `visualDesigner.initialize(userDataPayload)`, the SDK initializes and, if `designerMode` is in localStorage, enables the designer and shows the loading overlay, then the editor.
 
+---
+
+## Integration: index.html + AuthConfig.tsx (React, init after login)
+
+Use this when your app has a login and you want the designer to appear only **after** the user is authenticated.
+
+### 1. index.html – load the SDK (snippet only, no init)
+
+In your app’s **index.html**, add this script **once**, e.g. before `</body>`. Replace `YOUR_CDN_BASE` with your deployed Visual Designer base URL (e.g. `https://vickyg7113.github.io/visual-designer` or your GitHub Pages URL for this repo).
+
+```html
+<!-- Visual Designer: load SDK; init is called from React after login -->
+<script>
+  (function (cdnUrl) {
+    (function (r, e, v, a, i) {
+      var w, x, y, z, t;
+      a = r[i] = r[i] || {};
+      a._q = a._q || [];
+      w = ["initialize", "identify", "enableEditor", "disableEditor", "loadGuides", "getGuides"];
+      for (x = 0, y = w.length; x < y; ++x) {
+        (function (m) {
+          a[m] = a[m] || function () {
+            a._q[m === w[0] ? "unshift" : "push"]([m].concat([].slice.call(arguments, 0)));
+          };
+        })(w[x]);
+      }
+      z = e.createElement(v);
+      z.async = !0;
+      z.src = cdnUrl;
+      z.onload = function() {
+        setTimeout(function() {
+          if (r.VisualDesigner && r.VisualDesigner._processQueue) {
+            r.VisualDesigner._processQueue(a._q);
+          }
+        }, 100);
+      };
+      t = e.getElementsByTagName(v)[0];
+      t.parentNode.insertBefore(z, t);
+    })(window, document, "script", null, "visualDesigner");
+  })("YOUR_CDN_BASE/cdn/visual-designer/v1/visual-designer.umd.cjs");
+</script>
+```
+
+Example with a real base URL:
+
+```html
+})("https://vickyg7113.github.io/visual-designer/cdn/visual-designer/v1/visual-designer.umd.cjs");
+```
+
+Do **not** call `VisualDesigner.init()` in index.html; that happens in React after login.
+
+### 2. AuthConfig.tsx – init only after login
+
+After the user logs in, call `init()` (or `initialize()`) so the SDK starts and, if the page was opened with `?designer=true`, enables the editor.
+
+```tsx
+import { useEffect } from 'react';
+
+// Your auth type (adjust to your app)
+type User = {
+  id: string;
+  email?: string;
+  // ...
+};
+
+export function AuthConfig({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, user } = useAuth(); // your auth hook
+
+  useEffect(() => {
+    if (!isAuthenticated || !user) return;
+
+    const VD = (window as any).VisualDesigner;
+    if (!VD || typeof VD.init !== 'function') {
+      return;
+    }
+    VD.init({ /* optional config */ });
+    // Optional: pass user for future use
+    // (window as any).visualDesigner?.identify?.(user);
+  }, [isAuthenticated, user]);
+
+  return <>{children}</>;
+}
+```
+
+If you already have a post-login callback (e.g. in a router or auth provider), call init there instead:
+
+```tsx
+function onLoginSuccess(user: User) {
+  const VD = (window as any).VisualDesigner;
+  if (VD?.init) VD.init({});
+}
+```
+
+- **Before login:** The SDK script is loaded but **not** initialized → no editor on the login page.
+- **After login:** `VD.init()` runs → SDK reads `designerMode` from localStorage (set when the launcher opened the app with `?designer=true`) and shows the editor if needed.
+
+### 3. How changes are reflected (GitHub / CDN)
+
+Your **app** loads the SDK from a URL (e.g. your visual-designer repo on GitHub Pages). That URL always points at whatever is **currently** in that repo.
+
+| Step | What you do |
+|------|-------------|
+| 1. Change SDK | Edit code in the visual-designer repo (e.g. `src/sdk/`). |
+| 2. Build UMD | In that repo run: `npm run build:sdk` (writes to `cdn/visual-designer/v1/visual-designer.umd.cjs`). |
+| 3. Deploy CDN | Commit and push the updated `cdn/` folder to the visual-designer repo. If that repo is deployed to GitHub Pages, the new file is served at the same URL. |
+| 4. Your app sees it | Your app’s index.html loads `.../visual-designer/v1/visual-designer.umd.cjs` from that URL. The **next** time a user loads your app (or after cache expires), the browser fetches the new file and your changes are live. |
+
+So: **index.html** and **AuthConfig.tsx** stay the same; you only redeploy the **visual-designer** repo (with the new `cdn/` build). No change required in your app repo unless you switch CDN URL or add a new version path (e.g. `/v2/`) for cache busting.
+
+---
+
 ## Enable Editor Mode
 
 **Method 1: URL Parameter**
