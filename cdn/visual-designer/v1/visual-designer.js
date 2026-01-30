@@ -10,18 +10,18 @@ class p {
         method: "id"
       };
     if (e.hasAttribute("data-testid")) {
-      const o = e.getAttribute("data-testid");
+      const r = e.getAttribute("data-testid");
       return {
-        selector: `[data-testid="${this.escapeAttribute(o)}"]`,
+        selector: `[data-testid="${this.escapeAttribute(r)}"]`,
         confidence: "high",
         method: "data-testid"
       };
     }
     const t = this.getSemanticDataAttributes(e);
     if (t.length > 0) {
-      const o = t[0], r = e.getAttribute(o);
+      const r = t[0], o = e.getAttribute(r);
       return {
-        selector: `[${o}="${this.escapeAttribute(r)}"]`,
+        selector: `[${r}="${this.escapeAttribute(o)}"]`,
         confidence: "high",
         method: "data-attribute"
       };
@@ -78,8 +78,8 @@ class p {
     for (const n of t)
       e.hasAttribute(n) && i.push(n);
     for (let n = 0; n < e.attributes.length; n++) {
-      const o = e.attributes[n];
-      o.name.startsWith("data-") && !i.includes(o.name) && i.push(o.name);
+      const r = e.attributes[n];
+      r.name.startsWith("data-") && !i.includes(r.name) && i.push(r.name);
     }
     return i;
   }
@@ -87,18 +87,18 @@ class p {
    * Generate selector using ARIA attributes
    */
   static generateAriaSelector(e) {
-    var o;
+    var r;
     const t = e.getAttribute("role"), i = e.getAttribute("aria-label"), n = e.getAttribute("aria-labelledby");
     if (t) {
-      let r = `[role="${this.escapeAttribute(t)}"]`;
+      let o = `[role="${this.escapeAttribute(t)}"]`;
       if (i)
-        return r += `[aria-label="${this.escapeAttribute(i)}"]`, r;
+        return o += `[aria-label="${this.escapeAttribute(i)}"]`, o;
       if (n) {
         const a = document.getElementById(n);
-        if (a && ((o = a.textContent) == null ? void 0 : o.trim()))
-          return r;
+        if (a && ((r = a.textContent) == null ? void 0 : r.trim()))
+          return o;
       }
-      return r;
+      return o;
     }
     return null;
   }
@@ -115,20 +115,20 @@ class p {
         break;
       }
       if (i.className && typeof i.className == "string") {
-        const r = i.className.split(/\s+/).filter((a) => a && !a.startsWith("designer-")).slice(0, 2);
-        r.length > 0 && (n += "." + r.map((a) => this.escapeSelector(a)).join("."));
+        const o = i.className.split(/\s+/).filter((a) => a && !a.startsWith("designer-")).slice(0, 2);
+        o.length > 0 && (n += "." + o.map((a) => this.escapeSelector(a)).join("."));
       }
-      const o = i.parentElement;
-      if (o) {
-        const r = i.tagName, h = Array.from(o.children).filter(
-          (d) => d.tagName === r
+      const r = i.parentElement;
+      if (r) {
+        const o = i.tagName, h = Array.from(r.children).filter(
+          (d) => d.tagName === o
         );
         if (h.length > 1) {
           const d = h.indexOf(i) + 1;
           n += `:nth-of-type(${d})`;
         }
       }
-      if (t.unshift(n), i = o, t.length >= 5)
+      if (t.unshift(n), i = r, t.length >= 5)
         break;
     }
     return t.length > 0 ? t.join(" > ") : null;
@@ -149,9 +149,9 @@ class p {
 function w(s) {
   var i, n;
   const e = s.getBoundingClientRect(), t = {};
-  for (let o = 0; o < s.attributes.length; o++) {
-    const r = s.attributes[o];
-    t[r.name] = r.value;
+  for (let r = 0; r < s.attributes.length; r++) {
+    const o = s.attributes[r];
+    t[o.name] = o.value;
   }
   return {
     tagName: s.tagName.toLowerCase(),
@@ -169,17 +169,17 @@ function x(s) {
 function f() {
   return window.location.pathname || "/";
 }
-function S() {
+function k() {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
-function k(s) {
+function S(s) {
   const e = s.getBoundingClientRect();
   return e.top >= 0 && e.left >= 0 && e.bottom <= (window.innerHeight || document.documentElement.clientHeight) && e.right <= (window.innerWidth || document.documentElement.clientWidth);
 }
-function C(s) {
-  k(s) || s.scrollIntoView({ behavior: "smooth", block: "center" });
+function B(s) {
+  S(s) || s.scrollIntoView({ behavior: "smooth", block: "center" });
 }
-class M {
+class C {
   constructor() {
     this.isActive = !1, this.highlightOverlay = null, this.selectedElement = null, this.messageCallback = null, this.handleMouseOver = (e) => {
       if (!this.isActive || !this.highlightOverlay)
@@ -316,7 +316,7 @@ class M {
     e && e.remove();
   }
 }
-class B {
+class M {
   constructor() {
     this.renderedGuides = /* @__PURE__ */ new Map(), this.container = null;
   }
@@ -341,7 +341,7 @@ class B {
       console.warn(`Guide "${e.id}" target not found: ${e.selector}`);
       return;
     }
-    C(t);
+    B(t);
     const i = this.createTooltip(e, t);
     this.renderedGuides.set(e.id, i), this.container || this.createContainer(), this.container && this.container.appendChild(i), this.positionTooltip(i, t, e.placement);
   }
@@ -379,8 +379,8 @@ class B {
     `;
     const n = document.createElement("div");
     n.style.cssText = "margin-bottom: 8px;", n.textContent = e.content, i.appendChild(n);
-    const o = document.createElement("button");
-    o.textContent = "Got it", o.style.cssText = `
+    const r = document.createElement("button");
+    r.textContent = "Got it", r.style.cssText = `
       background: #3b82f6;
       color: white;
       border: none;
@@ -390,30 +390,30 @@ class B {
       font-weight: 500;
       cursor: pointer;
       transition: background 0.2s;
-    `, o.onmouseover = () => {
-      o.style.background = "#2563eb";
-    }, o.onmouseout = () => {
-      o.style.background = "#3b82f6";
-    }, o.onclick = () => {
+    `, r.onmouseover = () => {
+      r.style.background = "#2563eb";
+    }, r.onmouseout = () => {
+      r.style.background = "#3b82f6";
+    }, r.onclick = () => {
       this.dismissGuide(e.id);
-    }, i.appendChild(o);
-    const r = document.createElement("div");
-    return r.className = "designer-guide-arrow", r.style.cssText = `
+    }, i.appendChild(r);
+    const o = document.createElement("div");
+    return o.className = "designer-guide-arrow", o.style.cssText = `
       position: absolute;
       width: 0;
       height: 0;
       border-style: solid;
-    `, i.appendChild(r), i;
+    `, i.appendChild(o), i;
   }
   /**
    * Position tooltip relative to target element
    */
   positionTooltip(e, t, i) {
-    const n = t.getBoundingClientRect(), o = e.getBoundingClientRect(), r = window.pageXOffset || document.documentElement.scrollLeft, a = window.pageYOffset || document.documentElement.scrollTop, h = e.querySelector(".designer-guide-arrow");
+    const n = t.getBoundingClientRect(), r = e.getBoundingClientRect(), o = window.pageXOffset || document.documentElement.scrollLeft, a = window.pageYOffset || document.documentElement.scrollTop, h = e.querySelector(".designer-guide-arrow");
     let d = 0, c = 0, u = "";
     switch (i) {
       case "top":
-        d = n.top + a - o.height - 12, c = n.left + r + n.width / 2 - o.width / 2, u = `
+        d = n.top + a - r.height - 12, c = n.left + o + n.width / 2 - r.width / 2, u = `
           bottom: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -422,7 +422,7 @@ class B {
         `;
         break;
       case "bottom":
-        d = n.bottom + a + 12, c = n.left + r + n.width / 2 - o.width / 2, u = `
+        d = n.bottom + a + 12, c = n.left + o + n.width / 2 - r.width / 2, u = `
           top: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -431,7 +431,7 @@ class B {
         `;
         break;
       case "left":
-        d = n.top + a + n.height / 2 - o.height / 2, c = n.left + r - o.width - 12, u = `
+        d = n.top + a + n.height / 2 - r.height / 2, c = n.left + o - r.width - 12, u = `
           right: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -440,7 +440,7 @@ class B {
         `;
         break;
       case "right":
-        d = n.top + a + n.height / 2 - o.height / 2, c = n.right + r + 12, u = `
+        d = n.top + a + n.height / 2 - r.height / 2, c = n.right + o + 12, u = `
           left: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -450,7 +450,7 @@ class B {
         break;
     }
     const b = window.innerWidth, v = window.innerHeight;
-    c < r ? c = r + 10 : c + o.width > r + b && (c = r + b - o.width - 10), d < a ? d = a + 10 : d + o.height > a + v && (d = a + v - o.height - 10), e.style.top = `${d}px`, e.style.left = `${c}px`, h && (h.style.cssText += u);
+    c < o ? c = o + 10 : c + r.width > o + b && (c = o + b - r.width - 10), d < a ? d = a + 10 : d + r.height > a + v && (d = a + v - r.height - 10), e.style.top = `${d}px`, e.style.left = `${c}px`, h && (h.style.cssText += u);
   }
   /**
    * Create container for guides
@@ -471,15 +471,15 @@ class B {
    */
   updatePositions(e) {
     this.renderedGuides.forEach((t, i) => {
-      const n = e.find((r) => r.id === i);
+      const n = e.find((o) => o.id === i);
       if (!n)
         return;
-      const o = p.findElement(n.selector);
-      o && this.positionTooltip(t, o, n.placement);
+      const r = p.findElement(n.selector);
+      r && this.positionTooltip(t, r, n.placement);
     });
   }
 }
-class D {
+class L {
   constructor() {
     this.iframe = null, this.dragHandle = null, this.messageCallback = null, this.isReady = !1, this.mode = null, this.isDragging = !1, this.dragStartX = 0, this.dragStartY = 0, this.currentX = 0, this.currentY = 0, this.dragThreshold = 3, this.mouseDownX = 0, this.mouseDownY = 0, this.isMouseDown = !1, this.handleMouseDown = (e) => {
       if (!this.iframe || !this.dragHandle)
@@ -498,9 +498,9 @@ class D {
           return;
       }
       e.preventDefault(), e.stopPropagation();
-      const t = e.clientX - this.dragStartX, i = e.clientY - this.dragStartY, n = window.innerWidth, o = window.innerHeight, r = this.iframe.offsetWidth;
+      const t = e.clientX - this.dragStartX, i = e.clientY - this.dragStartY, n = window.innerWidth, r = window.innerHeight, o = this.iframe.offsetWidth;
       this.iframe.offsetHeight;
-      const a = Math.max(-r + 50, Math.min(t, n - 50)), h = Math.max(0, Math.min(i, o - 100));
+      const a = Math.max(-o + 50, Math.min(t, n - 50)), h = Math.max(0, Math.min(i, r - 100));
       this.currentX = a, this.currentY = h, this.iframe.style.left = `${a}px`, this.iframe.style.top = `${h}px`, this.iframe.style.right = "auto", this.iframe.style.bottom = "auto", this.dragHandle.style.left = `${a}px`, this.dragHandle.style.top = `${h}px`;
     }, this.handleMouseUp = (e) => {
       this.isMouseDown && (this.isDragging = !1, this.isMouseDown = !1, document.body.style.cursor = "", document.body.style.userSelect = "", document.documentElement.style.userSelect = "", e.preventDefault(), e.stopPropagation());
@@ -513,11 +513,9 @@ class D {
    * Create and show editor iframe
    */
   create(e, t) {
-    if (console.log("[Visual Designer] EditorFrame.create() called with mode:", t), this.iframe) {
-      console.warn("[Visual Designer] EditorFrame already created, skipping");
+    if (this.iframe)
       return;
-    }
-    this.mode = t || null, this.messageCallback = e, console.log("[Visual Designer] Creating editor iframe with mode:", this.mode), this.iframe = document.createElement("iframe"), this.iframe.id = "designer-editor-frame", this.iframe.style.cssText = `
+    this.mode = t || null, this.messageCallback = e, this.iframe = document.createElement("iframe"), this.iframe.id = "designer-editor-frame", this.iframe.style.cssText = `
       position: fixed;
       top: 0;
       left: 0;
@@ -543,7 +541,7 @@ class D {
    * Show editor frame
    */
   show() {
-    console.log("[Visual Designer] EditorFrame.show() called"), this.iframe ? (console.log("[Visual Designer] Showing iframe"), this.iframe.style.display = "block", this.updateDragHandlePosition()) : console.warn("[Visual Designer] Cannot show iframe - iframe is null"), this.dragHandle ? (console.log("[Visual Designer] Showing drag handle"), this.dragHandle.style.display = "block") : console.warn("[Visual Designer] Cannot show drag handle - dragHandle is null");
+    this.iframe && (this.iframe.style.display = "block", this.updateDragHandlePosition()), this.dragHandle && (this.dragHandle.style.display = "block");
   }
   /**
    * Hide editor frame
@@ -963,9 +961,9 @@ class D {
     this.dragHandle.style.top = `${e.top}px`, this.dragHandle.style.left = `${e.left}px`, this.dragHandle.style.width = `${e.width}px`;
   }
 }
-const L = "visual-designer-guides", y = "1.0.0";
-class O {
-  constructor(e = L) {
+const I = "visual-designer-guides", y = "1.0.0";
+class D {
+  constructor(e = I) {
     this.storageKey = e;
   }
   /**
@@ -993,7 +991,7 @@ class O {
    */
   saveGuide(e) {
     try {
-      const t = this.getGuides(), i = t.findIndex((o) => o.id === e.id), n = {
+      const t = this.getGuides(), i = t.findIndex((r) => r.id === e.id), n = {
         ...e,
         updatedAt: (/* @__PURE__ */ new Date()).toISOString(),
         createdAt: e.createdAt || (/* @__PURE__ */ new Date()).toISOString()
@@ -1047,7 +1045,7 @@ class O {
 }
 class E {
   constructor(e = {}) {
-    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.loadingOverlay = null, this.config = e, this.storage = new O(e.storageKey), this.editorMode = new M(), this.guideRenderer = new B(), this.editorFrame = new D();
+    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.config = e, this.storage = new D(e.storageKey), this.editorMode = new C(), this.guideRenderer = new M(), this.editorFrame = new L();
   }
   /**
    * Initialize the SDK
@@ -1057,29 +1055,25 @@ class E {
       console.warn("SDK already initialized");
       return;
     }
-    this.isInitialized = !0;
-    const e = this.shouldEnableEditorMode();
-    console.log("[Visual Designer] init() called"), console.log("[Visual Designer] shouldEnableEditor:", e), console.log("[Visual Designer] localStorage designerMode:", localStorage.getItem("designerMode")), console.log("[Visual Designer] localStorage designerModeType:", localStorage.getItem("designerModeType")), e ? (this.showLoadingOverlay(), this.enableEditor()) : this.loadGuides(), this.setupEventListeners();
+    this.isInitialized = !0, this.shouldEnableEditorMode() ? this.enableEditor() : this.loadGuides(), this.setupEventListeners();
   }
   /**
    * Enable editor mode
    */
   enableEditor() {
-    if (this.isEditorMode) {
-      console.log("[Visual Designer] Editor already enabled, skipping");
+    if (this.isEditorMode)
       return;
-    }
-    console.log("[Visual Designer] enableEditor() called"), this.isEditorMode = !0;
-    let e = typeof window < "u" ? window.__visualDesignerMode : null;
-    e || (e = localStorage.getItem("designerModeType") || null), console.log("[Visual Designer] Mode:", e), this.editorFrame.create((t) => this.handleEditorMessage(t), e), this.editorMode.activate((t) => this.handleEditorMessage(t)), this.createExitEditorButton(), this.createRedBorderOverlay(), this.createStudioBadge(), localStorage.setItem("designerMode", "true"), e && localStorage.setItem("designerModeType", e), setTimeout(() => {
-      this.editorFrame.show(), this.hideLoadingOverlay();
-    }, e === "tag-feature" ? 100 : 300);
+    this.isEditorMode = !0;
+    const e = typeof window < "u" ? window.__visualDesignerMode : null;
+    this.editorFrame.create((t) => this.handleEditorMessage(t), e), e === "tag-feature" && setTimeout(() => {
+      this.editorFrame.show();
+    }, 100), this.editorMode.activate((t) => this.handleEditorMessage(t)), this.createExitEditorButton(), this.createRedBorderOverlay(), this.createStudioBadge(), localStorage.setItem("designerMode", "true");
   }
   /**
    * Disable editor mode
    */
   disableEditor() {
-    this.isEditorMode && (this.isEditorMode = !1, this.editorMode.deactivate(), this.editorFrame.destroy(), this.removeExitEditorButton(), this.removeRedBorderOverlay(), this.removeStudioBadge(), localStorage.removeItem("designerMode"), localStorage.removeItem("designerModeType"), this.hideLoadingOverlay(), this.loadGuides());
+    this.isEditorMode && (this.isEditorMode = !1, this.editorMode.deactivate(), this.editorFrame.destroy(), this.removeExitEditorButton(), this.removeRedBorderOverlay(), this.removeStudioBadge(), localStorage.removeItem("designerMode"), this.loadGuides());
   }
   /**
    * Get all guides
@@ -1100,7 +1094,7 @@ class E {
   saveGuide(e) {
     const t = {
       ...e,
-      id: S(),
+      id: k(),
       createdAt: (/* @__PURE__ */ new Date()).toISOString(),
       updatedAt: (/* @__PURE__ */ new Date()).toISOString()
     };
@@ -1123,7 +1117,7 @@ class E {
    * Check if editor mode should be enabled
    */
   shouldEnableEditorMode() {
-    return this.config.editorMode !== void 0 ? (console.log("[Visual Designer] shouldEnableEditorMode: true (config override)"), this.config.editorMode) : typeof window < "u" && window.__visualDesignerWasLaunched ? (console.log("[Visual Designer] shouldEnableEditorMode: true (wasLaunched flag)"), !0) : localStorage.getItem("designerMode") === "true" ? (console.log("[Visual Designer] shouldEnableEditorMode: true (localStorage)"), !0) : (console.log("[Visual Designer] shouldEnableEditorMode: false"), !1);
+    return this.config.editorMode !== void 0 ? this.config.editorMode : !!(typeof window < "u" && window.__visualDesignerWasLaunched || localStorage.getItem("designerMode") === "true");
   }
   /**
    * Handle messages from editor
@@ -1143,7 +1137,6 @@ class E {
         this.handleExitEditorMode();
         break;
       case "EDITOR_READY":
-        this.hideLoadingOverlay();
         break;
       default:
         console.warn("Unknown message type:", e);
@@ -1315,72 +1308,15 @@ class E {
   removeStudioBadge() {
     this.studioBadge && (this.studioBadge.remove(), this.studioBadge = null);
   }
-  /**
-   * Show loading overlay while designer is initializing
-   */
-  showLoadingOverlay() {
-    if (this.loadingOverlay)
-      return;
-    if (!document.body) {
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", () => this.showLoadingOverlay());
-        return;
-      }
-      setTimeout(() => this.showLoadingOverlay(), 100);
-      return;
-    }
-    this.loadingOverlay = document.createElement("div"), this.loadingOverlay.id = "designer-loading-overlay", this.loadingOverlay.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(255, 255, 255, 0.95);
-      z-index: 1000002;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    `;
-    const e = document.createElement("div");
-    e.style.cssText = `
-      width: 48px;
-      height: 48px;
-      border: 4px solid #e2e8f0;
-      border-top-color: #3B82F6;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-bottom: 16px;
-    `;
-    const t = document.createElement("style");
-    t.textContent = `
-      @keyframes spin {
-        to { transform: rotate(360deg); }
-      }
-    `, document.head.appendChild(t);
-    const i = document.createElement("div");
-    i.textContent = "Loading Visual Designer...", i.style.cssText = `
-      color: #1e40af;
-      font-size: 16px;
-      font-weight: 500;
-    `, this.loadingOverlay.appendChild(e), this.loadingOverlay.appendChild(i), document.body.appendChild(this.loadingOverlay);
-  }
-  /**
-   * Hide loading overlay
-   */
-  hideLoadingOverlay() {
-    this.loadingOverlay && (this.loadingOverlay.remove(), this.loadingOverlay = null);
-  }
 }
 let l = null, m = !1;
 function g(s) {
   return l || (l = new E(s), l.init(), l);
 }
-function I() {
+function T() {
   return l;
 }
-function T(s) {
+function O(s) {
   !s || !Array.isArray(s) || s.forEach((e) => {
     if (!e || !Array.isArray(e) || e.length === 0)
       return;
@@ -1428,7 +1364,7 @@ if (typeof window < "u") {
   try {
     const e = new URL(window.location.href), t = e.searchParams.get("designer"), i = e.searchParams.get("mode");
     if (t === "true") {
-      i && (window.__visualDesignerMode = i, localStorage.setItem("designerModeType", i)), localStorage.setItem("designerMode", "true"), e.searchParams.delete("designer"), e.searchParams.delete("mode");
+      i && (window.__visualDesignerMode = i), e.searchParams.delete("designer"), e.searchParams.delete("mode");
       const n = e.toString();
       window.history.replaceState({}, "", n), window.__visualDesignerWasLaunched = !0;
     }
@@ -1446,13 +1382,13 @@ if (typeof window < "u" && !l) {
 }
 typeof window < "u" && (window.VisualDesigner = {
   init: g,
-  getInstance: I,
+  getInstance: T,
   DesignerSDK: E,
-  _processQueue: T
+  _processQueue: O
 });
 export {
   E as DesignerSDK,
-  T as _processQueue,
-  I as getInstance,
+  O as _processQueue,
+  T as getInstance,
   g as init
 };
