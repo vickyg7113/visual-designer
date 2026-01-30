@@ -69,8 +69,18 @@ export class DesignerSDK {
 
     this.isEditorMode = true;
     
-    // Create editor frame
-    this.editorFrame.create((message) => this.handleEditorMessage(message));
+    // Get mode from URL parameter (stored in global flag)
+    const mode = typeof window !== 'undefined' ? (window as any).__visualDesignerMode : null;
+    
+    // Create editor frame with mode
+    this.editorFrame.create((message) => this.handleEditorMessage(message), mode);
+    
+    // For Tag Feature mode, show the editor frame immediately
+    if (mode === 'tag-feature') {
+      setTimeout(() => {
+        this.editorFrame.show();
+      }, 100);
+    }
     
     // Activate editor mode
     this.editorMode.activate((message) => this.handleEditorMessage(message));

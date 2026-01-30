@@ -10,18 +10,18 @@ class p {
         method: "id"
       };
     if (e.hasAttribute("data-testid")) {
-      const n = e.getAttribute("data-testid");
+      const r = e.getAttribute("data-testid");
       return {
-        selector: `[data-testid="${this.escapeAttribute(n)}"]`,
+        selector: `[data-testid="${this.escapeAttribute(r)}"]`,
         confidence: "high",
         method: "data-testid"
       };
     }
     const t = this.getSemanticDataAttributes(e);
     if (t.length > 0) {
-      const n = t[0], s = e.getAttribute(n);
+      const r = t[0], s = e.getAttribute(r);
       return {
-        selector: `[${n}="${this.escapeAttribute(s)}"]`,
+        selector: `[${r}="${this.escapeAttribute(s)}"]`,
         confidence: "high",
         method: "data-attribute"
       };
@@ -33,9 +33,9 @@ class p {
         confidence: "medium",
         method: "aria"
       };
-    const r = this.generatePathSelector(e);
-    return r ? {
-      selector: r,
+    const n = this.generatePathSelector(e);
+    return n ? {
+      selector: n,
       confidence: "medium",
       method: "path"
     } : {
@@ -75,11 +75,11 @@ class p {
       "data-component",
       "data-element"
     ], i = [];
-    for (const r of t)
-      e.hasAttribute(r) && i.push(r);
-    for (let r = 0; r < e.attributes.length; r++) {
-      const n = e.attributes[r];
-      n.name.startsWith("data-") && !i.includes(n.name) && i.push(n.name);
+    for (const n of t)
+      e.hasAttribute(n) && i.push(n);
+    for (let n = 0; n < e.attributes.length; n++) {
+      const r = e.attributes[n];
+      r.name.startsWith("data-") && !i.includes(r.name) && i.push(r.name);
     }
     return i;
   }
@@ -87,15 +87,15 @@ class p {
    * Generate selector using ARIA attributes
    */
   static generateAriaSelector(e) {
-    var n;
-    const t = e.getAttribute("role"), i = e.getAttribute("aria-label"), r = e.getAttribute("aria-labelledby");
+    var r;
+    const t = e.getAttribute("role"), i = e.getAttribute("aria-label"), n = e.getAttribute("aria-labelledby");
     if (t) {
       let s = `[role="${this.escapeAttribute(t)}"]`;
       if (i)
         return s += `[aria-label="${this.escapeAttribute(i)}"]`, s;
-      if (r) {
-        const a = document.getElementById(r);
-        if (a && ((n = a.textContent) == null ? void 0 : n.trim()))
+      if (n) {
+        const a = document.getElementById(n);
+        if (a && ((r = a.textContent) == null ? void 0 : r.trim()))
           return s;
       }
       return s;
@@ -109,26 +109,26 @@ class p {
     const t = [];
     let i = e;
     for (; i && i !== document.body && i !== document.documentElement; ) {
-      let r = i.tagName.toLowerCase();
+      let n = i.tagName.toLowerCase();
       if (i.id) {
-        r += `#${this.escapeSelector(i.id)}`, t.unshift(r);
+        n += `#${this.escapeSelector(i.id)}`, t.unshift(n);
         break;
       }
       if (i.className && typeof i.className == "string") {
         const s = i.className.split(/\s+/).filter((a) => a && !a.startsWith("designer-")).slice(0, 2);
-        s.length > 0 && (r += "." + s.map((a) => this.escapeSelector(a)).join("."));
+        s.length > 0 && (n += "." + s.map((a) => this.escapeSelector(a)).join("."));
       }
-      const n = i.parentElement;
-      if (n) {
-        const s = i.tagName, h = Array.from(n.children).filter(
+      const r = i.parentElement;
+      if (r) {
+        const s = i.tagName, u = Array.from(r.children).filter(
           (l) => l.tagName === s
         );
-        if (h.length > 1) {
-          const l = h.indexOf(i) + 1;
-          r += `:nth-of-type(${l})`;
+        if (u.length > 1) {
+          const l = u.indexOf(i) + 1;
+          n += `:nth-of-type(${l})`;
         }
       }
-      if (t.unshift(r), i = n, t.length >= 5)
+      if (t.unshift(n), i = r, t.length >= 5)
         break;
     }
     return t.length > 0 ? t.join(" > ") : null;
@@ -147,26 +147,26 @@ class p {
   }
 }
 function w(o) {
-  var i, r;
+  var i, n;
   const e = o.getBoundingClientRect(), t = {};
-  for (let n = 0; n < o.attributes.length; n++) {
-    const s = o.attributes[n];
+  for (let r = 0; r < o.attributes.length; r++) {
+    const s = o.attributes[r];
     t[s.name] = s.value;
   }
   return {
     tagName: o.tagName.toLowerCase(),
     id: o.id || void 0,
     className: ((i = o.className) == null ? void 0 : i.toString()) || void 0,
-    textContent: ((r = o.textContent) == null ? void 0 : r.trim().substring(0, 50)) || void 0,
+    textContent: ((n = o.textContent) == null ? void 0 : n.trim().substring(0, 50)) || void 0,
     attributes: t,
     boundingRect: e
   };
 }
-function E(o) {
+function x(o) {
   const e = window.getComputedStyle(o);
   return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && o.getBoundingClientRect().height > 0 && o.getBoundingClientRect().width > 0;
 }
-function m() {
+function f() {
   return window.location.pathname || "/";
 }
 function S() {
@@ -176,10 +176,10 @@ function B(o) {
   const e = o.getBoundingClientRect();
   return e.top >= 0 && e.left >= 0 && e.bottom <= (window.innerHeight || document.documentElement.clientHeight) && e.right <= (window.innerWidth || document.documentElement.clientWidth);
 }
-function C(o) {
+function k(o) {
   B(o) || o.scrollIntoView({ behavior: "smooth", block: "center" });
 }
-class k {
+class C {
   constructor() {
     this.isActive = !1, this.highlightOverlay = null, this.selectedElement = null, this.messageCallback = null, this.handleMouseOver = (e) => {
       if (!this.isActive || !this.highlightOverlay)
@@ -190,7 +190,7 @@ class k {
           this.hideHighlight();
           return;
         }
-        if (!E(t)) {
+        if (!x(t)) {
           this.hideHighlight();
           return;
         }
@@ -200,7 +200,7 @@ class k {
       if (!this.isActive)
         return;
       const t = e.target;
-      t && (t.closest("#designer-editor-frame, #designer-highlight-overlay, #designer-exit-editor-btn, #designer-red-border-overlay, #designer-studio-badge") || (e.preventDefault(), e.stopPropagation(), e.stopImmediatePropagation(), E(t) && this.selectElement(t)));
+      t && (t.closest("#designer-editor-frame, #designer-highlight-overlay, #designer-exit-editor-btn, #designer-red-border-overlay, #designer-studio-badge") || (e.preventDefault(), e.stopPropagation(), e.stopImmediatePropagation(), x(t) && this.selectElement(t)));
     }, this.handleKeyDown = (e) => {
       this.isActive && e.key === "Escape" && (this.messageCallback && this.messageCallback({ type: "CANCEL" }), this.selectedElement = null, this.hideHighlight());
     };
@@ -270,8 +270,8 @@ class k {
   highlightElement(e) {
     if (!this.highlightOverlay)
       return;
-    const t = e.getBoundingClientRect(), i = window.pageXOffset || document.documentElement.scrollLeft, r = window.pageYOffset || document.documentElement.scrollTop;
-    this.highlightOverlay.style.display = "block", this.highlightOverlay.style.left = `${t.left + i}px`, this.highlightOverlay.style.top = `${t.top + r}px`, this.highlightOverlay.style.width = `${t.width}px`, this.highlightOverlay.style.height = `${t.height}px`;
+    const t = e.getBoundingClientRect(), i = window.pageXOffset || document.documentElement.scrollLeft, n = window.pageYOffset || document.documentElement.scrollTop;
+    this.highlightOverlay.style.display = "block", this.highlightOverlay.style.left = `${t.left + i}px`, this.highlightOverlay.style.top = `${t.top + n}px`, this.highlightOverlay.style.width = `${t.width}px`, this.highlightOverlay.style.height = `${t.height}px`;
   }
   /**
    * Hide highlight
@@ -325,11 +325,11 @@ class I {
    */
   renderGuides(e) {
     this.clear();
-    const t = m();
+    const t = f();
     e.filter(
-      (r) => r.page === t && r.status === "active"
-    ).forEach((r) => {
-      this.renderGuide(r);
+      (n) => n.page === t && n.status === "active"
+    ).forEach((n) => {
+      this.renderGuide(n);
     });
   }
   /**
@@ -341,7 +341,7 @@ class I {
       console.warn(`Guide "${e.id}" target not found: ${e.selector}`);
       return;
     }
-    C(t);
+    k(t);
     const i = this.createTooltip(e, t);
     this.renderedGuides.set(e.id, i), this.container || this.createContainer(), this.container && this.container.appendChild(i), this.positionTooltip(i, t, e.placement);
   }
@@ -377,10 +377,10 @@ class I {
       line-height: 1.5;
       color: #111827;
     `;
-    const r = document.createElement("div");
-    r.style.cssText = "margin-bottom: 8px;", r.textContent = e.content, i.appendChild(r);
-    const n = document.createElement("button");
-    n.textContent = "Got it", n.style.cssText = `
+    const n = document.createElement("div");
+    n.style.cssText = "margin-bottom: 8px;", n.textContent = e.content, i.appendChild(n);
+    const r = document.createElement("button");
+    r.textContent = "Got it", r.style.cssText = `
       background: #3b82f6;
       color: white;
       border: none;
@@ -390,13 +390,13 @@ class I {
       font-weight: 500;
       cursor: pointer;
       transition: background 0.2s;
-    `, n.onmouseover = () => {
-      n.style.background = "#2563eb";
-    }, n.onmouseout = () => {
-      n.style.background = "#3b82f6";
-    }, n.onclick = () => {
+    `, r.onmouseover = () => {
+      r.style.background = "#2563eb";
+    }, r.onmouseout = () => {
+      r.style.background = "#3b82f6";
+    }, r.onclick = () => {
       this.dismissGuide(e.id);
-    }, i.appendChild(n);
+    }, i.appendChild(r);
     const s = document.createElement("div");
     return s.className = "designer-guide-arrow", s.style.cssText = `
       position: absolute;
@@ -409,11 +409,11 @@ class I {
    * Position tooltip relative to target element
    */
   positionTooltip(e, t, i) {
-    const r = t.getBoundingClientRect(), n = e.getBoundingClientRect(), s = window.pageXOffset || document.documentElement.scrollLeft, a = window.pageYOffset || document.documentElement.scrollTop, h = e.querySelector(".designer-guide-arrow");
-    let l = 0, c = 0, u = "";
+    const n = t.getBoundingClientRect(), r = e.getBoundingClientRect(), s = window.pageXOffset || document.documentElement.scrollLeft, a = window.pageYOffset || document.documentElement.scrollTop, u = e.querySelector(".designer-guide-arrow");
+    let l = 0, c = 0, h = "";
     switch (i) {
       case "top":
-        l = r.top + a - n.height - 12, c = r.left + s + r.width / 2 - n.width / 2, u = `
+        l = n.top + a - r.height - 12, c = n.left + s + n.width / 2 - r.width / 2, h = `
           bottom: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -422,7 +422,7 @@ class I {
         `;
         break;
       case "bottom":
-        l = r.bottom + a + 12, c = r.left + s + r.width / 2 - n.width / 2, u = `
+        l = n.bottom + a + 12, c = n.left + s + n.width / 2 - r.width / 2, h = `
           top: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -431,7 +431,7 @@ class I {
         `;
         break;
       case "left":
-        l = r.top + a + r.height / 2 - n.height / 2, c = r.left + s - n.width - 12, u = `
+        l = n.top + a + n.height / 2 - r.height / 2, c = n.left + s - r.width - 12, h = `
           right: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -440,7 +440,7 @@ class I {
         `;
         break;
       case "right":
-        l = r.top + a + r.height / 2 - n.height / 2, c = r.right + s + 12, u = `
+        l = n.top + a + n.height / 2 - r.height / 2, c = n.right + s + 12, h = `
           left: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -449,8 +449,8 @@ class I {
         `;
         break;
     }
-    const b = window.innerWidth, y = window.innerHeight;
-    c < s ? c = s + 10 : c + n.width > s + b && (c = s + b - n.width - 10), l < a ? l = a + 10 : l + n.height > a + y && (l = a + y - n.height - 10), e.style.top = `${l}px`, e.style.left = `${c}px`, h && (h.style.cssText += u);
+    const b = window.innerWidth, v = window.innerHeight;
+    c < s ? c = s + 10 : c + r.width > s + b && (c = s + b - r.width - 10), l < a ? l = a + 10 : l + r.height > a + v && (l = a + v - r.height - 10), e.style.top = `${l}px`, e.style.left = `${c}px`, u && (u.style.cssText += h);
   }
   /**
    * Create container for guides
@@ -471,17 +471,17 @@ class I {
    */
   updatePositions(e) {
     this.renderedGuides.forEach((t, i) => {
-      const r = e.find((s) => s.id === i);
-      if (!r)
+      const n = e.find((s) => s.id === i);
+      if (!n)
         return;
-      const n = p.findElement(r.selector);
-      n && this.positionTooltip(t, n, r.placement);
+      const r = p.findElement(n.selector);
+      r && this.positionTooltip(t, r, n.placement);
     });
   }
 }
-class O {
+class L {
   constructor() {
-    this.iframe = null, this.messageCallback = null, this.isReady = !1, this.handleMessage = (e) => {
+    this.iframe = null, this.messageCallback = null, this.isReady = !1, this.mode = null, this.handleMessage = (e) => {
       const t = e.data;
       !t || !t.type || (this.messageCallback && this.messageCallback(t), (t.type === "CANCEL" || t.type === "GUIDE_SAVED") && this.hide());
     };
@@ -489,10 +489,10 @@ class O {
   /**
    * Create and show editor iframe
    */
-  create(e) {
+  create(e, t) {
     if (this.iframe)
       return;
-    this.messageCallback = e, this.iframe = document.createElement("iframe"), this.iframe.id = "designer-editor-frame", this.iframe.style.cssText = `
+    this.mode = t || null, this.messageCallback = e, this.iframe = document.createElement("iframe"), this.iframe.id = "designer-editor-frame", this.iframe.style.cssText = `
       position: fixed;
       top: 0;
       left: 0;
@@ -505,12 +505,12 @@ class O {
       z-index: 999999;
       display: none;
     `, this.loadEditorHtml(), window.addEventListener("message", this.handleMessage);
-    const t = () => {
+    const i = () => {
       document.body ? (document.body.appendChild(this.iframe), this.iframe && (this.iframe.onload = () => {
         this.isReady = !0, this.sendMessage({ type: "EDITOR_READY" });
-      })) : document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", t) : setTimeout(t, 100);
+      })) : document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", i) : setTimeout(i, 100);
     };
-    t();
+    i();
   }
   /**
    * Show editor frame
@@ -565,7 +565,7 @@ class O {
    * This is a fallback - in production, load from a static file
    */
   getEditorHtmlContent() {
-    return `<!DOCTYPE html>
+    return this.mode === "tag-feature" ? this.getTagFeatureHtmlContent() : `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -682,12 +682,192 @@ class O {
     window.addEventListener('load', () => sendMessage({ type: 'EDITOR_READY' }));
   <\/script>
 </body>
+  </html>`;
+  }
+  /**
+   * Get Tag Feature HTML content
+   */
+  getTagFeatureHtmlContent() {
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tag Feature - Visual Designer</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: #ffffff; color: #111827; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+    .editor-container { display: flex; flex-direction: column; height: 100%; background: #ffffff; }
+    .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid #e5e7eb; background: #ffffff; }
+    .header h2 { font-size: 20px; font-weight: 600; color: #111827; }
+    .close-icon { cursor: pointer; color: #6b7280; font-size: 18px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: none; border: none; padding: 0; }
+    .close-icon:hover { color: #111827; }
+    .tabs { display: flex; gap: 0; border-bottom: 1px solid #e5e7eb; background: #ffffff; padding: 0 20px; }
+    .tab { padding: 12px 20px; background: none; border: none; font-size: 14px; font-weight: 500; color: #6b7280; cursor: pointer; position: relative; transition: color 0.2s; font-family: inherit; }
+    .tab:hover { color: #111827; }
+    .tab.active { color: #111827; font-weight: 600; }
+    .tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: #3B82F6; }
+    .content { flex: 1; overflow-y: auto; padding: 24px 20px; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .section-title { font-size: 11px; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+    .card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; }
+    .card:hover { border-color: #d1d5db; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+    .card-content { display: flex; align-items: center; justify-content: space-between; }
+    .card-left { display: flex; align-items: center; gap: 12px; flex: 1; }
+    .badge { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-size: 12px; font-weight: 600; min-width: 24px; height: 24px; padding: 0 8px; color: #ffffff; }
+    .badge-orange { background: #f97316; }
+    .badge-blue { background: #3b82f6; }
+    .badge-purple { background: #a855f7; }
+    .card-text { flex: 1; }
+    .card-title { font-size: 14px; font-weight: 600; color: #111827; margin-bottom: 4px; }
+    .card-description { font-size: 13px; color: #6b7280; }
+    .card-url { font-size: 12px; color: #6b7280; margin-top: 4px; }
+    .chevron { color: #9ca3af; font-size: 18px; }
+    .heatmap-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-top: 1px solid #e5e7eb; margin-top: 24px; }
+    .heatmap-label { font-size: 14px; font-weight: 500; color: #111827; }
+    .heatmap-controls { display: flex; align-items: center; gap: 12px; }
+    .toggle-switch { position: relative; width: 44px; height: 24px; background: #d1d5db; border-radius: 12px; cursor: pointer; transition: background 0.2s; }
+    .toggle-switch.active { background: #10b981; }
+    .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: #ffffff; border-radius: 50%; transition: transform 0.2s; }
+    .toggle-switch.active::after { transform: translateX(20px); }
+    .toggle-switch.active::before { content: '✓'; position: absolute; top: 50%; left: 8px; transform: translateY(-50%); color: #ffffff; font-size: 12px; font-weight: bold; z-index: 1; }
+    .plus-icon { width: 24px; height: 24px; border-radius: 6px; border: 1px solid #d1d5db; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #6b7280; font-size: 18px; transition: all 0.2s; }
+    .plus-icon:hover { border-color: #6366f1; color: #6366f1; }
+    .tag-feature-btn { width: 100%; padding: 12px 20px; background: #14b8a6; color: #ffffff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; margin-top: 20px; }
+    .tag-feature-btn:hover { background: #0d9488; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3); }
+  </style>
+</head>
+<body>
+  <div class="editor-container">
+    <div class="header">
+      <h2>Manage Pages, Features, and AI agents</h2>
+      <button class="close-icon" id="closeBtn" aria-label="Close">□</button>
+    </div>
+    <div class="tabs">
+      <button class="tab active" data-tab="features">Features</button>
+      <button class="tab" data-tab="pages">Pages</button>
+      <button class="tab" data-tab="ai-agents">AI agents</button>
+    </div>
+    <div class="content">
+      <div id="featuresTab" class="tab-content active">
+        <div class="section-title">PAGE OVERVIEW</div>
+        <div class="card">
+          <div class="card-content">
+            <div class="card-left">
+              <span class="badge badge-orange">Untagged</span>
+              <div class="card-text">
+                <div class="card-title">Current URL</div>
+                <div class="card-url" id="currentUrlDisplay">-</div>
+              </div>
+            </div>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+        <div class="section-title">FEATURES OVERVIEW</div>
+        <div class="card">
+          <div class="card-content">
+            <div class="card-left">
+              <span class="badge badge-blue">5</span>
+              <div class="card-text">
+                <div class="card-title">Suggested Features</div>
+                <div class="card-description">List of untagged elements on this page</div>
+              </div>
+            </div>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-content">
+            <div class="card-left">
+              <span class="badge badge-purple">112</span>
+              <div class="card-text">
+                <div class="card-title">Tagged Features</div>
+                <div class="card-description">List of tagged Features on this page</div>
+              </div>
+            </div>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+        <div class="heatmap-row">
+          <span class="heatmap-label">Heatmap</span>
+          <div class="heatmap-controls">
+            <div class="toggle-switch active" id="heatmapToggle"></div>
+            <div class="plus-icon">+</div>
+          </div>
+        </div>
+        <button class="tag-feature-btn" id="tagFeatureBtn">Tag Feature</button>
+      </div>
+      <div id="pagesTab" class="tab-content">
+        <div class="section-title">PAGES OVERVIEW</div>
+        <div class="card">
+          <div class="card-content">
+            <div class="card-left">
+              <div class="card-text">
+                <div class="card-title">Pages</div>
+                <div class="card-description">Manage pages on your application</div>
+              </div>
+            </div>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+      </div>
+      <div id="aiAgentsTab" class="tab-content">
+        <div class="section-title">AI AGENTS OVERVIEW</div>
+        <div class="card">
+          <div class="card-content">
+            <div class="card-left">
+              <div class="card-text">
+                <div class="card-title">AI Agents</div>
+                <div class="card-description">Manage AI agents for your application</div>
+              </div>
+            </div>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Update current URL display
+    const currentUrl = window.location.href.replace(/^https?:\\/\\//, '').split('?')[0];
+    document.getElementById('currentUrlDisplay').textContent = currentUrl;
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabName = tab.dataset.tab;
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        document.getElementById(tabName + 'Tab').classList.add('active');
+      });
+    });
+    // Heatmap toggle
+    document.getElementById('heatmapToggle').addEventListener('click', function() {
+      this.classList.toggle('active');
+    });
+    // Close button
+    document.getElementById('closeBtn').addEventListener('click', () => {
+      sendMessage({ type: 'CANCEL' });
+    });
+    // Tag Feature button
+    document.getElementById('tagFeatureBtn').addEventListener('click', () => {
+      sendMessage({ type: 'TAG_FEATURE_CLICKED' });
+    });
+    function sendMessage(message) {
+      window.parent.postMessage(message, '*');
+    }
+    window.addEventListener('load', () => {
+      sendMessage({ type: 'EDITOR_READY' });
+    });
+  <\/script>
+</body>
 </html>`;
   }
 }
-const L = "visual-designer-guides", v = "1.0.0";
-class G {
-  constructor(e = L) {
+const O = "visual-designer-guides", y = "1.0.0";
+class A {
+  constructor(e = O) {
     this.storageKey = e;
   }
   /**
@@ -699,7 +879,7 @@ class G {
       if (!e)
         return [];
       const t = JSON.parse(e);
-      return t.version !== v ? (console.warn("Storage version mismatch, clearing old data"), this.clear(), []) : t.guides || [];
+      return t.version !== y ? (console.warn("Storage version mismatch, clearing old data"), this.clear(), []) : t.guides || [];
     } catch (e) {
       return console.error("Error reading guides from storage:", e), [];
     }
@@ -715,12 +895,12 @@ class G {
    */
   saveGuide(e) {
     try {
-      const t = this.getGuides(), i = t.findIndex((n) => n.id === e.id), r = {
+      const t = this.getGuides(), i = t.findIndex((r) => r.id === e.id), n = {
         ...e,
         updatedAt: (/* @__PURE__ */ new Date()).toISOString(),
         createdAt: e.createdAt || (/* @__PURE__ */ new Date()).toISOString()
       };
-      i >= 0 ? t[i] = r : t.push(r), this.saveGuides(t);
+      i >= 0 ? t[i] = n : t.push(n), this.saveGuides(t);
     } catch (t) {
       throw console.error("Error saving guide:", t), t;
     }
@@ -730,7 +910,7 @@ class G {
    */
   deleteGuide(e) {
     try {
-      const i = this.getGuides().filter((r) => r.id !== e);
+      const i = this.getGuides().filter((n) => n.id !== e);
       this.saveGuides(i);
     } catch (t) {
       throw console.error("Error deleting guide:", t), t;
@@ -742,7 +922,7 @@ class G {
   saveGuides(e) {
     const t = {
       guides: e,
-      version: v
+      version: y
     };
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(t));
@@ -767,9 +947,9 @@ class G {
     return this.getGuides().find((i) => i.id === e) || null;
   }
 }
-class x {
+class E {
   constructor(e = {}) {
-    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.config = e, this.storage = new G(e.storageKey), this.editorMode = new k(), this.guideRenderer = new I(), this.editorFrame = new O();
+    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.config = e, this.storage = new A(e.storageKey), this.editorMode = new C(), this.guideRenderer = new I(), this.editorFrame = new L();
   }
   /**
    * Initialize the SDK
@@ -785,7 +965,13 @@ class x {
    * Enable editor mode
    */
   enableEditor() {
-    this.isEditorMode || (this.isEditorMode = !0, this.editorFrame.create((e) => this.handleEditorMessage(e)), this.editorMode.activate((e) => this.handleEditorMessage(e)), this.createExitEditorButton(), this.createRedBorderOverlay(), this.createStudioBadge(), localStorage.setItem("designerMode", "true"));
+    if (this.isEditorMode)
+      return;
+    this.isEditorMode = !0;
+    const e = typeof window < "u" ? window.__visualDesignerMode : null;
+    this.editorFrame.create((t) => this.handleEditorMessage(t), e), e === "tag-feature" && setTimeout(() => {
+      this.editorFrame.show();
+    }, 100), this.editorMode.activate((t) => this.handleEditorMessage(t)), this.createExitEditorButton(), this.createRedBorderOverlay(), this.createStudioBadge(), localStorage.setItem("designerMode", "true");
   }
   /**
    * Disable editor mode
@@ -803,7 +989,7 @@ class x {
    * Get guides for current page
    */
   getGuidesForCurrentPage() {
-    const e = m();
+    const e = f();
     return this.storage.getGuidesByPage(e);
   }
   /**
@@ -872,7 +1058,7 @@ class x {
   handleSaveGuide(e) {
     const t = this.saveGuide({
       ...e.guide,
-      page: m()
+      page: f()
     });
     console.log("Guide saved:", t);
   }
@@ -894,8 +1080,8 @@ class x {
   setupEventListeners() {
     let e, t;
     const i = () => {
-      const r = this.storage.getGuides();
-      this.guideRenderer.updatePositions(r);
+      const n = this.storage.getGuides();
+      this.guideRenderer.updatePositions(n);
     };
     window.addEventListener("resize", () => {
       clearTimeout(e), e = window.setTimeout(i, 100);
@@ -1027,14 +1213,14 @@ class x {
     this.studioBadge && (this.studioBadge.remove(), this.studioBadge = null);
   }
 }
-let d = null, f = !1;
+let d = null, m = !1;
 function g(o) {
-  return d || (d = new x(o), d.init(), d);
+  return d || (d = new E(o), d.init(), d);
 }
 function M() {
   return d;
 }
-function A(o) {
+function T(o) {
   !o || !Array.isArray(o) || o.forEach((e) => {
     if (!e || !Array.isArray(e) || e.length === 0)
       return;
@@ -1042,13 +1228,13 @@ function A(o) {
     try {
       switch (t) {
         case "initialize": {
-          const r = i[0];
-          g(r);
+          const n = i[0];
+          g(n);
           break;
         }
         case "identify": {
-          const r = i[0];
-          r && console.log("[Visual Designer] identify (snippet) called with:", r);
+          const n = i[0];
+          n && console.log("[Visual Designer] identify (snippet) called with:", n);
           break;
         }
         case "enableEditor": {
@@ -1071,29 +1257,29 @@ function A(o) {
         default:
           console.warn("[Visual Designer] Unknown snippet method:", t);
       }
-    } catch (r) {
-      console.error("[Visual Designer] Error processing queued call:", t, r);
+    } catch (n) {
+      console.error("[Visual Designer] Error processing queued call:", t, n);
     }
   });
 }
 if (typeof window < "u") {
   const o = window.visualDesigner;
-  o && Array.isArray(o._q) && (f = !0);
+  o && Array.isArray(o._q) && (m = !0);
   try {
-    const e = new URL(window.location.href);
-    if (e.searchParams.get("designer") === "true") {
-      e.searchParams.delete("designer");
-      const i = e.toString();
-      window.history.replaceState({}, "", i), window.__visualDesignerWasLaunched = !0;
+    const e = new URL(window.location.href), t = e.searchParams.get("designer"), i = e.searchParams.get("mode");
+    if (t === "true") {
+      i && (window.__visualDesignerMode = i), e.searchParams.delete("designer"), e.searchParams.delete("mode");
+      const n = e.toString();
+      window.history.replaceState({}, "", n), window.__visualDesignerWasLaunched = !0;
     }
   } catch {
   }
 }
 if (typeof window < "u" && !d) {
   const o = window.__visualDesignerWasLaunched === !0;
-  if (!f || o) {
+  if (!m || o) {
     const e = () => {
-      !d && (!f || o) && g();
+      !d && (!m || o) && g();
     };
     document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", e) : e();
   }
@@ -1101,12 +1287,12 @@ if (typeof window < "u" && !d) {
 typeof window < "u" && (window.VisualDesigner = {
   init: g,
   getInstance: M,
-  DesignerSDK: x,
-  _processQueue: A
+  DesignerSDK: E,
+  _processQueue: T
 });
 export {
-  x as DesignerSDK,
-  A as _processQueue,
+  E as DesignerSDK,
+  T as _processQueue,
   M as getInstance,
   g as init
 };

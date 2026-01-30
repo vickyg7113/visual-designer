@@ -24,9 +24,9 @@
     .launcher-container {
       background: #ffffff;
       border-radius: 16px;
-      padding: 32px 32px 28px;
+      padding: 32px;
       box-shadow: 0 20px 50px rgba(15, 23, 42, 0.45);
-      max-width: 580px;
+      max-width: 600px;
       width: 100%;
     }
 
@@ -45,6 +45,47 @@
     .header p {
       font-size: 14px;
       color: #6b7280;
+    }
+
+    /* Mode Selection Buttons */
+    .mode-selection {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .mode-btn {
+      flex: 1;
+      padding: 12px 18px;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      background: #ffffff;
+      color: #374151;
+    }
+
+    .mode-btn:hover {
+      border-color: #6366f1;
+      background: #f0f4ff;
+    }
+
+    .mode-btn.active {
+      border-color: #6366f1;
+      background: #6366f1;
+      color: #ffffff;
+    }
+
+    /* Form Views */
+    .form-view {
+      display: none;
+    }
+
+    .form-view.active {
+      display: block;
     }
 
     .form-group {
@@ -113,6 +154,278 @@
       background: #e5e7eb;
     }
 
+    .error {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 10px;
+      color: #991b1b;
+      font-size: 13px;
+      display: none;
+    }
+
+    .error.show {
+      display: block;
+    }
+
+    /* Tag Feature Form Styles */
+    .tag-feature-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .tag-feature-header h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .tag-feature-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid #e5e7eb;
+      margin-bottom: 24px;
+    }
+
+    .tag-feature-tab {
+      padding: 12px 20px;
+      background: none;
+      border: none;
+      font-size: 14px;
+      font-weight: 500;
+      color: #6b7280;
+      cursor: pointer;
+      position: relative;
+      transition: color 0.2s;
+      font-family: inherit;
+    }
+
+    .tag-feature-tab:hover {
+      color: #111827;
+    }
+
+    .tag-feature-tab.active {
+      color: #111827;
+      font-weight: 600;
+    }
+
+    .tag-feature-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #3B82F6;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .card:hover {
+      border-color: #d1d5db;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      min-width: 24px;
+      height: 24px;
+      padding: 0 8px;
+      color: #ffffff;
+    }
+
+    .badge-orange {
+      background: #f97316;
+    }
+
+    .badge-blue {
+      background: #3b82f6;
+    }
+
+    .badge-purple {
+      background: #a855f7;
+    }
+
+    .card-text {
+      flex: 1;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 4px;
+    }
+
+    .card-description {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .card-url {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .chevron {
+      color: #9ca3af;
+      font-size: 18px;
+    }
+
+    .heatmap-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-top: 1px solid #e5e7eb;
+      margin-top: 24px;
+    }
+
+    .heatmap-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #111827;
+    }
+
+    .heatmap-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background: #d1d5db;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .toggle-switch.active {
+      background: #10b981;
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: #ffffff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+
+    .toggle-switch.active::after {
+      transform: translateX(20px);
+    }
+
+    .toggle-switch.active::before {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 8px;
+      transform: translateY(-50%);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: bold;
+      z-index: 1;
+    }
+
+    .plus-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #6b7280;
+      font-size: 18px;
+      transition: all 0.2s;
+    }
+
+    .plus-icon:hover {
+      border-color: #6366f1;
+      color: #6366f1;
+    }
+
+    .tag-feature-btn {
+      width: 100%;
+      padding: 12px 20px;
+      background: #14b8a6;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      margin-top: 20px;
+    }
+
+    .tag-feature-btn:hover {
+      background: #0d9488;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
+    }
+
+    #tagFeatureErrorMessage {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      color: #991b1b;
+      font-size: 13px;
+    }
+
     .info-box {
       margin-top: 18px;
       padding: 12px 14px;
@@ -128,59 +441,152 @@
       display: block;
       margin-bottom: 3px;
     }
-
-    .error {
-      margin-top: 10px;
-      padding: 10px 12px;
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      border-radius: 10px;
-      color: #991b1b;
-      font-size: 13px;
-      display: none;
-    }
-
-    .error.show {
-      display: block;
-    }
   </style>
 </head>
 <body>
   <div class="launcher-container">
     <div class="header">
       <h1>Launch Visual Designer</h1>
-      <p>Open any page with Visual Designer SDK using <code>?designer=true</code>.</p>
+      <p>Select a mode and launch the designer</p>
     </div>
 
-    <form id="launcherForm">
-      <div class="form-group">
-        <label for="targetUrl">Target URL</label>
-        <input
-          type="url"
-          id="targetUrl"
-          placeholder="https://your-app.com/page"
-          required
-          autocomplete="off"
-        />
+    <!-- Mode Selection -->
+    <div class="mode-selection">
+      <button class="mode-btn" data-mode="tag-page">Tag Page</button>
+      <button class="mode-btn" data-mode="tag-feature">Tag Feature</button>
+      <button class="mode-btn active" data-mode="guide">Guide</button>
+    </div>
+
+    <!-- Guide Form View -->
+    <div id="guideForm" class="form-view active">
+      <form id="launcherForm">
+        <div class="form-group">
+          <label for="targetUrl">Target URL</label>
+          <input
+            type="url"
+            id="targetUrl"
+            placeholder="https://your-app.com/page"
+            required
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="button-row">
+          <button type="button" class="btn btn-secondary" id="clearBtn">Clear</button>
+          <button type="submit" class="btn btn-primary" id="launchBtn">Launch Designer</button>
+        </div>
+
+        <div class="error" id="errorMessage"></div>
+      </form>
+
+      <div class="info-box">
+        <strong>How it works</strong>
+        Enter the URL of a page that already loads the Visual Designer SDK. This launcher will open that
+        URL in a new tab and append <code>?designer=true</code> so the SDK auto-enables editor mode.
       </div>
+    </div>
 
-      <div class="button-row">
-        <button type="button" class="btn btn-secondary" id="clearBtn">Clear</button>
-        <button type="submit" class="btn btn-primary" id="launchBtn">Launch Designer</button>
+    <!-- Tag Feature Form View -->
+    <div id="tagFeatureForm" class="form-view">
+      <form id="tagFeatureFormElement">
+        <div class="form-group">
+          <label for="tagFeatureUrl">Target URL</label>
+          <input
+            type="url"
+            id="tagFeatureUrl"
+            placeholder="https://your-app.com/page"
+            required
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="button-row">
+          <button type="button" class="btn btn-secondary" id="clearTagFeatureBtn">Clear</button>
+          <button type="submit" class="btn btn-primary" id="tagFeatureLaunchBtn">Launch Tag Feature</button>
+        </div>
+
+        <div class="error" id="tagFeatureErrorMessage"></div>
+      </form>
+
+      <div class="info-box">
+        <strong>Tag Feature Mode</strong>
+        Launch the designer in Tag Feature mode. The Tag Feature UI will appear in the editor sidebar on the target website.
       </div>
+    </div>
 
-      <div class="error" id="errorMessage"></div>
-    </form>
+    <!-- Tag Page Form View -->
+    <div id="tagPageForm" class="form-view">
+      <form id="tagPageFormElement">
+        <div class="form-group">
+          <label for="tagPageUrl">Target URL</label>
+          <input
+            type="url"
+            id="tagPageUrl"
+            placeholder="https://your-app.com/page"
+            required
+            autocomplete="off"
+          />
+        </div>
 
-    <div class="info-box">
-      <strong>How it works</strong>
-      Enter the URL of a page that already loads the Visual Designer SDK. This launcher will open that
-      URL in a new tab and append <code>?designer=true</code> so the SDK auto-enables editor mode.
+        <div class="button-row">
+          <button type="button" class="btn btn-secondary" id="clearTagPageBtn">Clear</button>
+          <button type="submit" class="btn btn-primary" id="tagPageLaunchBtn">Tag Page</button>
+        </div>
+
+        <div class="error" id="tagPageErrorMessage"></div>
+      </form>
+
+      <div class="info-box">
+        <strong>Tag Page Mode</strong>
+        Launch the designer in Tag Page mode to tag and manage pages.
+      </div>
     </div>
   </div>
 
   <script>
-    const form = document.getElementById('launcherForm');
+    let currentMode = 'guide';
+    let currentUrl = '';
+
+    // Mode selection
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mode = btn.dataset.mode;
+        switchMode(mode);
+      });
+    });
+
+    function switchMode(mode) {
+      currentMode = mode;
+      
+      // Update active button
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.querySelector(`[data-mode="${mode}"]`);
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+      }
+      
+      // Show/hide forms
+      document.querySelectorAll('.form-view').forEach(view => view.classList.remove('active'));
+      
+      if (mode === 'guide') {
+        document.getElementById('guideForm').classList.add('active');
+      } else if (mode === 'tag-feature') {
+        document.getElementById('tagFeatureForm').classList.add('active');
+        // Sync URL input
+        const tagFeatureUrl = tagFeatureUrlInput.value.trim() || targetInput.value.trim();
+        if (tagFeatureUrl) {
+          tagFeatureUrlInput.value = tagFeatureUrl;
+        } else if (currentUrl) {
+          tagFeatureUrlInput.value = currentUrl;
+        }
+      } else if (mode === 'tag-page') {
+        document.getElementById('tagPageForm').classList.add('active');
+      }
+    }
+
+
+    // Guide form
+    const guideForm = document.getElementById('launcherForm');
     const targetInput = document.getElementById('targetUrl');
     const errorBox = document.getElementById('errorMessage');
 
@@ -189,16 +595,62 @@
       hideError();
     });
 
-    form.addEventListener('submit', (event) => {
+    guideForm.addEventListener('submit', (event) => {
       event.preventDefault();
-      launchDesigner();
+      launchDesigner('guide');
     });
 
-    function launchDesigner() {
-      let targetUrl = targetInput.value.trim();
+    // Tag Feature form
+    const tagFeatureForm = document.getElementById('tagFeatureFormElement');
+    const tagFeatureUrlInput = document.getElementById('tagFeatureUrl');
+    const tagFeatureErrorBox = document.getElementById('tagFeatureErrorMessage');
+
+    document.getElementById('clearTagFeatureBtn').addEventListener('click', () => {
+      tagFeatureUrlInput.value = '';
+      hideTagFeatureError();
+    });
+
+    tagFeatureForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      launchDesigner('tag-feature');
+    });
+
+    // Tag Page form
+    const tagPageForm = document.getElementById('tagPageFormElement');
+    const tagPageUrlInput = document.getElementById('tagPageUrl');
+    const tagPageErrorBox = document.getElementById('tagPageErrorMessage');
+
+    document.getElementById('clearTagPageBtn').addEventListener('click', () => {
+      tagPageUrlInput.value = '';
+      hideTagPageError();
+    });
+
+    tagPageForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      launchDesigner('tag-page');
+    });
+
+    function launchDesigner(mode, url = null) {
+      let targetUrl = url;
+      
+      if (!targetUrl) {
+        if (mode === 'tag-page') {
+          targetUrl = tagPageUrlInput.value.trim();
+        } else if (mode === 'tag-feature') {
+          targetUrl = tagFeatureUrlInput.value.trim() || targetInput.value.trim();
+        } else {
+          targetUrl = targetInput.value.trim();
+        }
+      }
 
       if (!targetUrl) {
-        showError('Please enter a URL.');
+        if (mode === 'tag-page') {
+          showTagPageError('Please enter a URL.');
+        } else if (mode === 'tag-feature') {
+          showTagFeatureError('Please enter a URL in the Target URL field.');
+        } else {
+          showError('Please enter a URL.');
+        }
         return;
       }
 
@@ -212,22 +664,43 @@
       try {
         urlObj = new URL(targetUrl);
       } catch {
-        showError('Please enter a valid URL (including domain).');
+        if (mode === 'tag-page') {
+          showTagPageError('Please enter a valid URL (including domain).');
+        } else if (mode === 'tag-feature') {
+          showTagFeatureError('Please enter a valid URL (including domain).');
+        } else {
+          showError('Please enter a valid URL (including domain).');
+        }
         return;
       }
 
-      hideError();
+      // Hide errors
+      if (mode === 'tag-page') {
+        hideTagPageError();
+      } else if (mode === 'tag-feature') {
+        hideTagFeatureError();
+      } else {
+        hideError();
+      }
 
-      // Save last-used URL for convenience
-      localStorage.setItem('visual-designer-last-url', targetInput.value.trim());
+      // Save last-used URL
+      currentUrl = targetUrl;
+      localStorage.setItem('visual-designer-last-url', targetUrl);
 
-      // Append ?designer=true (or replace existing value)
+      // Append mode and designer params
       urlObj.searchParams.set('designer', 'true');
+      urlObj.searchParams.set('mode', mode);
       const finalUrl = urlObj.toString();
 
       const win = window.open(finalUrl, '_blank');
       if (!win) {
-        showError('Popup blocked! Please allow popups for this site.');
+        if (mode === 'tag-page') {
+          showTagPageError('Popup blocked! Please allow popups for this site.');
+        } else if (mode === 'tag-feature') {
+          showTagFeatureError('Popup blocked! Please allow popups for this site.');
+        } else {
+          showError('Popup blocked! Please allow popups for this site.');
+        }
       }
     }
 
@@ -241,10 +714,37 @@
       errorBox.classList.remove('show');
     }
 
+    function showTagPageError(message) {
+      tagPageErrorBox.textContent = message;
+      tagPageErrorBox.classList.add('show');
+    }
+
+    function hideTagPageError() {
+      tagPageErrorBox.textContent = '';
+      tagPageErrorBox.classList.remove('show');
+    }
+
+    function showTagFeatureError(message) {
+      if (tagFeatureErrorBox) {
+        tagFeatureErrorBox.textContent = message;
+        tagFeatureErrorBox.classList.add('show');
+      }
+    }
+
+    function hideTagFeatureError() {
+      if (tagFeatureErrorBox) {
+        tagFeatureErrorBox.textContent = '';
+        tagFeatureErrorBox.classList.remove('show');
+      }
+    }
+
     // Restore last-used URL if available
     const lastUrl = localStorage.getItem('visual-designer-last-url');
     if (lastUrl) {
       targetInput.value = lastUrl;
+      if (tagPageUrlInput) tagPageUrlInput.value = lastUrl;
+      if (tagFeatureUrlInput) tagFeatureUrlInput.value = lastUrl;
+      currentUrl = lastUrl;
     }
   </script>
 </body>

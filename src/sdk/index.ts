@@ -111,10 +111,17 @@ if (typeof window !== 'undefined') {
   try {
     const url = new URL(window.location.href);
     const designerParam = url.searchParams.get('designer');
+    const modeParam = url.searchParams.get('mode');
 
     if (designerParam === 'true') {
-      // Remove the parameter from the URL immediately so it never "sticks"
+      // Capture mode before removing params
+      if (modeParam) {
+        (window as any).__visualDesignerMode = modeParam;
+      }
+
+      // Remove the parameters from the URL immediately so they never "stick"
       url.searchParams.delete('designer');
+      url.searchParams.delete('mode');
       const cleanUrl = url.toString();
       window.history.replaceState({}, '', cleanUrl);
 
