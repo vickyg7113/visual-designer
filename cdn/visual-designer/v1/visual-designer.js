@@ -10,18 +10,18 @@ class p {
         method: "id"
       };
     if (e.hasAttribute("data-testid")) {
-      const r = e.getAttribute("data-testid");
+      const o = e.getAttribute("data-testid");
       return {
-        selector: `[data-testid="${this.escapeAttribute(r)}"]`,
+        selector: `[data-testid="${this.escapeAttribute(o)}"]`,
         confidence: "high",
         method: "data-testid"
       };
     }
     const t = this.getSemanticDataAttributes(e);
     if (t.length > 0) {
-      const r = t[0], o = e.getAttribute(r);
+      const o = t[0], s = e.getAttribute(o);
       return {
-        selector: `[${r}="${this.escapeAttribute(o)}"]`,
+        selector: `[${o}="${this.escapeAttribute(s)}"]`,
         confidence: "high",
         method: "data-attribute"
       };
@@ -78,8 +78,8 @@ class p {
     for (const n of t)
       e.hasAttribute(n) && i.push(n);
     for (let n = 0; n < e.attributes.length; n++) {
-      const r = e.attributes[n];
-      r.name.startsWith("data-") && !i.includes(r.name) && i.push(r.name);
+      const o = e.attributes[n];
+      o.name.startsWith("data-") && !i.includes(o.name) && i.push(o.name);
     }
     return i;
   }
@@ -87,18 +87,18 @@ class p {
    * Generate selector using ARIA attributes
    */
   static generateAriaSelector(e) {
-    var r;
+    var o;
     const t = e.getAttribute("role"), i = e.getAttribute("aria-label"), n = e.getAttribute("aria-labelledby");
     if (t) {
-      let o = `[role="${this.escapeAttribute(t)}"]`;
+      let s = `[role="${this.escapeAttribute(t)}"]`;
       if (i)
-        return o += `[aria-label="${this.escapeAttribute(i)}"]`, o;
+        return s += `[aria-label="${this.escapeAttribute(i)}"]`, s;
       if (n) {
         const a = document.getElementById(n);
-        if (a && ((r = a.textContent) == null ? void 0 : r.trim()))
-          return o;
+        if (a && ((o = a.textContent) == null ? void 0 : o.trim()))
+          return s;
       }
-      return o;
+      return s;
     }
     return null;
   }
@@ -115,20 +115,20 @@ class p {
         break;
       }
       if (i.className && typeof i.className == "string") {
-        const o = i.className.split(/\s+/).filter((a) => a && !a.startsWith("designer-")).slice(0, 2);
-        o.length > 0 && (n += "." + o.map((a) => this.escapeSelector(a)).join("."));
+        const s = i.className.split(/\s+/).filter((a) => a && !a.startsWith("designer-")).slice(0, 2);
+        s.length > 0 && (n += "." + s.map((a) => this.escapeSelector(a)).join("."));
       }
-      const r = i.parentElement;
-      if (r) {
-        const o = i.tagName, h = Array.from(r.children).filter(
-          (d) => d.tagName === o
+      const o = i.parentElement;
+      if (o) {
+        const s = i.tagName, h = Array.from(o.children).filter(
+          (d) => d.tagName === s
         );
         if (h.length > 1) {
           const d = h.indexOf(i) + 1;
           n += `:nth-of-type(${d})`;
         }
       }
-      if (t.unshift(n), i = r, t.length >= 5)
+      if (t.unshift(n), i = o, t.length >= 5)
         break;
     }
     return t.length > 0 ? t.join(" > ") : null;
@@ -146,40 +146,40 @@ class p {
     return e.replace(/"/g, '\\"').replace(/'/g, "\\'");
   }
 }
-function w(s) {
+function w(r) {
   var i, n;
-  const e = s.getBoundingClientRect(), t = {};
-  for (let r = 0; r < s.attributes.length; r++) {
-    const o = s.attributes[r];
-    t[o.name] = o.value;
+  const e = r.getBoundingClientRect(), t = {};
+  for (let o = 0; o < r.attributes.length; o++) {
+    const s = r.attributes[o];
+    t[s.name] = s.value;
   }
   return {
-    tagName: s.tagName.toLowerCase(),
-    id: s.id || void 0,
-    className: ((i = s.className) == null ? void 0 : i.toString()) || void 0,
-    textContent: ((n = s.textContent) == null ? void 0 : n.trim().substring(0, 50)) || void 0,
+    tagName: r.tagName.toLowerCase(),
+    id: r.id || void 0,
+    className: ((i = r.className) == null ? void 0 : i.toString()) || void 0,
+    textContent: ((n = r.textContent) == null ? void 0 : n.trim().substring(0, 50)) || void 0,
     attributes: t,
     boundingRect: e
   };
 }
-function x(s) {
-  const e = window.getComputedStyle(s);
-  return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && s.getBoundingClientRect().height > 0 && s.getBoundingClientRect().width > 0;
+function x(r) {
+  const e = window.getComputedStyle(r);
+  return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && r.getBoundingClientRect().height > 0 && r.getBoundingClientRect().width > 0;
 }
 function f() {
   return window.location.pathname || "/";
 }
-function k() {
+function S() {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
-function S(s) {
-  const e = s.getBoundingClientRect();
+function k(r) {
+  const e = r.getBoundingClientRect();
   return e.top >= 0 && e.left >= 0 && e.bottom <= (window.innerHeight || document.documentElement.clientHeight) && e.right <= (window.innerWidth || document.documentElement.clientWidth);
 }
-function B(s) {
-  S(s) || s.scrollIntoView({ behavior: "smooth", block: "center" });
+function C(r) {
+  k(r) || r.scrollIntoView({ behavior: "smooth", block: "center" });
 }
-class C {
+class B {
   constructor() {
     this.isActive = !1, this.highlightOverlay = null, this.selectedElement = null, this.messageCallback = null, this.handleMouseOver = (e) => {
       if (!this.isActive || !this.highlightOverlay)
@@ -341,7 +341,7 @@ class M {
       console.warn(`Guide "${e.id}" target not found: ${e.selector}`);
       return;
     }
-    B(t);
+    C(t);
     const i = this.createTooltip(e, t);
     this.renderedGuides.set(e.id, i), this.container || this.createContainer(), this.container && this.container.appendChild(i), this.positionTooltip(i, t, e.placement);
   }
@@ -379,8 +379,8 @@ class M {
     `;
     const n = document.createElement("div");
     n.style.cssText = "margin-bottom: 8px;", n.textContent = e.content, i.appendChild(n);
-    const r = document.createElement("button");
-    r.textContent = "Got it", r.style.cssText = `
+    const o = document.createElement("button");
+    o.textContent = "Got it", o.style.cssText = `
       background: #3b82f6;
       color: white;
       border: none;
@@ -390,30 +390,30 @@ class M {
       font-weight: 500;
       cursor: pointer;
       transition: background 0.2s;
-    `, r.onmouseover = () => {
-      r.style.background = "#2563eb";
-    }, r.onmouseout = () => {
-      r.style.background = "#3b82f6";
-    }, r.onclick = () => {
+    `, o.onmouseover = () => {
+      o.style.background = "#2563eb";
+    }, o.onmouseout = () => {
+      o.style.background = "#3b82f6";
+    }, o.onclick = () => {
       this.dismissGuide(e.id);
-    }, i.appendChild(r);
-    const o = document.createElement("div");
-    return o.className = "designer-guide-arrow", o.style.cssText = `
+    }, i.appendChild(o);
+    const s = document.createElement("div");
+    return s.className = "designer-guide-arrow", s.style.cssText = `
       position: absolute;
       width: 0;
       height: 0;
       border-style: solid;
-    `, i.appendChild(o), i;
+    `, i.appendChild(s), i;
   }
   /**
    * Position tooltip relative to target element
    */
   positionTooltip(e, t, i) {
-    const n = t.getBoundingClientRect(), r = e.getBoundingClientRect(), o = window.pageXOffset || document.documentElement.scrollLeft, a = window.pageYOffset || document.documentElement.scrollTop, h = e.querySelector(".designer-guide-arrow");
+    const n = t.getBoundingClientRect(), o = e.getBoundingClientRect(), s = window.pageXOffset || document.documentElement.scrollLeft, a = window.pageYOffset || document.documentElement.scrollTop, h = e.querySelector(".designer-guide-arrow");
     let d = 0, c = 0, u = "";
     switch (i) {
       case "top":
-        d = n.top + a - r.height - 12, c = n.left + o + n.width / 2 - r.width / 2, u = `
+        d = n.top + a - o.height - 12, c = n.left + s + n.width / 2 - o.width / 2, u = `
           bottom: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -422,7 +422,7 @@ class M {
         `;
         break;
       case "bottom":
-        d = n.bottom + a + 12, c = n.left + o + n.width / 2 - r.width / 2, u = `
+        d = n.bottom + a + 12, c = n.left + s + n.width / 2 - o.width / 2, u = `
           top: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -431,7 +431,7 @@ class M {
         `;
         break;
       case "left":
-        d = n.top + a + n.height / 2 - r.height / 2, c = n.left + o - r.width - 12, u = `
+        d = n.top + a + n.height / 2 - o.height / 2, c = n.left + s - o.width - 12, u = `
           right: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -440,7 +440,7 @@ class M {
         `;
         break;
       case "right":
-        d = n.top + a + n.height / 2 - r.height / 2, c = n.right + o + 12, u = `
+        d = n.top + a + n.height / 2 - o.height / 2, c = n.right + s + 12, u = `
           left: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -450,7 +450,7 @@ class M {
         break;
     }
     const b = window.innerWidth, v = window.innerHeight;
-    c < o ? c = o + 10 : c + r.width > o + b && (c = o + b - r.width - 10), d < a ? d = a + 10 : d + r.height > a + v && (d = a + v - r.height - 10), e.style.top = `${d}px`, e.style.left = `${c}px`, h && (h.style.cssText += u);
+    c < s ? c = s + 10 : c + o.width > s + b && (c = s + b - o.width - 10), d < a ? d = a + 10 : d + o.height > a + v && (d = a + v - o.height - 10), e.style.top = `${d}px`, e.style.left = `${c}px`, h && (h.style.cssText += u);
   }
   /**
    * Create container for guides
@@ -471,11 +471,11 @@ class M {
    */
   updatePositions(e) {
     this.renderedGuides.forEach((t, i) => {
-      const n = e.find((o) => o.id === i);
+      const n = e.find((s) => s.id === i);
       if (!n)
         return;
-      const r = p.findElement(n.selector);
-      r && this.positionTooltip(t, r, n.placement);
+      const o = p.findElement(n.selector);
+      o && this.positionTooltip(t, o, n.placement);
     });
   }
 }
@@ -498,9 +498,9 @@ class L {
           return;
       }
       e.preventDefault(), e.stopPropagation();
-      const t = e.clientX - this.dragStartX, i = e.clientY - this.dragStartY, n = window.innerWidth, r = window.innerHeight, o = this.iframe.offsetWidth;
+      const t = e.clientX - this.dragStartX, i = e.clientY - this.dragStartY, n = window.innerWidth, o = window.innerHeight, s = this.iframe.offsetWidth;
       this.iframe.offsetHeight;
-      const a = Math.max(-o + 50, Math.min(t, n - 50)), h = Math.max(0, Math.min(i, r - 100));
+      const a = Math.max(-s + 50, Math.min(t, n - 50)), h = Math.max(0, Math.min(i, o - 100));
       this.currentX = a, this.currentY = h, this.iframe.style.left = `${a}px`, this.iframe.style.top = `${h}px`, this.iframe.style.right = "auto", this.iframe.style.bottom = "auto", this.dragHandle.style.left = `${a}px`, this.dragHandle.style.top = `${h}px`;
     }, this.handleMouseUp = (e) => {
       this.isMouseDown && (this.isDragging = !1, this.isMouseDown = !1, document.body.style.cursor = "", document.body.style.userSelect = "", document.documentElement.style.userSelect = "", e.preventDefault(), e.stopPropagation());
@@ -961,9 +961,9 @@ class L {
     this.dragHandle.style.top = `${e.top}px`, this.dragHandle.style.left = `${e.left}px`, this.dragHandle.style.width = `${e.width}px`;
   }
 }
-const I = "visual-designer-guides", y = "1.0.0";
-class D {
-  constructor(e = I) {
+const O = "visual-designer-guides", y = "1.0.0";
+class I {
+  constructor(e = O) {
     this.storageKey = e;
   }
   /**
@@ -991,7 +991,7 @@ class D {
    */
   saveGuide(e) {
     try {
-      const t = this.getGuides(), i = t.findIndex((r) => r.id === e.id), n = {
+      const t = this.getGuides(), i = t.findIndex((o) => o.id === e.id), n = {
         ...e,
         updatedAt: (/* @__PURE__ */ new Date()).toISOString(),
         createdAt: e.createdAt || (/* @__PURE__ */ new Date()).toISOString()
@@ -1045,7 +1045,7 @@ class D {
 }
 class E {
   constructor(e = {}) {
-    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.config = e, this.storage = new D(e.storageKey), this.editorMode = new C(), this.guideRenderer = new M(), this.editorFrame = new L();
+    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.loadingOverlay = null, this.config = e, this.storage = new I(e.storageKey), this.editorMode = new B(), this.guideRenderer = new M(), this.editorFrame = new L();
   }
   /**
    * Initialize the SDK
@@ -1055,7 +1055,7 @@ class E {
       console.warn("SDK already initialized");
       return;
     }
-    this.isInitialized = !0, this.shouldEnableEditorMode() ? this.enableEditor() : this.loadGuides(), this.setupEventListeners();
+    this.isInitialized = !0, this.shouldEnableEditorMode() ? (this.showLoadingOverlay(), this.enableEditor()) : this.loadGuides(), this.setupEventListeners();
   }
   /**
    * Enable editor mode
@@ -1064,16 +1064,16 @@ class E {
     if (this.isEditorMode)
       return;
     this.isEditorMode = !0;
-    const e = typeof window < "u" ? window.__visualDesignerMode : null;
-    this.editorFrame.create((t) => this.handleEditorMessage(t), e), e === "tag-feature" && setTimeout(() => {
-      this.editorFrame.show();
-    }, 100), this.editorMode.activate((t) => this.handleEditorMessage(t)), this.createExitEditorButton(), this.createRedBorderOverlay(), this.createStudioBadge(), localStorage.setItem("designerMode", "true");
+    let e = typeof window < "u" ? window.__visualDesignerMode : null;
+    e || (e = localStorage.getItem("designerModeType") || null), this.editorFrame.create((t) => this.handleEditorMessage(t), e), this.editorMode.activate((t) => this.handleEditorMessage(t)), this.createExitEditorButton(), this.createRedBorderOverlay(), this.createStudioBadge(), localStorage.setItem("designerMode", "true"), e && localStorage.setItem("designerModeType", e), setTimeout(() => {
+      this.editorFrame.show(), this.hideLoadingOverlay();
+    }, e === "tag-feature" ? 100 : 300);
   }
   /**
    * Disable editor mode
    */
   disableEditor() {
-    this.isEditorMode && (this.isEditorMode = !1, this.editorMode.deactivate(), this.editorFrame.destroy(), this.removeExitEditorButton(), this.removeRedBorderOverlay(), this.removeStudioBadge(), localStorage.removeItem("designerMode"), this.loadGuides());
+    this.isEditorMode && (this.isEditorMode = !1, this.editorMode.deactivate(), this.editorFrame.destroy(), this.removeExitEditorButton(), this.removeRedBorderOverlay(), this.removeStudioBadge(), localStorage.removeItem("designerMode"), localStorage.removeItem("designerModeType"), this.hideLoadingOverlay(), this.loadGuides());
   }
   /**
    * Get all guides
@@ -1094,7 +1094,7 @@ class E {
   saveGuide(e) {
     const t = {
       ...e,
-      id: k(),
+      id: S(),
       createdAt: (/* @__PURE__ */ new Date()).toISOString(),
       updatedAt: (/* @__PURE__ */ new Date()).toISOString()
     };
@@ -1137,6 +1137,7 @@ class E {
         this.handleExitEditorMode();
         break;
       case "EDITOR_READY":
+        this.hideLoadingOverlay();
         break;
       default:
         console.warn("Unknown message type:", e);
@@ -1308,16 +1309,73 @@ class E {
   removeStudioBadge() {
     this.studioBadge && (this.studioBadge.remove(), this.studioBadge = null);
   }
+  /**
+   * Show loading overlay while designer is initializing (Pendo-style)
+   */
+  showLoadingOverlay() {
+    if (this.loadingOverlay)
+      return;
+    if (!document.body) {
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => this.showLoadingOverlay());
+        return;
+      }
+      setTimeout(() => this.showLoadingOverlay(), 100);
+      return;
+    }
+    this.loadingOverlay = document.createElement("div"), this.loadingOverlay.id = "designer-loading-overlay", this.loadingOverlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.95);
+      z-index: 1000002;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    `;
+    const e = document.createElement("div");
+    e.style.cssText = `
+      width: 48px;
+      height: 48px;
+      border: 4px solid #e2e8f0;
+      border-top-color: #3B82F6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    `;
+    const t = document.createElement("style");
+    t.textContent = `
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    `, document.head.appendChild(t);
+    const i = document.createElement("div");
+    i.textContent = "Loading Visual Designer...", i.style.cssText = `
+      color: #1e40af;
+      font-size: 16px;
+      font-weight: 500;
+    `, this.loadingOverlay.appendChild(e), this.loadingOverlay.appendChild(i), document.body.appendChild(this.loadingOverlay);
+  }
+  /**
+   * Hide loading overlay
+   */
+  hideLoadingOverlay() {
+    this.loadingOverlay && (this.loadingOverlay.remove(), this.loadingOverlay = null);
+  }
 }
 let l = null, m = !1;
-function g(s) {
-  return l || (l = new E(s), l.init(), l);
+function g(r) {
+  return l || (l = new E(r), l.init(), l);
 }
 function T() {
   return l;
 }
-function O(s) {
-  !s || !Array.isArray(s) || s.forEach((e) => {
+function D(r) {
+  !r || !Array.isArray(r) || r.forEach((e) => {
     if (!e || !Array.isArray(e) || e.length === 0)
       return;
     const t = e[0], i = e.slice(1);
@@ -1359,12 +1417,12 @@ function O(s) {
   });
 }
 if (typeof window < "u") {
-  const s = window.visualDesigner;
-  s && Array.isArray(s._q) && (m = !0);
+  const r = window.visualDesigner;
+  r && Array.isArray(r._q) && (m = !0);
   try {
     const e = new URL(window.location.href), t = e.searchParams.get("designer"), i = e.searchParams.get("mode");
     if (t === "true") {
-      i && (window.__visualDesignerMode = i), e.searchParams.delete("designer"), e.searchParams.delete("mode");
+      i && (window.__visualDesignerMode = i, localStorage.setItem("designerModeType", i)), localStorage.setItem("designerMode", "true"), e.searchParams.delete("designer"), e.searchParams.delete("mode");
       const n = e.toString();
       window.history.replaceState({}, "", n), window.__visualDesignerWasLaunched = !0;
     }
@@ -1372,10 +1430,10 @@ if (typeof window < "u") {
   }
 }
 if (typeof window < "u" && !l) {
-  const s = window.__visualDesignerWasLaunched === !0;
-  if (!m || s) {
+  const r = window.__visualDesignerWasLaunched === !0;
+  if (!m || r) {
     const e = () => {
-      !l && (!m || s) && g();
+      !l && (!m || r) && g();
     };
     document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", e) : e();
   }
@@ -1384,11 +1442,11 @@ typeof window < "u" && (window.VisualDesigner = {
   init: g,
   getInstance: T,
   DesignerSDK: E,
-  _processQueue: O
+  _processQueue: D
 });
 export {
   E as DesignerSDK,
-  O as _processQueue,
+  D as _processQueue,
   T as getInstance,
   g as init
 };

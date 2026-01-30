@@ -117,7 +117,13 @@ if (typeof window !== 'undefined') {
       // Capture mode before removing params
       if (modeParam) {
         (window as any).__visualDesignerMode = modeParam;
+        // Store mode in localStorage for persistence (Pendo-style: store intent before login)
+        // This allows the designer to be enabled after login when init() is called
+        localStorage.setItem('designerModeType', modeParam);
       }
+
+      // Store designerMode flag in localStorage (Pendo-style: store intent before login)
+      localStorage.setItem('designerMode', 'true');
 
       // Remove the parameters from the URL immediately so they never "stick"
       url.searchParams.delete('designer');
