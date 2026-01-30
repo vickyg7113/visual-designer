@@ -23,19 +23,22 @@ export class EditorFrame {
    * Create and show editor iframe
    */
   create(onMessage: (message: EditorMessage) => void, mode?: string | null): void {
+    console.log('[Visual Designer] EditorFrame.create() called with mode:', mode);
     if (this.iframe) {
+      console.warn('[Visual Designer] EditorFrame already created, skipping');
       return;
     }
 
     this.mode = mode || null;
     this.messageCallback = onMessage;
+    console.log('[Visual Designer] Creating editor iframe with mode:', this.mode);
     this.iframe = document.createElement('iframe');
     this.iframe.id = 'designer-editor-frame';
     this.iframe.style.cssText = `
       position: fixed;
       top: 0;
       left: 0;
-      width: 500px;
+      width: 600px;
       height: 800px;
       max-height: 90vh;
       border: none;
@@ -89,12 +92,19 @@ export class EditorFrame {
    * Show editor frame
    */
   show(): void {
+    console.log('[Visual Designer] EditorFrame.show() called');
     if (this.iframe) {
+      console.log('[Visual Designer] Showing iframe');
       this.iframe.style.display = 'block';
       this.updateDragHandlePosition();
+    } else {
+      console.warn('[Visual Designer] Cannot show iframe - iframe is null');
     }
     if (this.dragHandle) {
+      console.log('[Visual Designer] Showing drag handle');
       this.dragHandle.style.display = 'block';
+    } else {
+      console.warn('[Visual Designer] Cannot show drag handle - dragHandle is null');
     }
   }
 

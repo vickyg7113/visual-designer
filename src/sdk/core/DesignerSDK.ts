@@ -51,6 +51,12 @@ export class DesignerSDK {
     // In snippet mode, init() is called after login, so this will find the stored mode
     const shouldEnableEditor = this.shouldEnableEditorMode();
     
+    // Debug logging
+    console.log('[Visual Designer] init() called');
+    console.log('[Visual Designer] shouldEnableEditor:', shouldEnableEditor);
+    console.log('[Visual Designer] localStorage designerMode:', localStorage.getItem('designerMode'));
+    console.log('[Visual Designer] localStorage designerModeType:', localStorage.getItem('designerModeType'));
+    
     if (shouldEnableEditor) {
       // Show loading overlay while enabling editor (user just logged in)
       this.showLoadingOverlay();
@@ -70,9 +76,11 @@ export class DesignerSDK {
    */
   enableEditor(): void {
     if (this.isEditorMode) {
+      console.log('[Visual Designer] Editor already enabled, skipping');
       return;
     }
 
+    console.log('[Visual Designer] enableEditor() called');
     this.isEditorMode = true;
     
     // Get mode from URL parameter (stored in global flag) or localStorage
@@ -81,6 +89,8 @@ export class DesignerSDK {
       // Fallback to localStorage if mode wasn't in URL (e.g., page refresh)
       mode = localStorage.getItem('designerModeType') || null;
     }
+    
+    console.log('[Visual Designer] Mode:', mode);
     
     // Create editor frame with mode
     this.editorFrame.create((message) => this.handleEditorMessage(message), mode);
@@ -103,20 +113,14 @@ export class DesignerSDK {
       localStorage.setItem('designerModeType', mode);
     }
     
-    // For Tag Feature mode, show the editor frame immediately
-    // For other modes, wait a bit for everything to initialize, then hide loading
-    if (mode === 'tag-feature') {
-      setTimeout(() => {
-        this.editorFrame.show();
-        // Hide loading after editor is shown
-        this.hideLoadingOverlay();
-      }, 100);
-    } else {
-      // Hide loading overlay after a short delay to ensure everything is ready
-      setTimeout(() => {
-        this.hideLoadingOverlay();
-      }, 300);
-    }
+    // Show the editor frame for all modes
+    // For Tag Feature mode, show immediately
+    // For other modes, show after a short delay to ensure everything is initialized
+    setTimeout(() => {
+      this.editorFrame.show();
+      // Hide loading after editor is shown
+      this.hideLoadingOverlay();
+    }, mode === 'tag-feature' ? 100 : 300);
   }
 
   /**
@@ -214,19 +218,24 @@ export class DesignerSDK {
   private shouldEnableEditorMode(): boolean {
     // Check config override
     if (this.config.editorMode !== undefined) {
+      console.log('[Visual Designer] shouldEnableEditorMode: true (config override)');
       return this.config.editorMode;
     }
 
     // If script saw ?designer=true at load time (cleaned in index.ts), respect that flag
     if (typeof window !== 'undefined' && (window as any).__visualDesignerWasLaunched) {
+      console.log('[Visual Designer] shouldEnableEditorMode: true (wasLaunched flag)');
       return true;
     }
 
     // Check localStorage
-    if (localStorage.getItem('designerMode') === 'true') {
+    const designerMode = localStorage.getItem('designerMode');
+    if (designerMode === 'true') {
+      console.log('[Visual Designer] shouldEnableEditorMode: true (localStorage)');
       return true;
     }
 
+    console.log('[Visual Designer] shouldEnableEditorMode: false');
     return false;
   }
 
