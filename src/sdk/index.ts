@@ -117,7 +117,12 @@ if (typeof window !== 'undefined') {
       // Capture mode before removing params
       if (modeParam) {
         (window as any).__visualDesignerMode = modeParam;
+        // Also store in localStorage for persistence across page refreshes
+        localStorage.setItem('designerModeType', modeParam);
       }
+
+      // Store designerMode flag in localStorage so it persists even after login/refresh
+      localStorage.setItem('designerMode', 'true');
 
       // Remove the parameters from the URL immediately so they never "stick"
       url.searchParams.delete('designer');
@@ -137,13 +142,16 @@ if (typeof window !== 'undefined') {
 // - Normal case (no snippet): auto-init as before
 // - Snippet mode: DO NOT auto-init normally, BUT
 //   if the page was launched via ?designer=true (flag set in __visualDesignerWasLaunched),
+//   OR if designerMode is stored in localStorage (e.g., after login/refresh),
 //   we auto-init so editor comes up even if the host app doesn't explicitly call initialize().
 if (typeof window !== 'undefined' && !sdkInstance) {
   const wasLaunched = (window as any).__visualDesignerWasLaunched === true;
+  // Also check localStorage for designerMode (supports post-login initialization)
+  const hasDesignerMode = typeof localStorage !== 'undefined' && localStorage.getItem('designerMode') === 'true';
 
-  if (!isSnippetMode || wasLaunched) {
+  if (!isSnippetMode || wasLaunched || hasDesignerMode) {
     const doInit = () => {
-      if (!sdkInstance && (!isSnippetMode || wasLaunched)) {
+      if (!sdkInstance && (!isSnippetMode || wasLaunched || hasDesignerMode)) {
         init();
       }
     };

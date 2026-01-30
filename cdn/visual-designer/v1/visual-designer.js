@@ -10,18 +10,18 @@ class p {
         method: "id"
       };
     if (e.hasAttribute("data-testid")) {
-      const r = e.getAttribute("data-testid");
+      const o = e.getAttribute("data-testid");
       return {
-        selector: `[data-testid="${this.escapeAttribute(r)}"]`,
+        selector: `[data-testid="${this.escapeAttribute(o)}"]`,
         confidence: "high",
         method: "data-testid"
       };
     }
     const t = this.getSemanticDataAttributes(e);
     if (t.length > 0) {
-      const r = t[0], s = e.getAttribute(r);
+      const o = t[0], s = e.getAttribute(o);
       return {
-        selector: `[${r}="${this.escapeAttribute(s)}"]`,
+        selector: `[${o}="${this.escapeAttribute(s)}"]`,
         confidence: "high",
         method: "data-attribute"
       };
@@ -78,8 +78,8 @@ class p {
     for (const n of t)
       e.hasAttribute(n) && i.push(n);
     for (let n = 0; n < e.attributes.length; n++) {
-      const r = e.attributes[n];
-      r.name.startsWith("data-") && !i.includes(r.name) && i.push(r.name);
+      const o = e.attributes[n];
+      o.name.startsWith("data-") && !i.includes(o.name) && i.push(o.name);
     }
     return i;
   }
@@ -87,7 +87,7 @@ class p {
    * Generate selector using ARIA attributes
    */
   static generateAriaSelector(e) {
-    var r;
+    var o;
     const t = e.getAttribute("role"), i = e.getAttribute("aria-label"), n = e.getAttribute("aria-labelledby");
     if (t) {
       let s = `[role="${this.escapeAttribute(t)}"]`;
@@ -95,7 +95,7 @@ class p {
         return s += `[aria-label="${this.escapeAttribute(i)}"]`, s;
       if (n) {
         const a = document.getElementById(n);
-        if (a && ((r = a.textContent) == null ? void 0 : r.trim()))
+        if (a && ((o = a.textContent) == null ? void 0 : o.trim()))
           return s;
       }
       return s;
@@ -118,17 +118,17 @@ class p {
         const s = i.className.split(/\s+/).filter((a) => a && !a.startsWith("designer-")).slice(0, 2);
         s.length > 0 && (n += "." + s.map((a) => this.escapeSelector(a)).join("."));
       }
-      const r = i.parentElement;
-      if (r) {
-        const s = i.tagName, u = Array.from(r.children).filter(
-          (l) => l.tagName === s
+      const o = i.parentElement;
+      if (o) {
+        const s = i.tagName, h = Array.from(o.children).filter(
+          (d) => d.tagName === s
         );
-        if (u.length > 1) {
-          const l = u.indexOf(i) + 1;
-          n += `:nth-of-type(${l})`;
+        if (h.length > 1) {
+          const d = h.indexOf(i) + 1;
+          n += `:nth-of-type(${d})`;
         }
       }
-      if (t.unshift(n), i = r, t.length >= 5)
+      if (t.unshift(n), i = o, t.length >= 5)
         break;
     }
     return t.length > 0 ? t.join(" > ") : null;
@@ -146,25 +146,25 @@ class p {
     return e.replace(/"/g, '\\"').replace(/'/g, "\\'");
   }
 }
-function w(o) {
+function w(r) {
   var i, n;
-  const e = o.getBoundingClientRect(), t = {};
-  for (let r = 0; r < o.attributes.length; r++) {
-    const s = o.attributes[r];
+  const e = r.getBoundingClientRect(), t = {};
+  for (let o = 0; o < r.attributes.length; o++) {
+    const s = r.attributes[o];
     t[s.name] = s.value;
   }
   return {
-    tagName: o.tagName.toLowerCase(),
-    id: o.id || void 0,
-    className: ((i = o.className) == null ? void 0 : i.toString()) || void 0,
-    textContent: ((n = o.textContent) == null ? void 0 : n.trim().substring(0, 50)) || void 0,
+    tagName: r.tagName.toLowerCase(),
+    id: r.id || void 0,
+    className: ((i = r.className) == null ? void 0 : i.toString()) || void 0,
+    textContent: ((n = r.textContent) == null ? void 0 : n.trim().substring(0, 50)) || void 0,
     attributes: t,
     boundingRect: e
   };
 }
-function x(o) {
-  const e = window.getComputedStyle(o);
-  return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && o.getBoundingClientRect().height > 0 && o.getBoundingClientRect().width > 0;
+function x(r) {
+  const e = window.getComputedStyle(r);
+  return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && r.getBoundingClientRect().height > 0 && r.getBoundingClientRect().width > 0;
 }
 function f() {
   return window.location.pathname || "/";
@@ -172,14 +172,14 @@ function f() {
 function S() {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
-function B(o) {
-  const e = o.getBoundingClientRect();
+function k(r) {
+  const e = r.getBoundingClientRect();
   return e.top >= 0 && e.left >= 0 && e.bottom <= (window.innerHeight || document.documentElement.clientHeight) && e.right <= (window.innerWidth || document.documentElement.clientWidth);
 }
-function k(o) {
-  B(o) || o.scrollIntoView({ behavior: "smooth", block: "center" });
+function C(r) {
+  k(r) || r.scrollIntoView({ behavior: "smooth", block: "center" });
 }
-class C {
+class B {
   constructor() {
     this.isActive = !1, this.highlightOverlay = null, this.selectedElement = null, this.messageCallback = null, this.handleMouseOver = (e) => {
       if (!this.isActive || !this.highlightOverlay)
@@ -316,7 +316,7 @@ class C {
     e && e.remove();
   }
 }
-class I {
+class M {
   constructor() {
     this.renderedGuides = /* @__PURE__ */ new Map(), this.container = null;
   }
@@ -341,7 +341,7 @@ class I {
       console.warn(`Guide "${e.id}" target not found: ${e.selector}`);
       return;
     }
-    k(t);
+    C(t);
     const i = this.createTooltip(e, t);
     this.renderedGuides.set(e.id, i), this.container || this.createContainer(), this.container && this.container.appendChild(i), this.positionTooltip(i, t, e.placement);
   }
@@ -379,8 +379,8 @@ class I {
     `;
     const n = document.createElement("div");
     n.style.cssText = "margin-bottom: 8px;", n.textContent = e.content, i.appendChild(n);
-    const r = document.createElement("button");
-    r.textContent = "Got it", r.style.cssText = `
+    const o = document.createElement("button");
+    o.textContent = "Got it", o.style.cssText = `
       background: #3b82f6;
       color: white;
       border: none;
@@ -390,13 +390,13 @@ class I {
       font-weight: 500;
       cursor: pointer;
       transition: background 0.2s;
-    `, r.onmouseover = () => {
-      r.style.background = "#2563eb";
-    }, r.onmouseout = () => {
-      r.style.background = "#3b82f6";
-    }, r.onclick = () => {
+    `, o.onmouseover = () => {
+      o.style.background = "#2563eb";
+    }, o.onmouseout = () => {
+      o.style.background = "#3b82f6";
+    }, o.onclick = () => {
       this.dismissGuide(e.id);
-    }, i.appendChild(r);
+    }, i.appendChild(o);
     const s = document.createElement("div");
     return s.className = "designer-guide-arrow", s.style.cssText = `
       position: absolute;
@@ -409,11 +409,11 @@ class I {
    * Position tooltip relative to target element
    */
   positionTooltip(e, t, i) {
-    const n = t.getBoundingClientRect(), r = e.getBoundingClientRect(), s = window.pageXOffset || document.documentElement.scrollLeft, a = window.pageYOffset || document.documentElement.scrollTop, u = e.querySelector(".designer-guide-arrow");
-    let l = 0, c = 0, h = "";
+    const n = t.getBoundingClientRect(), o = e.getBoundingClientRect(), s = window.pageXOffset || document.documentElement.scrollLeft, a = window.pageYOffset || document.documentElement.scrollTop, h = e.querySelector(".designer-guide-arrow");
+    let d = 0, c = 0, u = "";
     switch (i) {
       case "top":
-        l = n.top + a - r.height - 12, c = n.left + s + n.width / 2 - r.width / 2, h = `
+        d = n.top + a - o.height - 12, c = n.left + s + n.width / 2 - o.width / 2, u = `
           bottom: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -422,7 +422,7 @@ class I {
         `;
         break;
       case "bottom":
-        l = n.bottom + a + 12, c = n.left + s + n.width / 2 - r.width / 2, h = `
+        d = n.bottom + a + 12, c = n.left + s + n.width / 2 - o.width / 2, u = `
           top: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -431,7 +431,7 @@ class I {
         `;
         break;
       case "left":
-        l = n.top + a + n.height / 2 - r.height / 2, c = n.left + s - r.width - 12, h = `
+        d = n.top + a + n.height / 2 - o.height / 2, c = n.left + s - o.width - 12, u = `
           right: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -440,7 +440,7 @@ class I {
         `;
         break;
       case "right":
-        l = n.top + a + n.height / 2 - r.height / 2, c = n.right + s + 12, h = `
+        d = n.top + a + n.height / 2 - o.height / 2, c = n.right + s + 12, u = `
           left: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -450,7 +450,7 @@ class I {
         break;
     }
     const b = window.innerWidth, v = window.innerHeight;
-    c < s ? c = s + 10 : c + r.width > s + b && (c = s + b - r.width - 10), l < a ? l = a + 10 : l + r.height > a + v && (l = a + v - r.height - 10), e.style.top = `${l}px`, e.style.left = `${c}px`, u && (u.style.cssText += h);
+    c < s ? c = s + 10 : c + o.width > s + b && (c = s + b - o.width - 10), d < a ? d = a + 10 : d + o.height > a + v && (d = a + v - o.height - 10), e.style.top = `${d}px`, e.style.left = `${c}px`, h && (h.style.cssText += u);
   }
   /**
    * Create container for guides
@@ -474,14 +474,37 @@ class I {
       const n = e.find((s) => s.id === i);
       if (!n)
         return;
-      const r = p.findElement(n.selector);
-      r && this.positionTooltip(t, r, n.placement);
+      const o = p.findElement(n.selector);
+      o && this.positionTooltip(t, o, n.placement);
     });
   }
 }
 class L {
   constructor() {
-    this.iframe = null, this.messageCallback = null, this.isReady = !1, this.mode = null, this.handleMessage = (e) => {
+    this.iframe = null, this.dragHandle = null, this.messageCallback = null, this.isReady = !1, this.mode = null, this.isDragging = !1, this.dragStartX = 0, this.dragStartY = 0, this.currentX = 0, this.currentY = 0, this.dragThreshold = 3, this.mouseDownX = 0, this.mouseDownY = 0, this.isMouseDown = !1, this.handleMouseDown = (e) => {
+      if (!this.iframe || !this.dragHandle)
+        return;
+      this.mouseDownX = e.clientX, this.mouseDownY = e.clientY, this.isMouseDown = !0, this.isDragging = !1;
+      const t = this.iframe.getBoundingClientRect();
+      this.dragStartX = e.clientX - t.left, this.dragStartY = e.clientY - t.top, this.currentX = t.left, this.currentY = t.top, e.preventDefault(), e.stopPropagation();
+    }, this.handleMouseMove = (e) => {
+      if (!this.isMouseDown || !this.iframe || !this.dragHandle)
+        return;
+      if (!this.isDragging) {
+        const d = Math.abs(e.clientX - this.mouseDownX), c = Math.abs(e.clientY - this.mouseDownY);
+        if (Math.sqrt(d * d + c * c) > this.dragThreshold)
+          this.isDragging = !0, document.body.style.cursor = "move", document.body.style.userSelect = "none", document.documentElement.style.userSelect = "none";
+        else
+          return;
+      }
+      e.preventDefault(), e.stopPropagation();
+      const t = e.clientX - this.dragStartX, i = e.clientY - this.dragStartY, n = window.innerWidth, o = window.innerHeight, s = this.iframe.offsetWidth;
+      this.iframe.offsetHeight;
+      const a = Math.max(-s + 50, Math.min(t, n - 50)), h = Math.max(0, Math.min(i, o - 100));
+      this.currentX = a, this.currentY = h, this.iframe.style.left = `${a}px`, this.iframe.style.top = `${h}px`, this.iframe.style.right = "auto", this.iframe.style.bottom = "auto", this.dragHandle.style.left = `${a}px`, this.dragHandle.style.top = `${h}px`;
+    }, this.handleMouseUp = (e) => {
+      this.isMouseDown && (this.isDragging = !1, this.isMouseDown = !1, document.body.style.cursor = "", document.body.style.userSelect = "", document.documentElement.style.userSelect = "", e.preventDefault(), e.stopPropagation());
+    }, this.handleMessage = (e) => {
       const t = e.data;
       !t || !t.type || (this.messageCallback && this.messageCallback(t), (t.type === "CANCEL" || t.type === "GUIDE_SAVED") && this.hide());
     };
@@ -496,18 +519,20 @@ class L {
       position: fixed;
       top: 0;
       left: 0;
-      width: 400px;
-      height: 100vh;
+      width: 500px;
+      height: 800px;
+      max-height: 90vh;
       border: none;
-      border-right: 1px solid #e5e7eb;
+      border-radius: 12px;
       background: white;
-      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
       z-index: 999999;
       display: none;
-    `, this.loadEditorHtml(), window.addEventListener("message", this.handleMessage);
+      overflow: hidden;
+    `, this.createDragHandle(), this.loadEditorHtml(), window.addEventListener("message", this.handleMessage);
     const i = () => {
-      document.body ? (document.body.appendChild(this.iframe), this.iframe && (this.iframe.onload = () => {
-        this.isReady = !0, this.sendMessage({ type: "EDITOR_READY" });
+      document.body ? (document.body.appendChild(this.iframe), this.dragHandle && document.body.appendChild(this.dragHandle), this.iframe && (this.iframe.onload = () => {
+        this.isReady = !0, this.sendMessage({ type: "EDITOR_READY" }), this.updateDragHandlePosition();
       })) : document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", i) : setTimeout(i, 100);
     };
     i();
@@ -516,13 +541,13 @@ class L {
    * Show editor frame
    */
   show() {
-    this.iframe && (this.iframe.style.display = "block");
+    this.iframe && (this.iframe.style.display = "block", this.updateDragHandlePosition()), this.dragHandle && (this.dragHandle.style.display = "block");
   }
   /**
    * Hide editor frame
    */
   hide() {
-    this.iframe && (this.iframe.style.display = "none");
+    this.iframe && (this.iframe.style.display = "none"), this.dragHandle && (this.dragHandle.style.display = "none");
   }
   /**
    * Send message to editor iframe
@@ -534,7 +559,7 @@ class L {
    * Destroy editor frame
    */
   destroy() {
-    window.removeEventListener("message", this.handleMessage), this.iframe && (this.iframe.remove(), this.iframe = null), this.isReady = !1, this.messageCallback = null;
+    window.removeEventListener("message", this.handleMessage), document.removeEventListener("mousemove", this.handleMouseMove, !0), document.removeEventListener("mouseup", this.handleMouseUp, !0), window.removeEventListener("mousemove", this.handleMouseMove, !0), window.removeEventListener("mouseup", this.handleMouseUp, !0), this.iframe && (this.iframe.remove(), this.iframe = null), this.dragHandle && (this.dragHandle.remove(), this.dragHandle = null), this.isReady = !1, this.messageCallback = null, this.isDragging = !1, this.isMouseDown = !1, document.body.style.cursor = "", document.body.style.userSelect = "", document.documentElement.style.userSelect = "";
   }
   /**
    * Send message to iframe
@@ -573,32 +598,33 @@ class L {
   <title>Visual Designer Editor</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 16px; background: #f9fafb; color: #111827; }
-    .editor-container { display: flex; flex-direction: column; gap: 16px; }
-    .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb; }
-    .header h2 { font-size: 18px; font-weight: 600; color: #111827; }
-    .close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
-    .close-btn:hover { color: #111827; }
-    .form-group { display: flex; flex-direction: column; gap: 8px; }
-    label { font-size: 14px; font-weight: 500; color: #374151; }
-    input[type="text"], textarea { padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; font-family: inherit; transition: border-color 0.2s; }
-    input[type="text"]:focus, textarea:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
-    textarea { resize: vertical; min-height: 80px; }
-    .selector-preview { padding: 8px 12px; background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 6px; font-size: 12px; font-family: 'Monaco', 'Courier New', monospace; color: #6b7280; word-break: break-all; }
-    .element-info { padding: 12px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 12px; }
-    .element-info strong { display: block; margin-bottom: 4px; color: #1e40af; }
-    .placement-group { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .placement-btn { padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; background: white; cursor: pointer; font-size: 14px; transition: all 0.2s; }
-    .placement-btn:hover { border-color: #3b82f6; background: #eff6ff; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 20px; background: #f8fafc; color: #111827; line-height: 1.5; height: 100%; overflow-y: auto; }
+    .editor-container { display: flex; flex-direction: column; gap: 20px; max-width: 100%; min-height: 100%; }
+    .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 2px solid #e2e8f0; margin-bottom: 4px; }
+    .header h2 { font-size: 18px; font-weight: 600; color: #0f172a; letter-spacing: -0.01em; }
+    .close-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: #64748b; padding: 4px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: all 0.2s; }
+    .close-btn:hover { color: #0f172a; background: #f1f5f9; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .form-group:last-of-type { margin-bottom: 0; }
+    label { font-size: 13px; font-weight: 600; color: #475569; letter-spacing: 0.01em; }
+    input[type="text"], textarea { padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s; background: #fff; }
+    input[type="text"]:focus, textarea:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); }
+    textarea { resize: vertical; min-height: 88px; line-height: 1.5; }
+    .selector-preview { padding: 10px 14px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 12px; font-family: 'Monaco', 'Courier New', monospace; color: #475569; word-break: break-all; line-height: 1.4; }
+    .element-info { padding: 14px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; font-size: 12px; }
+    .element-info strong { display: block; margin-bottom: 6px; color: #1e40af; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .placement-group { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .placement-btn { padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; }
+    .placement-btn:hover { border-color: #3b82f6; background: #eff6ff; color: #1d4ed8; }
     .placement-btn.active { border-color: #3b82f6; background: #3b82f6; color: white; }
-    .actions { display: flex; gap: 8px; padding-top: 8px; border-top: 1px solid #e5e7eb; }
-    .btn { flex: 1; padding: 10px 16px; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .actions { display: flex; gap: 10px; padding-top: 16px; margin-top: 16px; border-top: 1px solid #e2e8f0; }
+    .btn { flex: 1; padding: 11px 18px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
     .btn-primary { background: #3b82f6; color: white; }
-    .btn-primary:hover { background: #2563eb; }
-    .btn-secondary { background: #f3f4f6; color: #374151; }
-    .btn-secondary:hover { background: #e5e7eb; }
-    .empty-state { text-align: center; padding: 32px 16px; color: #6b7280; font-size: 14px; }
-    .error { padding: 8px 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; color: #991b1b; font-size: 12px; display: none; }
+    .btn-primary:hover { background: #2563eb; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35); }
+    .btn-secondary { background: #f1f5f9; color: #475569; }
+    .btn-secondary:hover { background: #e2e8f0; color: #0f172a; }
+    .empty-state { text-align: center; padding: 40px 20px; color: #64748b; font-size: 14px; background: #f8fafc; border: 1px dashed #e2e8f0; border-radius: 12px; }
+    .error { padding: 10px 14px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; color: #b91c1c; font-size: 13px; display: none; margin-top: 12px; }
     .error.show { display: block; }
   </style>
 </head>
@@ -696,46 +722,47 @@ class L {
   <title>Tag Feature - Visual Designer</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: #ffffff; color: #111827; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-    .editor-container { display: flex; flex-direction: column; height: 100%; background: #ffffff; }
-    .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid #e5e7eb; background: #ffffff; }
-    .header h2 { font-size: 20px; font-weight: 600; color: #111827; }
-    .close-icon { cursor: pointer; color: #6b7280; font-size: 18px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: none; border: none; padding: 0; }
-    .close-icon:hover { color: #111827; }
-    .tabs { display: flex; gap: 0; border-bottom: 1px solid #e5e7eb; background: #ffffff; padding: 0 20px; }
-    .tab { padding: 12px 20px; background: none; border: none; font-size: 14px; font-weight: 500; color: #6b7280; cursor: pointer; position: relative; transition: color 0.2s; font-family: inherit; }
-    .tab:hover { color: #111827; }
-    .tab.active { color: #111827; font-weight: 600; }
-    .tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: #3B82F6; }
-    .content { flex: 1; overflow-y: auto; padding: 24px 20px; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: #f8fafc; color: #111827; height: 100%; overflow-y: auto; display: flex; flex-direction: column; line-height: 1.5; }
+    .editor-container { display: flex; flex-direction: column; min-height: 100%; background: #fff; }
+    .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 2px solid #e2e8f0; background: #fff; }
+    .header h2 { font-size: 18px; font-weight: 600; color: #0f172a; letter-spacing: -0.01em; }
+    .close-icon { cursor: pointer; color: #64748b; font-size: 20px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: none; border: none; padding: 0; border-radius: 8px; transition: all 0.2s; }
+    .close-icon:hover { color: #0f172a; background: #f1f5f9; }
+    .tabs { display: flex; gap: 0; border-bottom: 1px solid #e2e8f0; background: #fff; padding: 0 20px; }
+    .tab { padding: 14px 20px; background: none; border: none; font-size: 14px; font-weight: 500; color: #64748b; cursor: pointer; position: relative; transition: color 0.2s; font-family: inherit; }
+    .tab:hover { color: #0f172a; }
+    .tab.active { color: #0f172a; font-weight: 600; }
+    .tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 3px; background: #3b82f6; border-radius: 3px 3px 0 0; }
+    .content { flex: 1; overflow-y: auto; padding: 24px 20px; background: #f8fafc; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-    .section-title { font-size: 11px; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
-    .card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; }
-    .card:hover { border-color: #d1d5db; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+    .section-title { font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; margin-top: 20px; }
+    .section-title:first-child { margin-top: 0; }
+    .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px 18px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+    .card:hover { border-color: #cbd5e1; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
     .card-content { display: flex; align-items: center; justify-content: space-between; }
-    .card-left { display: flex; align-items: center; gap: 12px; flex: 1; }
-    .badge { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-size: 12px; font-weight: 600; min-width: 24px; height: 24px; padding: 0 8px; color: #ffffff; }
+    .card-left { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
+    .badge { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-size: 12px; font-weight: 600; min-width: 28px; height: 28px; padding: 0 10px; color: #fff; flex-shrink: 0; }
     .badge-orange { background: #f97316; }
     .badge-blue { background: #3b82f6; }
-    .badge-purple { background: #a855f7; }
-    .card-text { flex: 1; }
-    .card-title { font-size: 14px; font-weight: 600; color: #111827; margin-bottom: 4px; }
-    .card-description { font-size: 13px; color: #6b7280; }
-    .card-url { font-size: 12px; color: #6b7280; margin-top: 4px; }
-    .chevron { color: #9ca3af; font-size: 18px; }
-    .heatmap-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-top: 1px solid #e5e7eb; margin-top: 24px; }
-    .heatmap-label { font-size: 14px; font-weight: 500; color: #111827; }
+    .badge-purple { background: #8b5cf6; }
+    .card-text { flex: 1; min-width: 0; }
+    .card-title { font-size: 14px; font-weight: 600; color: #0f172a; margin-bottom: 4px; }
+    .card-description { font-size: 13px; color: #64748b; line-height: 1.4; }
+    .card-url { font-size: 12px; color: #64748b; margin-top: 4px; word-break: break-all; }
+    .chevron { color: #94a3b8; font-size: 18px; flex-shrink: 0; }
+    .heatmap-row { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; border-top: 1px solid #e2e8f0; margin-top: 24px; }
+    .heatmap-label { font-size: 14px; font-weight: 500; color: #0f172a; }
     .heatmap-controls { display: flex; align-items: center; gap: 12px; }
-    .toggle-switch { position: relative; width: 44px; height: 24px; background: #d1d5db; border-radius: 12px; cursor: pointer; transition: background 0.2s; }
+    .toggle-switch { position: relative; width: 44px; height: 24px; background: #cbd5e1; border-radius: 12px; cursor: pointer; transition: background 0.2s; }
     .toggle-switch.active { background: #10b981; }
-    .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: #ffffff; border-radius: 50%; transition: transform 0.2s; }
+    .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: #fff; border-radius: 50%; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
     .toggle-switch.active::after { transform: translateX(20px); }
-    .toggle-switch.active::before { content: '✓'; position: absolute; top: 50%; left: 8px; transform: translateY(-50%); color: #ffffff; font-size: 12px; font-weight: bold; z-index: 1; }
-    .plus-icon { width: 24px; height: 24px; border-radius: 6px; border: 1px solid #d1d5db; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #6b7280; font-size: 18px; transition: all 0.2s; }
-    .plus-icon:hover { border-color: #6366f1; color: #6366f1; }
-    .tag-feature-btn { width: 100%; padding: 12px 20px; background: #14b8a6; color: #ffffff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; margin-top: 20px; }
-    .tag-feature-btn:hover { background: #0d9488; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3); }
+    .toggle-switch.active::before { content: '✓'; position: absolute; top: 50%; left: 8px; transform: translateY(-50%); color: #fff; font-size: 11px; font-weight: bold; z-index: 1; }
+    .plus-icon { width: 28px; height: 28px; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #64748b; font-size: 18px; transition: all 0.2s; background: #fff; }
+    .plus-icon:hover { border-color: #3b82f6; color: #3b82f6; background: #eff6ff; }
+    .tag-feature-btn { width: 100%; padding: 12px 20px; background: #14b8a6; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; margin-top: 24px; box-shadow: 0 2px 8px rgba(20, 184, 166, 0.25); }
+    .tag-feature-btn:hover { background: #0d9488; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(20, 184, 166, 0.35); }
   </style>
 </head>
 <body>
@@ -864,9 +891,78 @@ class L {
 </body>
 </html>`;
   }
+  /**
+   * Create drag handle overlay
+   */
+  createDragHandle() {
+    if (this.dragHandle)
+      return;
+    this.dragHandle = document.createElement("div"), this.dragHandle.id = "designer-editor-drag-handle", this.dragHandle.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 400px;
+      height: 70px;
+      background: transparent;
+      cursor: default;
+      z-index: 1000000;
+      display: none;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    `;
+    const e = document.createElement("div");
+    e.style.cssText = `
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      cursor: move;
+      pointer-events: auto;
+      padding: 4px;
+      border-radius: 8px;
+      z-index: 1;
+    `;
+    const t = document.createElement("div");
+    t.style.cssText = `
+      display: grid;
+      grid-template-columns: repeat(3, 6px);
+      grid-template-rows: repeat(2, 6px);
+      gap: 5px;
+      padding: 8px 10px;
+      border: 1px solid #000000;
+      border-radius: 8px;
+      pointer-events: none;
+    `;
+    for (let i = 0; i < 6; i++) {
+      const n = document.createElement("div");
+      n.style.cssText = `
+        width: 6px;
+        height: 6px;
+        min-width: 6px;
+        min-height: 6px;
+        background: #000000;
+        border-radius: 50%;
+        display: block;
+        flex-shrink: 0;
+      `, t.appendChild(n);
+    }
+    e.appendChild(t), this.dragHandle.appendChild(e), e.addEventListener("mousedown", this.handleMouseDown, !0), document.addEventListener("mousemove", this.handleMouseMove, !0), document.addEventListener("mouseup", this.handleMouseUp, !0), window.addEventListener("mousemove", this.handleMouseMove, !0), window.addEventListener("mouseup", this.handleMouseUp, !0);
+  }
+  /**
+   * Update drag handle position to match iframe
+   */
+  updateDragHandlePosition() {
+    if (!this.iframe || !this.dragHandle)
+      return;
+    const e = this.iframe.getBoundingClientRect();
+    this.dragHandle.style.top = `${e.top}px`, this.dragHandle.style.left = `${e.left}px`, this.dragHandle.style.width = `${e.width}px`;
+  }
 }
 const O = "visual-designer-guides", y = "1.0.0";
-class A {
+class I {
   constructor(e = O) {
     this.storageKey = e;
   }
@@ -895,7 +991,7 @@ class A {
    */
   saveGuide(e) {
     try {
-      const t = this.getGuides(), i = t.findIndex((r) => r.id === e.id), n = {
+      const t = this.getGuides(), i = t.findIndex((o) => o.id === e.id), n = {
         ...e,
         updatedAt: (/* @__PURE__ */ new Date()).toISOString(),
         createdAt: e.createdAt || (/* @__PURE__ */ new Date()).toISOString()
@@ -949,7 +1045,7 @@ class A {
 }
 class E {
   constructor(e = {}) {
-    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.config = e, this.storage = new A(e.storageKey), this.editorMode = new C(), this.guideRenderer = new I(), this.editorFrame = new L();
+    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.loadingOverlay = null, this.config = e, this.storage = new I(e.storageKey), this.editorMode = new B(), this.guideRenderer = new M(), this.editorFrame = new L();
   }
   /**
    * Initialize the SDK
@@ -959,7 +1055,7 @@ class E {
       console.warn("SDK already initialized");
       return;
     }
-    this.isInitialized = !0, this.shouldEnableEditorMode() ? this.enableEditor() : this.loadGuides(), this.setupEventListeners();
+    this.isInitialized = !0, this.shouldEnableEditorMode() ? (this.showLoadingOverlay(), this.enableEditor()) : this.loadGuides(), this.setupEventListeners();
   }
   /**
    * Enable editor mode
@@ -968,16 +1064,18 @@ class E {
     if (this.isEditorMode)
       return;
     this.isEditorMode = !0;
-    const e = typeof window < "u" ? window.__visualDesignerMode : null;
-    this.editorFrame.create((t) => this.handleEditorMessage(t), e), e === "tag-feature" && setTimeout(() => {
-      this.editorFrame.show();
-    }, 100), this.editorMode.activate((t) => this.handleEditorMessage(t)), this.createExitEditorButton(), this.createRedBorderOverlay(), this.createStudioBadge(), localStorage.setItem("designerMode", "true");
+    let e = typeof window < "u" ? window.__visualDesignerMode : null;
+    e || (e = localStorage.getItem("designerModeType") || null), this.editorFrame.create((t) => this.handleEditorMessage(t), e), this.editorMode.activate((t) => this.handleEditorMessage(t)), this.createExitEditorButton(), this.createRedBorderOverlay(), this.createStudioBadge(), localStorage.setItem("designerMode", "true"), e && localStorage.setItem("designerModeType", e), e === "tag-feature" ? setTimeout(() => {
+      this.editorFrame.show(), this.hideLoadingOverlay();
+    }, 100) : setTimeout(() => {
+      this.hideLoadingOverlay();
+    }, 300);
   }
   /**
    * Disable editor mode
    */
   disableEditor() {
-    this.isEditorMode && (this.isEditorMode = !1, this.editorMode.deactivate(), this.editorFrame.destroy(), this.removeExitEditorButton(), this.removeRedBorderOverlay(), this.removeStudioBadge(), localStorage.removeItem("designerMode"), this.loadGuides());
+    this.isEditorMode && (this.isEditorMode = !1, this.editorMode.deactivate(), this.editorFrame.destroy(), this.removeExitEditorButton(), this.removeRedBorderOverlay(), this.removeStudioBadge(), localStorage.removeItem("designerMode"), localStorage.removeItem("designerModeType"), this.hideLoadingOverlay(), this.loadGuides());
   }
   /**
    * Get all guides
@@ -1041,6 +1139,7 @@ class E {
         this.handleExitEditorMode();
         break;
       case "EDITOR_READY":
+        this.hideLoadingOverlay();
         break;
       default:
         console.warn("Unknown message type:", e);
@@ -1212,16 +1311,73 @@ class E {
   removeStudioBadge() {
     this.studioBadge && (this.studioBadge.remove(), this.studioBadge = null);
   }
+  /**
+   * Show loading overlay while designer is initializing
+   */
+  showLoadingOverlay() {
+    if (this.loadingOverlay)
+      return;
+    if (!document.body) {
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => this.showLoadingOverlay());
+        return;
+      }
+      setTimeout(() => this.showLoadingOverlay(), 100);
+      return;
+    }
+    this.loadingOverlay = document.createElement("div"), this.loadingOverlay.id = "designer-loading-overlay", this.loadingOverlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.95);
+      z-index: 1000002;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    `;
+    const e = document.createElement("div");
+    e.style.cssText = `
+      width: 48px;
+      height: 48px;
+      border: 4px solid #e2e8f0;
+      border-top-color: #3B82F6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    `;
+    const t = document.createElement("style");
+    t.textContent = `
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    `, document.head.appendChild(t);
+    const i = document.createElement("div");
+    i.textContent = "Loading Visual Designer...", i.style.cssText = `
+      color: #1e40af;
+      font-size: 16px;
+      font-weight: 500;
+    `, this.loadingOverlay.appendChild(e), this.loadingOverlay.appendChild(i), document.body.appendChild(this.loadingOverlay);
+  }
+  /**
+   * Hide loading overlay
+   */
+  hideLoadingOverlay() {
+    this.loadingOverlay && (this.loadingOverlay.remove(), this.loadingOverlay = null);
+  }
 }
-let d = null, m = !1;
-function g(o) {
-  return d || (d = new E(o), d.init(), d);
+let l = null, m = !1;
+function g(r) {
+  return l || (l = new E(r), l.init(), l);
 }
-function M() {
-  return d;
+function T() {
+  return l;
 }
-function T(o) {
-  !o || !Array.isArray(o) || o.forEach((e) => {
+function D(r) {
+  !r || !Array.isArray(r) || r.forEach((e) => {
     if (!e || !Array.isArray(e) || e.length === 0)
       return;
     const t = e[0], i = e.slice(1);
@@ -1238,20 +1394,20 @@ function T(o) {
           break;
         }
         case "enableEditor": {
-          (d ?? g()).enableEditor();
+          (l ?? g()).enableEditor();
           break;
         }
         case "disableEditor": {
-          d && d.disableEditor();
+          l && l.disableEditor();
           break;
         }
         case "loadGuides": {
-          d && d.loadGuides();
+          l && l.loadGuides();
           break;
         }
         case "getGuides": {
-          if (d)
-            return d.getGuides();
+          if (l)
+            return l.getGuides();
           break;
         }
         default:
@@ -1263,36 +1419,36 @@ function T(o) {
   });
 }
 if (typeof window < "u") {
-  const o = window.visualDesigner;
-  o && Array.isArray(o._q) && (m = !0);
+  const r = window.visualDesigner;
+  r && Array.isArray(r._q) && (m = !0);
   try {
     const e = new URL(window.location.href), t = e.searchParams.get("designer"), i = e.searchParams.get("mode");
     if (t === "true") {
-      i && (window.__visualDesignerMode = i), e.searchParams.delete("designer"), e.searchParams.delete("mode");
+      i && (window.__visualDesignerMode = i, localStorage.setItem("designerModeType", i)), localStorage.setItem("designerMode", "true"), e.searchParams.delete("designer"), e.searchParams.delete("mode");
       const n = e.toString();
       window.history.replaceState({}, "", n), window.__visualDesignerWasLaunched = !0;
     }
   } catch {
   }
 }
-if (typeof window < "u" && !d) {
-  const o = window.__visualDesignerWasLaunched === !0;
-  if (!m || o) {
-    const e = () => {
-      !d && (!m || o) && g();
+if (typeof window < "u" && !l) {
+  const r = window.__visualDesignerWasLaunched === !0, e = typeof localStorage < "u" && localStorage.getItem("designerMode") === "true";
+  if (!m || r || e) {
+    const t = () => {
+      !l && (!m || r || e) && g();
     };
-    document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", e) : e();
+    document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", t) : t();
   }
 }
 typeof window < "u" && (window.VisualDesigner = {
   init: g,
-  getInstance: M,
+  getInstance: T,
   DesignerSDK: E,
-  _processQueue: T
+  _processQueue: D
 });
 export {
   E as DesignerSDK,
-  T as _processQueue,
-  M as getInstance,
+  D as _processQueue,
+  T as getInstance,
   g as init
 };

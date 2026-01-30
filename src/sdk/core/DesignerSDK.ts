@@ -25,6 +25,7 @@ export class DesignerSDK {
   private exitEditorButton: HTMLElement | null = null;
   private redBorderOverlay: HTMLElement | null = null;
   private studioBadge: HTMLElement | null = null;
+  private loadingOverlay: HTMLElement | null = null;
 
   constructor(config: SDKConfig = {}) {
     this.config = config;
@@ -45,10 +46,13 @@ export class DesignerSDK {
 
     this.isInitialized = true;
 
-    // Check if editor mode should be enabled
+    // Check if editor mode should be enabled (from localStorage or URL flag)
     const shouldEnableEditor = this.shouldEnableEditorMode();
     
     if (shouldEnableEditor) {
+      // Show loading overlay while enabling editor
+      this.showLoadingOverlay();
+      // Enable editor (will hide loading when ready)
       this.enableEditor();
     } else {
       // Load and render guides for end users
@@ -69,18 +73,15 @@ export class DesignerSDK {
 
     this.isEditorMode = true;
     
-    // Get mode from URL parameter (stored in global flag)
-    const mode = typeof window !== 'undefined' ? (window as any).__visualDesignerMode : null;
+    // Get mode from URL parameter (stored in global flag) or localStorage
+    let mode = typeof window !== 'undefined' ? (window as any).__visualDesignerMode : null;
+    if (!mode) {
+      // Fallback to localStorage if mode wasn't in URL (e.g., page refresh)
+      mode = localStorage.getItem('designerModeType') || null;
+    }
     
     // Create editor frame with mode
     this.editorFrame.create((message) => this.handleEditorMessage(message), mode);
-    
-    // For Tag Feature mode, show the editor frame immediately
-    if (mode === 'tag-feature') {
-      setTimeout(() => {
-        this.editorFrame.show();
-      }, 100);
-    }
     
     // Activate editor mode
     this.editorMode.activate((message) => this.handleEditorMessage(message));
@@ -94,8 +95,26 @@ export class DesignerSDK {
     // Create studio badge
     this.createStudioBadge();
     
-    // Store editor mode in localStorage
+    // Store editor mode and mode type in localStorage
     localStorage.setItem('designerMode', 'true');
+    if (mode) {
+      localStorage.setItem('designerModeType', mode);
+    }
+    
+    // For Tag Feature mode, show the editor frame immediately
+    // For other modes, wait a bit for everything to initialize, then hide loading
+    if (mode === 'tag-feature') {
+      setTimeout(() => {
+        this.editorFrame.show();
+        // Hide loading after editor is shown
+        this.hideLoadingOverlay();
+      }, 100);
+    } else {
+      // Hide loading overlay after a short delay to ensure everything is ready
+      setTimeout(() => {
+        this.hideLoadingOverlay();
+      }, 300);
+    }
   }
 
   /**
@@ -119,8 +138,12 @@ export class DesignerSDK {
     // Remove studio badge
     this.removeStudioBadge();
     
-    // Remove editor mode from localStorage
+    // Remove editor mode and mode type from localStorage
     localStorage.removeItem('designerMode');
+    localStorage.removeItem('designerModeType');
+    
+    // Hide loading overlay if it's showing
+    this.hideLoadingOverlay();
     
     // Reload guides for end users
     this.loadGuides();
@@ -227,7 +250,8 @@ export class DesignerSDK {
         break;
 
       case 'EDITOR_READY':
-        // Editor is ready, no action needed
+        // Editor is ready, hide loading overlay
+        this.hideLoadingOverlay();
         break;
 
       default:
@@ -473,6 +497,86 @@ export class DesignerSDK {
     if (this.studioBadge) {
       this.studioBadge.remove();
       this.studioBadge = null;
+    }
+  }
+
+  /**
+   * Show loading overlay while designer is initializing
+   */
+  private showLoadingOverlay(): void {
+    if (this.loadingOverlay) {
+      return;
+    }
+
+    // Ensure document.body exists
+    if (!document.body) {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => this.showLoadingOverlay());
+        return;
+      }
+      setTimeout(() => this.showLoadingOverlay(), 100);
+      return;
+    }
+
+    this.loadingOverlay = document.createElement('div');
+    this.loadingOverlay.id = 'designer-loading-overlay';
+    this.loadingOverlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.95);
+      z-index: 1000002;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    `;
+
+    // Create spinner
+    const spinner = document.createElement('div');
+    spinner.style.cssText = `
+      width: 48px;
+      height: 48px;
+      border: 4px solid #e2e8f0;
+      border-top-color: #3B82F6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    `;
+
+    // Add spin animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Create loading text
+    const loadingText = document.createElement('div');
+    loadingText.textContent = 'Loading Visual Designer...';
+    loadingText.style.cssText = `
+      color: #1e40af;
+      font-size: 16px;
+      font-weight: 500;
+    `;
+
+    this.loadingOverlay.appendChild(spinner);
+    this.loadingOverlay.appendChild(loadingText);
+    document.body.appendChild(this.loadingOverlay);
+  }
+
+  /**
+   * Hide loading overlay
+   */
+  private hideLoadingOverlay(): void {
+    if (this.loadingOverlay) {
+      this.loadingOverlay.remove();
+      this.loadingOverlay = null;
     }
   }
 }
