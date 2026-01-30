@@ -106,6 +106,35 @@ if (typeof window !== 'undefined') {
   const globalVD = (window as any).visualDesigner;
   if (globalVD && Array.isArray(globalVD._q)) {
     isSnippetMode = true;
+    // Replace the stub with real methods so that when the host app calls
+    // visualDesigner.initialize(config) AFTER this script loads (e.g. after login),
+    // it will call init(config) directly instead of just pushing to a queue.
+    (window as any).visualDesigner = {
+      _q: globalVD._q,
+      // Accept user payload or SDKConfig - init() will use it; designerMode from localStorage is checked inside init()
+      initialize: (config?: SDKConfig | Record<string, unknown>) => {
+        init(config as SDKConfig);
+      },
+      identify: (user: unknown) => {
+        if (user) {
+          console.log('[Visual Designer] identify (snippet) called with:', user);
+        }
+      },
+      enableEditor: () => {
+        (sdkInstance ?? init()).enableEditor();
+      },
+      disableEditor: () => {
+        if (sdkInstance) sdkInstance.disableEditor();
+      },
+      loadGuides: () => {
+        if (sdkInstance) sdkInstance.loadGuides();
+      },
+      getGuides: () => {
+        return sdkInstance ? sdkInstance.getGuides() : undefined;
+      },
+    };
+    // Process any calls that were queued BEFORE this script loaded
+    _processQueue(globalVD._q);
   }
 
   try {
@@ -174,9 +203,12 @@ if (typeof window !== 'undefined' && !sdkInstance) {
 }
 
 // For UMD builds, expose globally
+// initialize() is an alias for init() so host apps can call either
+// visualDesigner.initialize(userData) or VisualDesigner.initialize(userData)
 if (typeof window !== 'undefined') {
   (window as any).VisualDesigner = {
     init,
+    initialize: init,
     getInstance,
     DesignerSDK,
     _processQueue,

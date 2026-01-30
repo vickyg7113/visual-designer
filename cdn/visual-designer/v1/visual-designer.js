@@ -94,8 +94,8 @@ class p {
       if (i)
         return r += `[aria-label="${this.escapeAttribute(i)}"]`, r;
       if (n) {
-        const a = document.getElementById(n);
-        if (a && ((o = a.textContent) == null ? void 0 : o.trim()))
+        const d = document.getElementById(n);
+        if (d && ((o = d.textContent) == null ? void 0 : o.trim()))
           return r;
       }
       return r;
@@ -115,17 +115,17 @@ class p {
         break;
       }
       if (i.className && typeof i.className == "string") {
-        const r = i.className.split(/\s+/).filter((a) => a && !a.startsWith("designer-")).slice(0, 2);
-        r.length > 0 && (n += "." + r.map((a) => this.escapeSelector(a)).join("."));
+        const r = i.className.split(/\s+/).filter((d) => d && !d.startsWith("designer-")).slice(0, 2);
+        r.length > 0 && (n += "." + r.map((d) => this.escapeSelector(d)).join("."));
       }
       const o = i.parentElement;
       if (o) {
         const r = i.tagName, h = Array.from(o.children).filter(
-          (d) => d.tagName === r
+          (l) => l.tagName === r
         );
         if (h.length > 1) {
-          const d = h.indexOf(i) + 1;
-          n += `:nth-of-type(${d})`;
+          const l = h.indexOf(i) + 1;
+          n += `:nth-of-type(${l})`;
         }
       }
       if (t.unshift(n), i = o, t.length >= 5)
@@ -146,7 +146,7 @@ class p {
     return e.replace(/"/g, '\\"').replace(/'/g, "\\'");
   }
 }
-function w(s) {
+function S(s) {
   var i, n;
   const e = s.getBoundingClientRect(), t = {};
   for (let o = 0; o < s.attributes.length; o++) {
@@ -169,17 +169,17 @@ function x(s) {
 function f() {
   return window.location.pathname || "/";
 }
-function S() {
+function k() {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
-function k(s) {
+function C(s) {
   const e = s.getBoundingClientRect();
   return e.top >= 0 && e.left >= 0 && e.bottom <= (window.innerHeight || document.documentElement.clientHeight) && e.right <= (window.innerWidth || document.documentElement.clientWidth);
 }
-function C(s) {
-  k(s) || s.scrollIntoView({ behavior: "smooth", block: "center" });
+function M(s) {
+  C(s) || s.scrollIntoView({ behavior: "smooth", block: "center" });
 }
-class M {
+class B {
   constructor() {
     this.isActive = !1, this.highlightOverlay = null, this.selectedElement = null, this.messageCallback = null, this.handleMouseOver = (e) => {
       if (!this.isActive || !this.highlightOverlay)
@@ -284,7 +284,7 @@ class M {
    */
   selectElement(e) {
     this.selectedElement = e, this.highlightElement(e);
-    const t = p.generateSelector(e), i = w(e);
+    const t = p.generateSelector(e), i = S(e);
     this.messageCallback && this.messageCallback({
       type: "ELEMENT_SELECTED",
       selector: t.selector,
@@ -316,7 +316,7 @@ class M {
     e && e.remove();
   }
 }
-class B {
+class D {
   constructor() {
     this.renderedGuides = /* @__PURE__ */ new Map(), this.container = null;
   }
@@ -341,7 +341,7 @@ class B {
       console.warn(`Guide "${e.id}" target not found: ${e.selector}`);
       return;
     }
-    C(t);
+    M(t);
     const i = this.createTooltip(e, t);
     this.renderedGuides.set(e.id, i), this.container || this.createContainer(), this.container && this.container.appendChild(i), this.positionTooltip(i, t, e.placement);
   }
@@ -409,11 +409,11 @@ class B {
    * Position tooltip relative to target element
    */
   positionTooltip(e, t, i) {
-    const n = t.getBoundingClientRect(), o = e.getBoundingClientRect(), r = window.pageXOffset || document.documentElement.scrollLeft, a = window.pageYOffset || document.documentElement.scrollTop, h = e.querySelector(".designer-guide-arrow");
-    let d = 0, c = 0, u = "";
+    const n = t.getBoundingClientRect(), o = e.getBoundingClientRect(), r = window.pageXOffset || document.documentElement.scrollLeft, d = window.pageYOffset || document.documentElement.scrollTop, h = e.querySelector(".designer-guide-arrow");
+    let l = 0, c = 0, g = "";
     switch (i) {
       case "top":
-        d = n.top + a - o.height - 12, c = n.left + r + n.width / 2 - o.width / 2, u = `
+        l = n.top + d - o.height - 12, c = n.left + r + n.width / 2 - o.width / 2, g = `
           bottom: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -422,7 +422,7 @@ class B {
         `;
         break;
       case "bottom":
-        d = n.bottom + a + 12, c = n.left + r + n.width / 2 - o.width / 2, u = `
+        l = n.bottom + d + 12, c = n.left + r + n.width / 2 - o.width / 2, g = `
           top: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -431,7 +431,7 @@ class B {
         `;
         break;
       case "left":
-        d = n.top + a + n.height / 2 - o.height / 2, c = n.left + r - o.width - 12, u = `
+        l = n.top + d + n.height / 2 - o.height / 2, c = n.left + r - o.width - 12, g = `
           right: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -440,7 +440,7 @@ class B {
         `;
         break;
       case "right":
-        d = n.top + a + n.height / 2 - o.height / 2, c = n.right + r + 12, u = `
+        l = n.top + d + n.height / 2 - o.height / 2, c = n.right + r + 12, g = `
           left: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -450,7 +450,7 @@ class B {
         break;
     }
     const b = window.innerWidth, v = window.innerHeight;
-    c < r ? c = r + 10 : c + o.width > r + b && (c = r + b - o.width - 10), d < a ? d = a + 10 : d + o.height > a + v && (d = a + v - o.height - 10), e.style.top = `${d}px`, e.style.left = `${c}px`, h && (h.style.cssText += u);
+    c < r ? c = r + 10 : c + o.width > r + b && (c = r + b - o.width - 10), l < d ? l = d + 10 : l + o.height > d + v && (l = d + v - o.height - 10), e.style.top = `${l}px`, e.style.left = `${c}px`, h && (h.style.cssText += g);
   }
   /**
    * Create container for guides
@@ -479,7 +479,7 @@ class B {
     });
   }
 }
-class D {
+class L {
   constructor() {
     this.iframe = null, this.dragHandle = null, this.messageCallback = null, this.isReady = !1, this.mode = null, this.isDragging = !1, this.dragStartX = 0, this.dragStartY = 0, this.currentX = 0, this.currentY = 0, this.dragThreshold = 3, this.mouseDownX = 0, this.mouseDownY = 0, this.isMouseDown = !1, this.handleMouseDown = (e) => {
       if (!this.iframe || !this.dragHandle)
@@ -491,8 +491,8 @@ class D {
       if (!this.isMouseDown || !this.iframe || !this.dragHandle)
         return;
       if (!this.isDragging) {
-        const d = Math.abs(e.clientX - this.mouseDownX), c = Math.abs(e.clientY - this.mouseDownY);
-        if (Math.sqrt(d * d + c * c) > this.dragThreshold)
+        const l = Math.abs(e.clientX - this.mouseDownX), c = Math.abs(e.clientY - this.mouseDownY);
+        if (Math.sqrt(l * l + c * c) > this.dragThreshold)
           this.isDragging = !0, document.body.style.cursor = "move", document.body.style.userSelect = "none", document.documentElement.style.userSelect = "none";
         else
           return;
@@ -500,8 +500,8 @@ class D {
       e.preventDefault(), e.stopPropagation();
       const t = e.clientX - this.dragStartX, i = e.clientY - this.dragStartY, n = window.innerWidth, o = window.innerHeight, r = this.iframe.offsetWidth;
       this.iframe.offsetHeight;
-      const a = Math.max(-r + 50, Math.min(t, n - 50)), h = Math.max(0, Math.min(i, o - 100));
-      this.currentX = a, this.currentY = h, this.iframe.style.left = `${a}px`, this.iframe.style.top = `${h}px`, this.iframe.style.right = "auto", this.iframe.style.bottom = "auto", this.dragHandle.style.left = `${a}px`, this.dragHandle.style.top = `${h}px`;
+      const d = Math.max(-r + 50, Math.min(t, n - 50)), h = Math.max(0, Math.min(i, o - 100));
+      this.currentX = d, this.currentY = h, this.iframe.style.left = `${d}px`, this.iframe.style.top = `${h}px`, this.iframe.style.right = "auto", this.iframe.style.bottom = "auto", this.dragHandle.style.left = `${d}px`, this.dragHandle.style.top = `${h}px`;
     }, this.handleMouseUp = (e) => {
       this.isMouseDown && (this.isDragging = !1, this.isMouseDown = !1, document.body.style.cursor = "", document.body.style.userSelect = "", document.documentElement.style.userSelect = "", e.preventDefault(), e.stopPropagation());
     }, this.handleMessage = (e) => {
@@ -963,9 +963,9 @@ class D {
     this.dragHandle.style.top = `${e.top}px`, this.dragHandle.style.left = `${e.left}px`, this.dragHandle.style.width = `${e.width}px`;
   }
 }
-const L = "visual-designer-guides", y = "1.0.0";
-class I {
-  constructor(e = L) {
+const I = "visual-designer-guides", y = "1.0.0";
+class O {
+  constructor(e = I) {
     this.storageKey = e;
   }
   /**
@@ -1047,7 +1047,7 @@ class I {
 }
 class E {
   constructor(e = {}) {
-    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.loadingOverlay = null, this.config = e, this.storage = new I(e.storageKey), this.editorMode = new M(), this.guideRenderer = new B(), this.editorFrame = new D();
+    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.loadingOverlay = null, this.config = e, this.storage = new O(e.storageKey), this.editorMode = new B(), this.guideRenderer = new D(), this.editorFrame = new L();
   }
   /**
    * Initialize the SDK
@@ -1100,7 +1100,7 @@ class E {
   saveGuide(e) {
     const t = {
       ...e,
-      id: S(),
+      id: k(),
       createdAt: (/* @__PURE__ */ new Date()).toISOString(),
       updatedAt: (/* @__PURE__ */ new Date()).toISOString()
     };
@@ -1373,14 +1373,14 @@ class E {
     this.loadingOverlay && (this.loadingOverlay.remove(), this.loadingOverlay = null);
   }
 }
-let l = null, m = !1;
-function g(s) {
-  return l || (l = new E(s), l.init(), l);
+let a = null, m = !1;
+function u(s) {
+  return a || (a = new E(s), a.init(), a);
 }
-function O() {
-  return l;
+function T() {
+  return a;
 }
-function T(s) {
+function w(s) {
   !s || !Array.isArray(s) || s.forEach((e) => {
     if (!e || !Array.isArray(e) || e.length === 0)
       return;
@@ -1389,7 +1389,7 @@ function T(s) {
       switch (t) {
         case "initialize": {
           const n = i[0];
-          g(n);
+          u(n);
           break;
         }
         case "identify": {
@@ -1398,20 +1398,20 @@ function T(s) {
           break;
         }
         case "enableEditor": {
-          (l ?? g()).enableEditor();
+          (a ?? u()).enableEditor();
           break;
         }
         case "disableEditor": {
-          l && l.disableEditor();
+          a && a.disableEditor();
           break;
         }
         case "loadGuides": {
-          l && l.loadGuides();
+          a && a.loadGuides();
           break;
         }
         case "getGuides": {
-          if (l)
-            return l.getGuides();
+          if (a)
+            return a.getGuides();
           break;
         }
         default:
@@ -1424,7 +1424,26 @@ function T(s) {
 }
 if (typeof window < "u") {
   const s = window.visualDesigner;
-  s && Array.isArray(s._q) && (m = !0);
+  s && Array.isArray(s._q) && (m = !0, window.visualDesigner = {
+    _q: s._q,
+    // Accept user payload or SDKConfig - init() will use it; designerMode from localStorage is checked inside init()
+    initialize: (e) => {
+      u(e);
+    },
+    identify: (e) => {
+      e && console.log("[Visual Designer] identify (snippet) called with:", e);
+    },
+    enableEditor: () => {
+      (a ?? u()).enableEditor();
+    },
+    disableEditor: () => {
+      a && a.disableEditor();
+    },
+    loadGuides: () => {
+      a && a.loadGuides();
+    },
+    getGuides: () => a ? a.getGuides() : void 0
+  }, w(s._q));
   try {
     const e = new URL(window.location.href), t = e.searchParams.get("designer"), i = e.searchParams.get("mode");
     if (t === "true") {
@@ -1435,24 +1454,25 @@ if (typeof window < "u") {
   } catch {
   }
 }
-if (typeof window < "u" && !l) {
+if (typeof window < "u" && !a) {
   const s = window.__visualDesignerWasLaunched === !0;
   if (typeof localStorage < "u" && localStorage.getItem("designerMode"), !m || s) {
     const e = () => {
-      !l && (!m || s) && g();
+      !a && (!m || s) && u();
     };
     document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", e) : e();
   }
 }
 typeof window < "u" && (window.VisualDesigner = {
-  init: g,
-  getInstance: O,
+  init: u,
+  initialize: u,
+  getInstance: T,
   DesignerSDK: E,
-  _processQueue: T
+  _processQueue: w
 });
 export {
   E as DesignerSDK,
-  T as _processQueue,
-  O as getInstance,
-  g as init
+  w as _processQueue,
+  T as getInstance,
+  u as init
 };

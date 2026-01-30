@@ -80,6 +80,53 @@
 </html>
 ```
 
+## Pendo-style snippet (initialize after login)
+
+Use this snippet when you load the SDK early but only call `initialize()` after the user logs in (e.g. in React `useEffect` when `isAuthenticated` is true). The snippet creates a stub (`window.visualDesigner`) that queues calls until the real script loads, then the SDK replaces the stub with real methods so later calls run immediately.
+
+**Snippet (place before `</body>`):**
+```html
+<script>
+  (function (cdnUrl) {
+    (function (r, e, v, a, i) {
+      var w, x, y, z, t;
+      a = r[i] = r[i] || {};
+      a._q = a._q || [];
+      w = ["initialize", "identify", "enableEditor", "disableEditor", "loadGuides", "getGuides"];
+      for (x = 0, y = w.length; x < y; ++x) {
+        (function (m) {
+          a[m] = a[m] || function () {
+            a._q[m === w[0] ? "unshift" : "push"]([m].concat([].slice.call(arguments, 0)));
+          };
+        })(w[x]);
+      }
+      z = e.createElement(v);
+      z.async = !0;
+      z.src = cdnUrl || "https://vickyg7113.github.io/visual-designer/cdn/visual-designer/v1/visual-designer.umd.cjs";
+      z.onload = function() {
+        setTimeout(function() {
+          if (r.VisualDesigner && r.VisualDesigner._processQueue) {
+            r.VisualDesigner._processQueue(a._q);
+          }
+        }, 100);
+      };
+      t = e.getElementsByTagName(v)[0];
+      t.parentNode.insertBefore(z, t);
+    })(window, document, "script", null, "visualDesigner");
+  })("https://vickyg7113.github.io/visual-designer/cdn/visual-designer/v1/visual-designer.umd.cjs");
+</script>
+```
+
+**After login (e.g. in React):**
+```javascript
+const visualDesigner = window.visualDesigner || window.VisualDesigner;
+if (visualDesigner && visualDesigner.initialize) {
+  visualDesigner.initialize(userDataPayload);  // or VisualDesigner.init(userDataPayload)
+}
+```
+
+When the launcher opens the target URL with `?designer=true&mode=guide`, the SDK stores `designerMode` and `designerModeType` in localStorage. After login, when you call `visualDesigner.initialize(userDataPayload)`, the SDK initializes and, if `designerMode` is in localStorage, enables the designer and shows the loading overlay, then the editor.
+
 ## Enable Editor Mode
 
 **Method 1: URL Parameter**
