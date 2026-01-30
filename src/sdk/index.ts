@@ -106,33 +106,31 @@ if (typeof window !== 'undefined') {
   const globalVD = (window as any).visualDesigner;
   if (globalVD && Array.isArray(globalVD._q)) {
     isSnippetMode = true;
-    // Replace the stub with real methods so that when the host app calls
-    // visualDesigner.initialize(config) AFTER this script loads (e.g. after login),
-    // it will call init(config) directly instead of just pushing to a queue.
-    (window as any).visualDesigner = {
-      _q: globalVD._q,
-      // Accept user payload or SDKConfig - init() will use it; designerMode from localStorage is checked inside init()
-      initialize: (config?: SDKConfig | Record<string, unknown>) => {
-        init(config as SDKConfig);
-      },
-      identify: (user: unknown) => {
-        if (user) {
-          console.log('[Visual Designer] identify (snippet) called with:', user);
-        }
-      },
-      enableEditor: () => {
-        (sdkInstance ?? init()).enableEditor();
-      },
-      disableEditor: () => {
-        if (sdkInstance) sdkInstance.disableEditor();
-      },
-      loadGuides: () => {
-        if (sdkInstance) sdkInstance.loadGuides();
-      },
-      getGuides: () => {
-        return sdkInstance ? sdkInstance.getGuides() : undefined;
-      },
+    // Mutate the EXISTING stub object so that any reference the host app holds
+    // (e.g. const v = window.visualDesigner at mount) gets real methods.
+    // Replacing with a new object would leave stale references still calling the old stub.
+    globalVD.initialize = (config?: SDKConfig | Record<string, unknown>) => {
+      init(config as SDKConfig);
     };
+    globalVD.identify = (user: unknown) => {
+      if (user) {
+        console.log('[Visual Designer] identify (snippet) called with:', user);
+      }
+    };
+    globalVD.enableEditor = () => {
+      (sdkInstance ?? init()).enableEditor();
+    };
+    globalVD.disableEditor = () => {
+      if (sdkInstance) sdkInstance.disableEditor();
+    };
+    globalVD.loadGuides = () => {
+      if (sdkInstance) sdkInstance.loadGuides();
+    };
+    globalVD.getGuides = () => {
+      return sdkInstance ? sdkInstance.getGuides() : undefined;
+    };
+    globalVD.getInstance = getInstance;
+    globalVD.init = init;
     // Process any calls that were queued BEFORE this script loaded
     _processQueue(globalVD._q);
   }

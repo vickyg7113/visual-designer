@@ -146,7 +146,7 @@ class p {
     return e.replace(/"/g, '\\"').replace(/'/g, "\\'");
   }
 }
-function S(s) {
+function k(s) {
   var i, n;
   const e = s.getBoundingClientRect(), t = {};
   for (let o = 0; o < s.attributes.length; o++) {
@@ -169,17 +169,17 @@ function x(s) {
 function f() {
   return window.location.pathname || "/";
 }
-function k() {
+function C() {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
-function C(s) {
+function M(s) {
   const e = s.getBoundingClientRect();
   return e.top >= 0 && e.left >= 0 && e.bottom <= (window.innerHeight || document.documentElement.clientHeight) && e.right <= (window.innerWidth || document.documentElement.clientWidth);
 }
-function M(s) {
-  C(s) || s.scrollIntoView({ behavior: "smooth", block: "center" });
+function B(s) {
+  M(s) || s.scrollIntoView({ behavior: "smooth", block: "center" });
 }
-class B {
+class D {
   constructor() {
     this.isActive = !1, this.highlightOverlay = null, this.selectedElement = null, this.messageCallback = null, this.handleMouseOver = (e) => {
       if (!this.isActive || !this.highlightOverlay)
@@ -284,7 +284,7 @@ class B {
    */
   selectElement(e) {
     this.selectedElement = e, this.highlightElement(e);
-    const t = p.generateSelector(e), i = S(e);
+    const t = p.generateSelector(e), i = k(e);
     this.messageCallback && this.messageCallback({
       type: "ELEMENT_SELECTED",
       selector: t.selector,
@@ -316,7 +316,7 @@ class B {
     e && e.remove();
   }
 }
-class D {
+class L {
   constructor() {
     this.renderedGuides = /* @__PURE__ */ new Map(), this.container = null;
   }
@@ -341,7 +341,7 @@ class D {
       console.warn(`Guide "${e.id}" target not found: ${e.selector}`);
       return;
     }
-    M(t);
+    B(t);
     const i = this.createTooltip(e, t);
     this.renderedGuides.set(e.id, i), this.container || this.createContainer(), this.container && this.container.appendChild(i), this.positionTooltip(i, t, e.placement);
   }
@@ -479,7 +479,7 @@ class D {
     });
   }
 }
-class L {
+class I {
   constructor() {
     this.iframe = null, this.dragHandle = null, this.messageCallback = null, this.isReady = !1, this.mode = null, this.isDragging = !1, this.dragStartX = 0, this.dragStartY = 0, this.currentX = 0, this.currentY = 0, this.dragThreshold = 3, this.mouseDownX = 0, this.mouseDownY = 0, this.isMouseDown = !1, this.handleMouseDown = (e) => {
       if (!this.iframe || !this.dragHandle)
@@ -963,9 +963,9 @@ class L {
     this.dragHandle.style.top = `${e.top}px`, this.dragHandle.style.left = `${e.left}px`, this.dragHandle.style.width = `${e.width}px`;
   }
 }
-const I = "visual-designer-guides", y = "1.0.0";
-class O {
-  constructor(e = I) {
+const O = "visual-designer-guides", y = "1.0.0";
+class T {
+  constructor(e = O) {
     this.storageKey = e;
   }
   /**
@@ -1047,7 +1047,7 @@ class O {
 }
 class E {
   constructor(e = {}) {
-    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.loadingOverlay = null, this.config = e, this.storage = new O(e.storageKey), this.editorMode = new B(), this.guideRenderer = new D(), this.editorFrame = new L();
+    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.loadingOverlay = null, this.config = e, this.storage = new T(e.storageKey), this.editorMode = new D(), this.guideRenderer = new L(), this.editorFrame = new I();
   }
   /**
    * Initialize the SDK
@@ -1100,7 +1100,7 @@ class E {
   saveGuide(e) {
     const t = {
       ...e,
-      id: k(),
+      id: C(),
       createdAt: (/* @__PURE__ */ new Date()).toISOString(),
       updatedAt: (/* @__PURE__ */ new Date()).toISOString()
     };
@@ -1377,10 +1377,10 @@ let a = null, m = !1;
 function u(s) {
   return a || (a = new E(s), a.init(), a);
 }
-function T() {
+function w() {
   return a;
 }
-function w(s) {
+function S(s) {
   !s || !Array.isArray(s) || s.forEach((e) => {
     if (!e || !Array.isArray(e) || e.length === 0)
       return;
@@ -1424,26 +1424,17 @@ function w(s) {
 }
 if (typeof window < "u") {
   const s = window.visualDesigner;
-  s && Array.isArray(s._q) && (m = !0, window.visualDesigner = {
-    _q: s._q,
-    // Accept user payload or SDKConfig - init() will use it; designerMode from localStorage is checked inside init()
-    initialize: (e) => {
-      u(e);
-    },
-    identify: (e) => {
-      e && console.log("[Visual Designer] identify (snippet) called with:", e);
-    },
-    enableEditor: () => {
-      (a ?? u()).enableEditor();
-    },
-    disableEditor: () => {
-      a && a.disableEditor();
-    },
-    loadGuides: () => {
-      a && a.loadGuides();
-    },
-    getGuides: () => a ? a.getGuides() : void 0
-  }, w(s._q));
+  s && Array.isArray(s._q) && (m = !0, s.initialize = (e) => {
+    u(e);
+  }, s.identify = (e) => {
+    e && console.log("[Visual Designer] identify (snippet) called with:", e);
+  }, s.enableEditor = () => {
+    (a ?? u()).enableEditor();
+  }, s.disableEditor = () => {
+    a && a.disableEditor();
+  }, s.loadGuides = () => {
+    a && a.loadGuides();
+  }, s.getGuides = () => a ? a.getGuides() : void 0, s.getInstance = w, s.init = u, S(s._q));
   try {
     const e = new URL(window.location.href), t = e.searchParams.get("designer"), i = e.searchParams.get("mode");
     if (t === "true") {
@@ -1466,13 +1457,13 @@ if (typeof window < "u" && !a) {
 typeof window < "u" && (window.VisualDesigner = {
   init: u,
   initialize: u,
-  getInstance: T,
+  getInstance: w,
   DesignerSDK: E,
-  _processQueue: w
+  _processQueue: S
 });
 export {
   E as DesignerSDK,
-  w as _processQueue,
-  T as getInstance,
+  S as _processQueue,
+  w as getInstance,
   u as init
 };
