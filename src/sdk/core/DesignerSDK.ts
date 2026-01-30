@@ -46,11 +46,13 @@ export class DesignerSDK {
 
     this.isInitialized = true;
 
-    // Check if editor mode should be enabled (from localStorage or URL flag)
+    // Check if editor mode should be enabled
+    // This checks localStorage for designerMode (set when ?designer=true was in URL)
+    // In snippet mode, init() is called after login, so this will find the stored mode
     const shouldEnableEditor = this.shouldEnableEditorMode();
     
     if (shouldEnableEditor) {
-      // Show loading overlay while enabling editor
+      // Show loading overlay while enabling editor (user just logged in)
       this.showLoadingOverlay();
       // Enable editor (will hide loading when ready)
       this.enableEditor();

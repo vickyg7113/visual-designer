@@ -140,18 +140,18 @@ if (typeof window !== 'undefined') {
 
 // Auto-initialize rules:
 // - Normal case (no snippet): auto-init as before
-// - Snippet mode: DO NOT auto-init normally, BUT
-//   if the page was launched via ?designer=true (flag set in __visualDesignerWasLaunched),
-//   OR if designerMode is stored in localStorage (e.g., after login/refresh),
-//   we auto-init so editor comes up even if the host app doesn't explicitly call initialize().
+// - Snippet mode: DO NOT auto-init based on localStorage (to prevent showing on login page)
+//   Only auto-init if ?designer=true was in URL at script load time (wasLaunched flag)
+//   When init() is explicitly called after login, it will check localStorage and enable editor
 if (typeof window !== 'undefined' && !sdkInstance) {
   const wasLaunched = (window as any).__visualDesignerWasLaunched === true;
-  // Also check localStorage for designerMode (supports post-login initialization)
-  const hasDesignerMode = typeof localStorage !== 'undefined' && localStorage.getItem('designerMode') === 'true';
 
-  if (!isSnippetMode || wasLaunched || hasDesignerMode) {
+  // In snippet mode, only auto-init if URL had ?designer=true (not based on localStorage)
+  // This prevents editor from showing on login page
+  // After login, when init() is called explicitly, it will check localStorage and enable editor
+  if (!isSnippetMode || wasLaunched) {
     const doInit = () => {
-      if (!sdkInstance && (!isSnippetMode || wasLaunched || hasDesignerMode)) {
+      if (!sdkInstance && (!isSnippetMode || wasLaunched)) {
         init();
       }
     };

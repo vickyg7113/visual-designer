@@ -1432,12 +1432,12 @@ if (typeof window < "u") {
   }
 }
 if (typeof window < "u" && !l) {
-  const r = window.__visualDesignerWasLaunched === !0, e = typeof localStorage < "u" && localStorage.getItem("designerMode") === "true";
-  if (!m || r || e) {
-    const t = () => {
-      !l && (!m || r || e) && g();
+  const r = window.__visualDesignerWasLaunched === !0;
+  if (!m || r) {
+    const e = () => {
+      !l && (!m || r) && g();
     };
-    document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", t) : t();
+    document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", e) : e();
   }
 }
 typeof window < "u" && (window.VisualDesigner = {
