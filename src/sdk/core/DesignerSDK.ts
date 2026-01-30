@@ -49,12 +49,21 @@ export class DesignerSDK {
     // Check if editor mode should be enabled (Pendo-style: check localStorage for stored intent)
     const shouldEnableEditor = this.shouldEnableEditorMode();
     
+    // Debug logging
+    console.log('[Visual Designer] init() called');
+    console.log('[Visual Designer] shouldEnableEditor:', shouldEnableEditor);
+    console.log('[Visual Designer] localStorage designerMode:', localStorage.getItem('designerMode'));
+    console.log('[Visual Designer] localStorage designerModeType:', localStorage.getItem('designerModeType'));
+    console.log('[Visual Designer] __visualDesignerWasLaunched:', typeof window !== 'undefined' ? (window as any).__visualDesignerWasLaunched : 'N/A');
+    
     if (shouldEnableEditor) {
+      console.log('[Visual Designer] Enabling editor...');
       // Show loading overlay while enabling editor (user just logged in, designer launching)
       this.showLoadingOverlay();
       // Enable editor (will hide loading when ready)
       this.enableEditor();
     } else {
+      console.log('[Visual Designer] Not enabling editor, loading guides instead');
       // Load and render guides for end users
       this.loadGuides();
     }
@@ -68,9 +77,11 @@ export class DesignerSDK {
    */
   enableEditor(): void {
     if (this.isEditorMode) {
+      console.log('[Visual Designer] Editor already enabled, skipping');
       return;
     }
 
+    console.log('[Visual Designer] enableEditor() called');
     this.isEditorMode = true;
     
     // Get mode from URL parameter (stored in global flag) or localStorage (Pendo-style)
@@ -80,6 +91,8 @@ export class DesignerSDK {
       // Fallback to localStorage (Pendo-style: retrieve stored intent after login)
       mode = localStorage.getItem('designerModeType') || null;
     }
+    
+    console.log('[Visual Designer] Mode:', mode);
     
     // Create editor frame with mode
     this.editorFrame.create((message) => this.handleEditorMessage(message), mode);
@@ -207,19 +220,24 @@ export class DesignerSDK {
   private shouldEnableEditorMode(): boolean {
     // Check config override
     if (this.config.editorMode !== undefined) {
+      console.log('[Visual Designer] shouldEnableEditorMode: true (config override)');
       return this.config.editorMode;
     }
 
     // If script saw ?designer=true at load time (cleaned in index.ts), respect that flag
     if (typeof window !== 'undefined' && (window as any).__visualDesignerWasLaunched) {
+      console.log('[Visual Designer] shouldEnableEditorMode: true (wasLaunched flag)');
       return true;
     }
 
-    // Check localStorage
-    if (localStorage.getItem('designerMode') === 'true') {
+    // Check localStorage (Pendo-style: stored intent)
+    const designerMode = localStorage.getItem('designerMode');
+    if (designerMode === 'true') {
+      console.log('[Visual Designer] shouldEnableEditorMode: true (localStorage)');
       return true;
     }
 
+    console.log('[Visual Designer] shouldEnableEditorMode: false');
     return false;
   }
 

@@ -19,9 +19,9 @@ class p {
     }
     const t = this.getSemanticDataAttributes(e);
     if (t.length > 0) {
-      const o = t[0], s = e.getAttribute(o);
+      const o = t[0], r = e.getAttribute(o);
       return {
-        selector: `[${o}="${this.escapeAttribute(s)}"]`,
+        selector: `[${o}="${this.escapeAttribute(r)}"]`,
         confidence: "high",
         method: "data-attribute"
       };
@@ -90,15 +90,15 @@ class p {
     var o;
     const t = e.getAttribute("role"), i = e.getAttribute("aria-label"), n = e.getAttribute("aria-labelledby");
     if (t) {
-      let s = `[role="${this.escapeAttribute(t)}"]`;
+      let r = `[role="${this.escapeAttribute(t)}"]`;
       if (i)
-        return s += `[aria-label="${this.escapeAttribute(i)}"]`, s;
+        return r += `[aria-label="${this.escapeAttribute(i)}"]`, r;
       if (n) {
         const a = document.getElementById(n);
         if (a && ((o = a.textContent) == null ? void 0 : o.trim()))
-          return s;
+          return r;
       }
-      return s;
+      return r;
     }
     return null;
   }
@@ -115,13 +115,13 @@ class p {
         break;
       }
       if (i.className && typeof i.className == "string") {
-        const s = i.className.split(/\s+/).filter((a) => a && !a.startsWith("designer-")).slice(0, 2);
-        s.length > 0 && (n += "." + s.map((a) => this.escapeSelector(a)).join("."));
+        const r = i.className.split(/\s+/).filter((a) => a && !a.startsWith("designer-")).slice(0, 2);
+        r.length > 0 && (n += "." + r.map((a) => this.escapeSelector(a)).join("."));
       }
       const o = i.parentElement;
       if (o) {
-        const s = i.tagName, h = Array.from(o.children).filter(
-          (d) => d.tagName === s
+        const r = i.tagName, h = Array.from(o.children).filter(
+          (d) => d.tagName === r
         );
         if (h.length > 1) {
           const d = h.indexOf(i) + 1;
@@ -146,25 +146,25 @@ class p {
     return e.replace(/"/g, '\\"').replace(/'/g, "\\'");
   }
 }
-function w(r) {
+function w(s) {
   var i, n;
-  const e = r.getBoundingClientRect(), t = {};
-  for (let o = 0; o < r.attributes.length; o++) {
-    const s = r.attributes[o];
-    t[s.name] = s.value;
+  const e = s.getBoundingClientRect(), t = {};
+  for (let o = 0; o < s.attributes.length; o++) {
+    const r = s.attributes[o];
+    t[r.name] = r.value;
   }
   return {
-    tagName: r.tagName.toLowerCase(),
-    id: r.id || void 0,
-    className: ((i = r.className) == null ? void 0 : i.toString()) || void 0,
-    textContent: ((n = r.textContent) == null ? void 0 : n.trim().substring(0, 50)) || void 0,
+    tagName: s.tagName.toLowerCase(),
+    id: s.id || void 0,
+    className: ((i = s.className) == null ? void 0 : i.toString()) || void 0,
+    textContent: ((n = s.textContent) == null ? void 0 : n.trim().substring(0, 50)) || void 0,
     attributes: t,
     boundingRect: e
   };
 }
-function x(r) {
-  const e = window.getComputedStyle(r);
-  return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && r.getBoundingClientRect().height > 0 && r.getBoundingClientRect().width > 0;
+function x(s) {
+  const e = window.getComputedStyle(s);
+  return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && s.getBoundingClientRect().height > 0 && s.getBoundingClientRect().width > 0;
 }
 function f() {
   return window.location.pathname || "/";
@@ -172,14 +172,14 @@ function f() {
 function S() {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
-function k(r) {
-  const e = r.getBoundingClientRect();
+function k(s) {
+  const e = s.getBoundingClientRect();
   return e.top >= 0 && e.left >= 0 && e.bottom <= (window.innerHeight || document.documentElement.clientHeight) && e.right <= (window.innerWidth || document.documentElement.clientWidth);
 }
-function C(r) {
-  k(r) || r.scrollIntoView({ behavior: "smooth", block: "center" });
+function C(s) {
+  k(s) || s.scrollIntoView({ behavior: "smooth", block: "center" });
 }
-class B {
+class M {
   constructor() {
     this.isActive = !1, this.highlightOverlay = null, this.selectedElement = null, this.messageCallback = null, this.handleMouseOver = (e) => {
       if (!this.isActive || !this.highlightOverlay)
@@ -316,7 +316,7 @@ class B {
     e && e.remove();
   }
 }
-class M {
+class B {
   constructor() {
     this.renderedGuides = /* @__PURE__ */ new Map(), this.container = null;
   }
@@ -397,23 +397,23 @@ class M {
     }, o.onclick = () => {
       this.dismissGuide(e.id);
     }, i.appendChild(o);
-    const s = document.createElement("div");
-    return s.className = "designer-guide-arrow", s.style.cssText = `
+    const r = document.createElement("div");
+    return r.className = "designer-guide-arrow", r.style.cssText = `
       position: absolute;
       width: 0;
       height: 0;
       border-style: solid;
-    `, i.appendChild(s), i;
+    `, i.appendChild(r), i;
   }
   /**
    * Position tooltip relative to target element
    */
   positionTooltip(e, t, i) {
-    const n = t.getBoundingClientRect(), o = e.getBoundingClientRect(), s = window.pageXOffset || document.documentElement.scrollLeft, a = window.pageYOffset || document.documentElement.scrollTop, h = e.querySelector(".designer-guide-arrow");
+    const n = t.getBoundingClientRect(), o = e.getBoundingClientRect(), r = window.pageXOffset || document.documentElement.scrollLeft, a = window.pageYOffset || document.documentElement.scrollTop, h = e.querySelector(".designer-guide-arrow");
     let d = 0, c = 0, u = "";
     switch (i) {
       case "top":
-        d = n.top + a - o.height - 12, c = n.left + s + n.width / 2 - o.width / 2, u = `
+        d = n.top + a - o.height - 12, c = n.left + r + n.width / 2 - o.width / 2, u = `
           bottom: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -422,7 +422,7 @@ class M {
         `;
         break;
       case "bottom":
-        d = n.bottom + a + 12, c = n.left + s + n.width / 2 - o.width / 2, u = `
+        d = n.bottom + a + 12, c = n.left + r + n.width / 2 - o.width / 2, u = `
           top: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -431,7 +431,7 @@ class M {
         `;
         break;
       case "left":
-        d = n.top + a + n.height / 2 - o.height / 2, c = n.left + s - o.width - 12, u = `
+        d = n.top + a + n.height / 2 - o.height / 2, c = n.left + r - o.width - 12, u = `
           right: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -440,7 +440,7 @@ class M {
         `;
         break;
       case "right":
-        d = n.top + a + n.height / 2 - o.height / 2, c = n.right + s + 12, u = `
+        d = n.top + a + n.height / 2 - o.height / 2, c = n.right + r + 12, u = `
           left: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -450,7 +450,7 @@ class M {
         break;
     }
     const b = window.innerWidth, v = window.innerHeight;
-    c < s ? c = s + 10 : c + o.width > s + b && (c = s + b - o.width - 10), d < a ? d = a + 10 : d + o.height > a + v && (d = a + v - o.height - 10), e.style.top = `${d}px`, e.style.left = `${c}px`, h && (h.style.cssText += u);
+    c < r ? c = r + 10 : c + o.width > r + b && (c = r + b - o.width - 10), d < a ? d = a + 10 : d + o.height > a + v && (d = a + v - o.height - 10), e.style.top = `${d}px`, e.style.left = `${c}px`, h && (h.style.cssText += u);
   }
   /**
    * Create container for guides
@@ -471,7 +471,7 @@ class M {
    */
   updatePositions(e) {
     this.renderedGuides.forEach((t, i) => {
-      const n = e.find((s) => s.id === i);
+      const n = e.find((r) => r.id === i);
       if (!n)
         return;
       const o = p.findElement(n.selector);
@@ -479,7 +479,7 @@ class M {
     });
   }
 }
-class L {
+class D {
   constructor() {
     this.iframe = null, this.dragHandle = null, this.messageCallback = null, this.isReady = !1, this.mode = null, this.isDragging = !1, this.dragStartX = 0, this.dragStartY = 0, this.currentX = 0, this.currentY = 0, this.dragThreshold = 3, this.mouseDownX = 0, this.mouseDownY = 0, this.isMouseDown = !1, this.handleMouseDown = (e) => {
       if (!this.iframe || !this.dragHandle)
@@ -498,9 +498,9 @@ class L {
           return;
       }
       e.preventDefault(), e.stopPropagation();
-      const t = e.clientX - this.dragStartX, i = e.clientY - this.dragStartY, n = window.innerWidth, o = window.innerHeight, s = this.iframe.offsetWidth;
+      const t = e.clientX - this.dragStartX, i = e.clientY - this.dragStartY, n = window.innerWidth, o = window.innerHeight, r = this.iframe.offsetWidth;
       this.iframe.offsetHeight;
-      const a = Math.max(-s + 50, Math.min(t, n - 50)), h = Math.max(0, Math.min(i, o - 100));
+      const a = Math.max(-r + 50, Math.min(t, n - 50)), h = Math.max(0, Math.min(i, o - 100));
       this.currentX = a, this.currentY = h, this.iframe.style.left = `${a}px`, this.iframe.style.top = `${h}px`, this.iframe.style.right = "auto", this.iframe.style.bottom = "auto", this.dragHandle.style.left = `${a}px`, this.dragHandle.style.top = `${h}px`;
     }, this.handleMouseUp = (e) => {
       this.isMouseDown && (this.isDragging = !1, this.isMouseDown = !1, document.body.style.cursor = "", document.body.style.userSelect = "", document.documentElement.style.userSelect = "", e.preventDefault(), e.stopPropagation());
@@ -513,9 +513,11 @@ class L {
    * Create and show editor iframe
    */
   create(e, t) {
-    if (this.iframe)
+    if (console.log("[Visual Designer] EditorFrame.create() called with mode:", t), this.iframe) {
+      console.warn("[Visual Designer] EditorFrame already created, skipping");
       return;
-    this.mode = t || null, this.messageCallback = e, this.iframe = document.createElement("iframe"), this.iframe.id = "designer-editor-frame", this.iframe.style.cssText = `
+    }
+    this.mode = t || null, this.messageCallback = e, console.log("[Visual Designer] Creating editor iframe with mode:", this.mode), this.iframe = document.createElement("iframe"), this.iframe.id = "designer-editor-frame", this.iframe.style.cssText = `
       position: fixed;
       top: 0;
       left: 0;
@@ -541,7 +543,7 @@ class L {
    * Show editor frame
    */
   show() {
-    this.iframe && (this.iframe.style.display = "block", this.updateDragHandlePosition()), this.dragHandle && (this.dragHandle.style.display = "block");
+    console.log("[Visual Designer] EditorFrame.show() called"), this.iframe ? (console.log("[Visual Designer] Showing iframe"), this.iframe.style.display = "block", this.updateDragHandlePosition()) : console.warn("[Visual Designer] Cannot show iframe - iframe is null"), this.dragHandle ? (console.log("[Visual Designer] Showing drag handle"), this.dragHandle.style.display = "block") : console.warn("[Visual Designer] Cannot show drag handle - dragHandle is null");
   }
   /**
    * Hide editor frame
@@ -961,9 +963,9 @@ class L {
     this.dragHandle.style.top = `${e.top}px`, this.dragHandle.style.left = `${e.left}px`, this.dragHandle.style.width = `${e.width}px`;
   }
 }
-const O = "visual-designer-guides", y = "1.0.0";
+const L = "visual-designer-guides", y = "1.0.0";
 class I {
-  constructor(e = O) {
+  constructor(e = L) {
     this.storageKey = e;
   }
   /**
@@ -1045,7 +1047,7 @@ class I {
 }
 class E {
   constructor(e = {}) {
-    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.loadingOverlay = null, this.config = e, this.storage = new I(e.storageKey), this.editorMode = new B(), this.guideRenderer = new M(), this.editorFrame = new L();
+    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.loadingOverlay = null, this.config = e, this.storage = new I(e.storageKey), this.editorMode = new M(), this.guideRenderer = new B(), this.editorFrame = new D();
   }
   /**
    * Initialize the SDK
@@ -1055,17 +1057,21 @@ class E {
       console.warn("SDK already initialized");
       return;
     }
-    this.isInitialized = !0, this.shouldEnableEditorMode() ? (this.showLoadingOverlay(), this.enableEditor()) : this.loadGuides(), this.setupEventListeners();
+    this.isInitialized = !0;
+    const e = this.shouldEnableEditorMode();
+    console.log("[Visual Designer] init() called"), console.log("[Visual Designer] shouldEnableEditor:", e), console.log("[Visual Designer] localStorage designerMode:", localStorage.getItem("designerMode")), console.log("[Visual Designer] localStorage designerModeType:", localStorage.getItem("designerModeType")), console.log("[Visual Designer] __visualDesignerWasLaunched:", typeof window < "u" ? window.__visualDesignerWasLaunched : "N/A"), e ? (console.log("[Visual Designer] Enabling editor..."), this.showLoadingOverlay(), this.enableEditor()) : (console.log("[Visual Designer] Not enabling editor, loading guides instead"), this.loadGuides()), this.setupEventListeners();
   }
   /**
    * Enable editor mode
    */
   enableEditor() {
-    if (this.isEditorMode)
+    if (this.isEditorMode) {
+      console.log("[Visual Designer] Editor already enabled, skipping");
       return;
-    this.isEditorMode = !0;
+    }
+    console.log("[Visual Designer] enableEditor() called"), this.isEditorMode = !0;
     let e = typeof window < "u" ? window.__visualDesignerMode : null;
-    e || (e = localStorage.getItem("designerModeType") || null), this.editorFrame.create((t) => this.handleEditorMessage(t), e), this.editorMode.activate((t) => this.handleEditorMessage(t)), this.createExitEditorButton(), this.createRedBorderOverlay(), this.createStudioBadge(), localStorage.setItem("designerMode", "true"), e && localStorage.setItem("designerModeType", e), setTimeout(() => {
+    e || (e = localStorage.getItem("designerModeType") || null), console.log("[Visual Designer] Mode:", e), this.editorFrame.create((t) => this.handleEditorMessage(t), e), this.editorMode.activate((t) => this.handleEditorMessage(t)), this.createExitEditorButton(), this.createRedBorderOverlay(), this.createStudioBadge(), localStorage.setItem("designerMode", "true"), e && localStorage.setItem("designerModeType", e), setTimeout(() => {
       this.editorFrame.show(), this.hideLoadingOverlay();
     }, e === "tag-feature" ? 100 : 300);
   }
@@ -1117,7 +1123,7 @@ class E {
    * Check if editor mode should be enabled
    */
   shouldEnableEditorMode() {
-    return this.config.editorMode !== void 0 ? this.config.editorMode : !!(typeof window < "u" && window.__visualDesignerWasLaunched || localStorage.getItem("designerMode") === "true");
+    return this.config.editorMode !== void 0 ? (console.log("[Visual Designer] shouldEnableEditorMode: true (config override)"), this.config.editorMode) : typeof window < "u" && window.__visualDesignerWasLaunched ? (console.log("[Visual Designer] shouldEnableEditorMode: true (wasLaunched flag)"), !0) : localStorage.getItem("designerMode") === "true" ? (console.log("[Visual Designer] shouldEnableEditorMode: true (localStorage)"), !0) : (console.log("[Visual Designer] shouldEnableEditorMode: false"), !1);
   }
   /**
    * Handle messages from editor
@@ -1368,14 +1374,14 @@ class E {
   }
 }
 let l = null, m = !1;
-function g(r) {
-  return l || (l = new E(r), l.init(), l);
+function g(s) {
+  return l || (l = new E(s), l.init(), l);
 }
-function T() {
+function O() {
   return l;
 }
-function D(r) {
-  !r || !Array.isArray(r) || r.forEach((e) => {
+function T(s) {
+  !s || !Array.isArray(s) || s.forEach((e) => {
     if (!e || !Array.isArray(e) || e.length === 0)
       return;
     const t = e[0], i = e.slice(1);
@@ -1417,8 +1423,8 @@ function D(r) {
   });
 }
 if (typeof window < "u") {
-  const r = window.visualDesigner;
-  r && Array.isArray(r._q) && (m = !0);
+  const s = window.visualDesigner;
+  s && Array.isArray(s._q) && (m = !0);
   try {
     const e = new URL(window.location.href), t = e.searchParams.get("designer"), i = e.searchParams.get("mode");
     if (t === "true") {
@@ -1430,23 +1436,23 @@ if (typeof window < "u") {
   }
 }
 if (typeof window < "u" && !l) {
-  const r = window.__visualDesignerWasLaunched === !0;
-  if (!m || r) {
+  const s = window.__visualDesignerWasLaunched === !0;
+  if (typeof localStorage < "u" && localStorage.getItem("designerMode"), !m || s) {
     const e = () => {
-      !l && (!m || r) && g();
+      !l && (!m || s) && g();
     };
     document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", e) : e();
   }
 }
 typeof window < "u" && (window.VisualDesigner = {
   init: g,
-  getInstance: T,
+  getInstance: O,
   DesignerSDK: E,
-  _processQueue: D
+  _processQueue: T
 });
 export {
   E as DesignerSDK,
-  D as _processQueue,
-  T as getInstance,
+  T as _processQueue,
+  O as getInstance,
   g as init
 };
