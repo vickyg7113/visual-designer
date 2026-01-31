@@ -53,11 +53,42 @@ export interface SelectorResult {
 }
 
 /**
+ * Tag Page / Tag Feature payloads
+ */
+export interface TagPageRule {
+  ruleType: 'suggested' | 'exact' | 'builder';
+  selectionUrl: string;
+}
+
+export interface TagPagePayload {
+  pageSetup: 'create' | 'merge';
+  pageName: string;
+  description?: string;
+  includeRules: TagPageRule[];
+}
+
+export interface TagFeaturePayload {
+  featureSetup?: 'create' | 'merge';
+  featureName: string;
+  description?: string;
+  includeRules?: TagPageRule[];
+  /** Set when saving from element selection flow */
+  selector?: string;
+  elementInfo?: ElementInfo;
+}
+
+/**
  * Editor message types
  */
 export type EditorMessageType =
   | 'ELEMENT_SELECTED'
   | 'SAVE_GUIDE'
+  | 'SAVE_TAG_PAGE'
+  | 'SAVE_TAG_FEATURE'
+  | 'TAG_FEATURE_CLICKED'
+  | 'ACTIVATE_SELECTOR'
+  | 'CLEAR_SELECTION_CLICKED'
+  | 'CLEAR_SELECTION_ACK'
   | 'CANCEL'
   | 'EDITOR_READY'
   | 'GUIDE_SAVED'
@@ -97,12 +128,49 @@ export interface ExitEditorModeMessage {
   type: 'EXIT_EDITOR_MODE';
 }
 
+export interface TagFeatureClickMessage {
+  type: 'TAG_FEATURE_CLICKED';
+}
+
+export interface ActivateSelectorMessage {
+  type: 'ACTIVATE_SELECTOR';
+}
+
+export interface ClearSelectionClickMessage {
+  type: 'CLEAR_SELECTION_CLICKED';
+}
+
+export interface ClearSelectionAckMessage {
+  type: 'CLEAR_SELECTION_ACK';
+}
+
+export interface TagPageSavedAckMessage {
+  type: 'TAG_PAGE_SAVED_ACK';
+}
+
+export interface SaveTagPageMessage {
+  type: 'SAVE_TAG_PAGE';
+  payload: TagPagePayload;
+}
+
+export interface SaveTagFeatureMessage {
+  type: 'SAVE_TAG_FEATURE';
+  payload: TagFeaturePayload;
+}
+
 /**
  * Union type for all editor messages
  */
 export type EditorMessage =
   | ElementSelectedMessage
   | SaveGuideMessage
+  | SaveTagPageMessage
+  | SaveTagFeatureMessage
+  | TagFeatureClickMessage
+  | ActivateSelectorMessage
+  | ClearSelectionClickMessage
+  | ClearSelectionAckMessage
+  | TagPageSavedAckMessage
   | CancelMessage
   | EditorReadyMessage
   | GuideSavedMessage

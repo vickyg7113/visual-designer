@@ -63,7 +63,25 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
     }
+    .target-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .target-nav-links a {
+      padding: 8px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      color: #64748b;
+      transition: background 0.2s, color 0.2s;
+    }
+    .target-nav-links a:hover { color: #0f172a; background: #f1f5f9; }
+    .target-nav-links a.active { color: #3b82f6; background: #eff6ff; }
     .target-nav .user { font-size: 14px; color: #64748b; }
     .target-nav .logout {
       padding: 8px 16px;
@@ -76,6 +94,15 @@
     .target-content { padding: 24px; max-width: 800px; margin: 0 auto; }
     .target-content h2 { margin-bottom: 16px; }
     .target-content p { color: #64748b; margin-bottom: 24px; }
+    .target-page { display: none; }
+    .target-page.active { display: block; }
+    .target-content .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .target-content .card h3 { margin-bottom: 12px; font-size: 16px; color: #0f172a; }
+    .target-content .card-content p { margin: 0; color: #475569; font-size: 14px; }
+    .target-content .stat-row { display: flex; gap: 24px; margin-top: 12px; }
+    .target-content .stat { padding: 12px 16px; background: #f8fafc; border-radius: 8px; min-width: 100px; }
+    .target-content .stat-value { font-size: 20px; font-weight: 600; color: #0f172a; }
+    .target-content .stat-label { font-size: 12px; color: #64748b; margin-top: 4px; }
     .debug-box {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
@@ -112,23 +139,87 @@
   <!-- App screen (shown after "login") -->
   <div id="appScreen" class="app-screen">
     <nav class="target-nav">
-      <span class="logo">Target App</span>
+      <div class="target-nav-links">
+        <a href="#/dashboard" data-page="dashboard" class="nav-page">Dashboard</a>
+        <a href="#/support" data-page="support" class="nav-page">Support</a>
+        <a href="#/settings" data-page="settings" class="nav-page">Settings</a>
+        <a href="#/profile" data-page="profile" class="nav-page">Profile</a>
+      </div>
       <div>
         <span class="user" id="userEmail">user@example.com</span>
         <button type="button" class="logout" id="logoutBtn">Log out</button>
       </div>
     </nav>
     <main class="target-content">
-      <h2>Support</h2>
-      <p>This page replicates your target URL: SDK loaded via snippet, then initialized after login.</p>
-      <div class="card">
-        <h3>Tickets</h3>
-        <div class="card-content">
-          <p>If you launched from the launcher with "Guide" or "Tag Feature", the designer should appear after you sign in.</p>
+      <!-- Dashboard Page -->
+      <div id="page-dashboard" class="target-page active" data-page="dashboard">
+        <h2>Dashboard</h2>
+        <p>Overview of your app. Use Tag Page designer to tag this page (e.g. as "Dashboard").</p>
+        <div class="card">
+          <h3>Quick stats</h3>
+          <div class="card-content">
+            <div class="stat-row">
+              <div class="stat"><div class="stat-value">1,234</div><div class="stat-label">Users</div></div>
+              <div class="stat"><div class="stat-value">56</div><div class="stat-label">Projects</div></div>
+              <div class="stat"><div class="stat-value">12</div><div class="stat-label">Active</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Recent activity</h3>
+          <div class="card-content">
+            <p>Sample dashboard content for tagging pages testing.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Support Page -->
+      <div id="page-support" class="target-page" data-page="support">
+        <h2>Support</h2>
+        <p>Support and tickets. Tag this page (e.g. as "Support" or "Tickets").</p>
+        <div class="card">
+          <h3>Tickets</h3>
+          <div class="card-content">
+            <p>If you launched from the launcher with Guide or Tag Feature, the designer appears after sign in. Navigate between Dashboard, Support, Settings, Profile to test tagging different pages.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Settings Page -->
+      <div id="page-settings" class="target-page" data-page="settings">
+        <h2>Settings</h2>
+        <p>Application settings. Tag this page for testing (e.g. "Settings").</p>
+        <div class="card">
+          <h3>Account</h3>
+          <div class="card-content">
+            <p>Theme, notifications, language preferences.</p>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Privacy</h3>
+          <div class="card-content">
+            <p>Privacy and security options.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Profile Page -->
+      <div id="page-profile" class="target-page" data-page="profile">
+        <h2>Profile</h2>
+        <p>User profile. Tag this page (e.g. "Profile") for tagging pages testing.</p>
+        <div class="card">
+          <h3>Personal info</h3>
+          <div class="card-content">
+            <p>Name, email, avatar and profile details.</p>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Preferences</h3>
+          <div class="card-content">
+            <p>Profile visibility and notification preferences.</p>
+          </div>
         </div>
       </div>
       <div class="debug-box" id="debugBox">
         <strong>Debug</strong><br>
+        Current page (hash): <span id="debugPage">-</span><br>
         localStorage.designerMode: <span id="debugDesignerMode">-</span><br>
         localStorage.designerModeType: <span id="debugDesignerModeType">-</span><br>
         VisualDesigner loaded: <span id="debugVD">-</span><br>
@@ -175,6 +266,7 @@
       var loginForm = document.getElementById('loginForm');
       var logoutBtn = document.getElementById('logoutBtn');
       var userEmailEl = document.getElementById('userEmail');
+      var debugPage = document.getElementById('debugPage');
       var debugDesignerMode = document.getElementById('debugDesignerMode');
       var debugDesignerModeType = document.getElementById('debugDesignerModeType');
       var debugVD = document.getElementById('debugVD');
@@ -182,12 +274,35 @@
 
       var isAuthenticated = false;
       var currentUser = null;
+      var VALID_PAGES = ['dashboard', 'support', 'settings', 'profile'];
+
+      function getPageFromHash() {
+        var hash = (window.location.hash || '#/dashboard').slice(1);
+        var path = hash.slice(0, 1) === '/' ? hash.slice(1) : hash;
+        var page = path.split('/')[0] || 'dashboard';
+        return VALID_PAGES.indexOf(page) >= 0 ? page : 'dashboard';
+      }
+
+      function showPage(pageId) {
+        document.querySelectorAll('.target-page').forEach(function(el) {
+          el.classList.toggle('active', el.getAttribute('data-page') === pageId);
+        });
+        document.querySelectorAll('.nav-page').forEach(function(a) {
+          a.classList.toggle('active', a.getAttribute('data-page') === pageId);
+        });
+        if (debugPage) debugPage.textContent = pageId;
+      }
+
+      function syncHashToPage() {
+        var page = getPageFromHash();
+        showPage(page);
+      }
 
       function updateDebug() {
-        debugDesignerMode.textContent = localStorage.getItem('designerMode') || '(empty)';
-        debugDesignerModeType.textContent = localStorage.getItem('designerModeType') || '(empty)';
-        debugVD.textContent = window.VisualDesigner ? 'yes' : 'no';
-        debugInstance.textContent = window.VisualDesigner && window.VisualDesigner.getInstance ? (window.VisualDesigner.getInstance() ? 'instance' : 'null') : 'N/A';
+        if (debugDesignerMode) debugDesignerMode.textContent = localStorage.getItem('designerMode') || '(empty)';
+        if (debugDesignerModeType) debugDesignerModeType.textContent = localStorage.getItem('designerModeType') || '(empty)';
+        if (debugVD) debugVD.textContent = window.VisualDesigner ? 'yes' : 'no';
+        if (debugInstance) debugInstance.textContent = window.VisualDesigner && window.VisualDesigner.getInstance ? (window.VisualDesigner.getInstance() ? 'instance' : 'null') : 'N/A';
       }
 
       function showScreen(loggedIn) {
@@ -195,6 +310,7 @@
         appScreen.classList.toggle('visible', loggedIn);
         if (loggedIn) {
           userEmailEl.textContent = currentUser && currentUser.email ? currentUser.email : 'user@example.com';
+          syncHashToPage();
         }
         updateDebug();
       }
@@ -243,6 +359,13 @@
         showScreen(false);
         updateDebug();
       });
+
+      // Hash-based routing for multiple pages (tagging pages testing)
+      window.addEventListener('hashchange', syncHashToPage);
+      if (!window.location.hash || window.location.hash === '#') {
+        window.location.hash = '#/dashboard';
+      }
+      syncHashToPage();
 
       // Initial state
       showScreen(false);

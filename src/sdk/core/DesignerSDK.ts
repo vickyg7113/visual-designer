@@ -8,6 +8,8 @@ import {
   SDKConfig,
   EditorMessage,
   SaveGuideMessage,
+  SaveTagPageMessage,
+  SaveTagFeatureMessage,
   ElementSelectedMessage,
 } from '../types';
 
@@ -46,6 +48,9 @@ export class DesignerSDK {
 
     this.isInitialized = true;
 
+    // Load Montserrat for designer UI and guide tooltips
+    this.injectMontserratFont();
+
     // Check if editor mode should be enabled (Pendo-style: check localStorage for stored intent)
     const shouldEnableEditor = this.shouldEnableEditorMode();
     
@@ -83,7 +88,7 @@ export class DesignerSDK {
 
     console.log('[Visual Designer] enableEditor() called');
     this.isEditorMode = true;
-    
+
     // Get mode from URL parameter (stored in global flag) or localStorage (Pendo-style)
     // Priority: window.__visualDesignerMode (if URL param was just processed) > localStorage (if page refreshed or after login)
     let mode = typeof window !== 'undefined' ? (window as any).__visualDesignerMode : null;
@@ -94,11 +99,14 @@ export class DesignerSDK {
     
     console.log('[Visual Designer] Mode:', mode);
     
-    // Create editor frame with mode
+    // Create editor frame with mode (tag-page / tag-feature = form panel only; guide = selector + guide form)
     this.editorFrame.create((message) => this.handleEditorMessage(message), mode);
     
-    // Activate editor mode
-    this.editorMode.activate((message) => this.handleEditorMessage(message));
+    // Activate click-to-select only for guide mode; tag-page and tag-feature use form-based panels (no selector editor)
+    const isTagMode = mode === 'tag-page' || mode === 'tag-feature';
+    if (!isTagMode) {
+      this.editorMode.activate((message) => this.handleEditorMessage(message));
+    }
     
     // Create exit editor button
     this.createExitEditorButton();
@@ -115,14 +123,11 @@ export class DesignerSDK {
       localStorage.setItem('designerModeType', mode);
     }
     
-    // Show the editor frame for all modes (Pendo-style: show after initialization)
-    // For Tag Feature mode, show immediately
-    // For other modes, show after a short delay to ensure everything is initialized
+    // Show the editor frame (Tag Page / Tag Feature = show soon; Guide = short delay)
     setTimeout(() => {
       this.editorFrame.show();
-      // Hide loading after editor is shown
       this.hideLoadingOverlay();
-    }, mode === 'tag-feature' ? 100 : 300);
+    }, isTagMode ? 100 : 300);
   }
 
   /**
@@ -133,6 +138,8 @@ export class DesignerSDK {
       return;
     }
 
+    //close the tab
+    window.close();
     this.isEditorMode = false;
     this.editorMode.deactivate();
     this.editorFrame.destroy();
@@ -254,6 +261,30 @@ export class DesignerSDK {
         this.handleSaveGuide(message);
         break;
 
+      case 'TAG_FEATURE_CLICKED':
+        // User clicked "Tag Feature" in the panel → enable click-to-select on the page
+        this.editorMode.activate((msg) => this.handleEditorMessage(msg));
+        break;
+
+      case 'ACTIVATE_SELECTOR':
+        // User clicked "Select element" in Guide empty state → (re-)enable click-to-select
+        this.editorMode.activate((msg) => this.handleEditorMessage(msg));
+        break;
+
+      case 'CLEAR_SELECTION_CLICKED':
+        // User clicked "Clear Selection" → turn off selector and notify iframe
+        this.editorMode.deactivate();
+        this.editorFrame.sendClearSelectionAck();
+        break;
+
+      case 'SAVE_TAG_PAGE':
+        this.handleSaveTagPage(message);
+        break;
+
+      case 'SAVE_TAG_FEATURE':
+        this.handleSaveTagFeature(message);
+        break;
+
       case 'CANCEL':
         this.handleCancel();
         break;
@@ -263,7 +294,6 @@ export class DesignerSDK {
         break;
 
       case 'EDITOR_READY':
-        // Editor is ready, hide loading overlay
         this.hideLoadingOverlay();
         break;
 
@@ -291,6 +321,35 @@ export class DesignerSDK {
     // Notify editor that guide was saved
     // (This could trigger a success message in the editor UI)
     console.log('Guide saved:', guide);
+  }
+
+  /**
+   * Handle save tag page – persist to localStorage so Tag Page panel can show "tagged" vs "untagged"
+   */
+  private handleSaveTagPage(message: SaveTagPageMessage): void {
+    console.log('[Visual Designer] Tag page saved:', message.payload);
+    const key = 'designerTaggedPages';
+    try {
+      const raw = localStorage.getItem(key) || '[]';
+      const list: { pageName: string; url: string }[] = JSON.parse(raw);
+      const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+      list.push({
+        pageName: message.payload.pageName,
+        url: currentUrl,
+      });
+      localStorage.setItem(key, JSON.stringify(list));
+    } catch (e) {
+      console.warn('[Visual Designer] Failed to persist tagged page:', e);
+    }
+    this.editorFrame.sendTagPageSavedAck();
+  }
+
+  /**
+   * Handle save tag feature (from overview form or from element selection)
+   */
+  private handleSaveTagFeature(message: SaveTagFeatureMessage): void {
+    console.log('[Visual Designer] Tag feature saved:', message.payload);
+    this.editorFrame.hide();
   }
 
   /**
@@ -340,6 +399,19 @@ export class DesignerSDK {
   }
 
   /**
+   * Inject Montserrat font on host page so SDK UI (badge, exit button, loading) uses it
+   */
+  private injectMontserratFont(): void {
+    if (typeof document === 'undefined' || !document.head) return;
+    if (document.getElementById('designer-montserrat-font')) return;
+    const link = document.createElement('link');
+    link.id = 'designer-montserrat-font';
+    link.rel = 'stylesheet';
+    link.href = 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap';
+    document.head.appendChild(link);
+  }
+
+  /**
    * Create exit editor button
    */
   private createExitEditorButton(): void {
@@ -371,7 +443,7 @@ export class DesignerSDK {
       color: #3b82f6;
       font-size: 14px;
       font-weight: 600;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
       cursor: pointer;
       z-index: 1000000;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -491,7 +563,7 @@ export class DesignerSDK {
       color: #ffffff;
       font-size: 14px;
       font-weight: 600;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
       border-radius: 0 0 6px 6px;
       border: 5px solid #3B82F6;
       border-top: none;
@@ -545,7 +617,7 @@ export class DesignerSDK {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
     `;
 
     // Create spinner
@@ -576,6 +648,7 @@ export class DesignerSDK {
       color: #1e40af;
       font-size: 16px;
       font-weight: 500;
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
     `;
 
     this.loadingOverlay.appendChild(spinner);

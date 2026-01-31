@@ -91,7 +91,7 @@ export class GuideRenderer {
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
       z-index: 999997;
       max-width: 300px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 14px;
       line-height: 1.5;
       color: #111827;
