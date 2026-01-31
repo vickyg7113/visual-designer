@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Visual Designer Editor</title>
+  <script src="https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js"></script>
   <style>
+    iconify-icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.125em; }
     * {
       margin: 0;
       padding: 0;
@@ -432,12 +434,12 @@
     <!-- Header -->
     <div class="header">
       <div class="header-left">
-        <div class="menu-icon" id="menuIcon">⋯</div>
+        <div class="menu-icon" id="menuIcon"><iconify-icon icon="mdi:dots-horizontal"></iconify-icon></div>
         <h2>Edit Container</h2>
       </div>
       <div style="display: flex; align-items: center;">
-        <button class="exit-editor-btn" id="exitEditorBtn">Exit Editor</button>
-        <button class="close-icon" id="closeBtn" aria-label="Close">□</button>
+        <button class="exit-editor-btn" id="exitEditorBtn"><iconify-icon icon="mdi:exit-to-app" style="vertical-align:-0.2em;margin-right:6px;"></iconify-icon>Exit Editor</button>
+        <button class="close-icon" id="closeBtn" aria-label="Close"><iconify-icon icon="mdi:close"></iconify-icon></button>
       </div>
     </div>
 
@@ -452,7 +454,7 @@
     <div class="content">
       <!-- Empty State -->
       <div id="emptyState" class="empty-state">
-        <div class="empty-state-icon">🎯</div>
+        <div class="empty-state-icon"><iconify-icon icon="mdi:target" style="font-size:48px;"></iconify-icon></div>
         <div class="empty-state-text">
           Click on an element in the page<br>to create a guide
         </div>
@@ -511,9 +513,7 @@
                 <div class="performance-fill"></div>
               </div>
               <div class="performance-text">
-                <svg class="performance-icon" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 9L1 4h10z" fill="#166534"/>
-                </svg>
+                <iconify-icon icon="mdi:check-circle" style="color:#166534;"></iconify-icon>
                 Best selector performance
               </div>
             </div>

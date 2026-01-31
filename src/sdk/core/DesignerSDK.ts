@@ -50,6 +50,8 @@ export class DesignerSDK {
 
     // Load Montserrat for designer UI and guide tooltips
     this.injectMontserratFont();
+    // Load Iconify for icons
+    this.injectIconifyScript();
 
     // Check if editor mode should be enabled (Pendo-style: check localStorage for stored intent)
     const shouldEnableEditor = this.shouldEnableEditorMode();
@@ -412,6 +414,19 @@ export class DesignerSDK {
   }
 
   /**
+   * Inject Iconify icons script on host page so SDK UI can use iconify-icon
+   */
+  private injectIconifyScript(): void {
+    if (typeof document === 'undefined' || !document.head) return;
+    if (document.getElementById('designer-iconify-script')) return;
+    const script = document.createElement('script');
+    script.id = 'designer-iconify-script';
+    script.src = 'https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js';
+    script.async = true;
+    document.head.appendChild(script);
+  }
+
+  /**
    * Create exit editor button
    */
   private createExitEditorButton(): void {
@@ -431,7 +446,7 @@ export class DesignerSDK {
 
     this.exitEditorButton = document.createElement('button');
     this.exitEditorButton.id = 'designer-exit-editor-btn';
-    this.exitEditorButton.textContent = 'Exit Editor';
+    this.exitEditorButton.innerHTML = '<iconify-icon icon="mdi:exit-to-app" style="vertical-align:-0.2em;margin-right:6px;"></iconify-icon>Exit Editor';
     this.exitEditorButton.style.cssText = `
       position: fixed;
       top: 20px;

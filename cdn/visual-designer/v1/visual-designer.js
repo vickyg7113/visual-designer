@@ -19,9 +19,9 @@ class h {
     }
     const t = this.getSemanticDataAttributes(e);
     if (t.length > 0) {
-      const r = t[0], o = e.getAttribute(r);
+      const r = t[0], a = e.getAttribute(r);
       return {
-        selector: `[${r}="${this.escapeAttribute(o)}"]`,
+        selector: `[${r}="${this.escapeAttribute(a)}"]`,
         confidence: "high",
         method: "data-attribute"
       };
@@ -90,15 +90,15 @@ class h {
     var r;
     const t = e.getAttribute("role"), i = e.getAttribute("aria-label"), n = e.getAttribute("aria-labelledby");
     if (t) {
-      let o = `[role="${this.escapeAttribute(t)}"]`;
+      let a = `[role="${this.escapeAttribute(t)}"]`;
       if (i)
-        return o += `[aria-label="${this.escapeAttribute(i)}"]`, o;
+        return a += `[aria-label="${this.escapeAttribute(i)}"]`, a;
       if (n) {
         const d = document.getElementById(n);
         if (d && ((r = d.textContent) == null ? void 0 : r.trim()))
-          return o;
+          return a;
       }
-      return o;
+      return a;
     }
     return null;
   }
@@ -115,13 +115,13 @@ class h {
         break;
       }
       if (i.className && typeof i.className == "string") {
-        const o = i.className.split(/\s+/).filter((d) => d && !d.startsWith("designer-")).slice(0, 2);
-        o.length > 0 && (n += "." + o.map((d) => this.escapeSelector(d)).join("."));
+        const a = i.className.split(/\s+/).filter((d) => d && !d.startsWith("designer-")).slice(0, 2);
+        a.length > 0 && (n += "." + a.map((d) => this.escapeSelector(d)).join("."));
       }
       const r = i.parentElement;
       if (r) {
-        const o = i.tagName, g = Array.from(r.children).filter(
-          (l) => l.tagName === o
+        const a = i.tagName, g = Array.from(r.children).filter(
+          (l) => l.tagName === a
         );
         if (g.length > 1) {
           const l = g.indexOf(i) + 1;
@@ -146,38 +146,38 @@ class h {
     return e.replace(/"/g, '\\"').replace(/'/g, "\\'");
   }
 }
-function S(a) {
+function B(o) {
   var i, n;
-  const e = a.getBoundingClientRect(), t = {};
-  for (let r = 0; r < a.attributes.length; r++) {
-    const o = a.attributes[r];
-    t[o.name] = o.value;
+  const e = o.getBoundingClientRect(), t = {};
+  for (let r = 0; r < o.attributes.length; r++) {
+    const a = o.attributes[r];
+    t[a.name] = a.value;
   }
   return {
-    tagName: a.tagName.toLowerCase(),
-    id: a.id || void 0,
-    className: ((i = a.className) == null ? void 0 : i.toString()) || void 0,
-    textContent: ((n = a.textContent) == null ? void 0 : n.trim().substring(0, 50)) || void 0,
+    tagName: o.tagName.toLowerCase(),
+    id: o.id || void 0,
+    className: ((i = o.className) == null ? void 0 : i.toString()) || void 0,
+    textContent: ((n = o.textContent) == null ? void 0 : n.trim().substring(0, 50)) || void 0,
     attributes: t,
     boundingRect: e
   };
 }
-function v(a) {
-  const e = window.getComputedStyle(a);
-  return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && a.getBoundingClientRect().height > 0 && a.getBoundingClientRect().width > 0;
+function v(o) {
+  const e = window.getComputedStyle(o);
+  return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && o.getBoundingClientRect().height > 0 && o.getBoundingClientRect().width > 0;
 }
 function m() {
   return window.location.pathname || "/";
 }
-function B() {
+function S() {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
-function C(a) {
-  const e = a.getBoundingClientRect();
+function C(o) {
+  const e = o.getBoundingClientRect();
   return e.top >= 0 && e.left >= 0 && e.bottom <= (window.innerHeight || document.documentElement.clientHeight) && e.right <= (window.innerWidth || document.documentElement.clientWidth);
 }
-function I(a) {
-  C(a) || a.scrollIntoView({ behavior: "smooth", block: "center" });
+function I(o) {
+  C(o) || o.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 class T {
   constructor() {
@@ -284,7 +284,7 @@ class T {
    */
   selectElement(e) {
     this.selectedElement = e, this.highlightElement(e);
-    const t = h.generateSelector(e), i = S(e);
+    const t = h.generateSelector(e), i = B(e);
     this.messageCallback && this.messageCallback({
       type: "ELEMENT_SELECTED",
       selector: t.selector,
@@ -397,23 +397,23 @@ class L {
     }, r.onclick = () => {
       this.dismissGuide(e.id);
     }, i.appendChild(r);
-    const o = document.createElement("div");
-    return o.className = "designer-guide-arrow", o.style.cssText = `
+    const a = document.createElement("div");
+    return a.className = "designer-guide-arrow", a.style.cssText = `
       position: absolute;
       width: 0;
       height: 0;
       border-style: solid;
-    `, i.appendChild(o), i;
+    `, i.appendChild(a), i;
   }
   /**
    * Position tooltip relative to target element
    */
   positionTooltip(e, t, i) {
-    const n = t.getBoundingClientRect(), r = e.getBoundingClientRect(), o = window.pageXOffset || document.documentElement.scrollLeft, d = window.pageYOffset || document.documentElement.scrollTop, g = e.querySelector(".designer-guide-arrow");
+    const n = t.getBoundingClientRect(), r = e.getBoundingClientRect(), a = window.pageXOffset || document.documentElement.scrollLeft, d = window.pageYOffset || document.documentElement.scrollTop, g = e.querySelector(".designer-guide-arrow");
     let l = 0, c = 0, p = "";
     switch (i) {
       case "top":
-        l = n.top + d - r.height - 12, c = n.left + o + n.width / 2 - r.width / 2, p = `
+        l = n.top + d - r.height - 12, c = n.left + a + n.width / 2 - r.width / 2, p = `
           bottom: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -422,7 +422,7 @@ class L {
         `;
         break;
       case "bottom":
-        l = n.bottom + d + 12, c = n.left + o + n.width / 2 - r.width / 2, p = `
+        l = n.bottom + d + 12, c = n.left + a + n.width / 2 - r.width / 2, p = `
           top: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -431,7 +431,7 @@ class L {
         `;
         break;
       case "left":
-        l = n.top + d + n.height / 2 - r.height / 2, c = n.left + o - r.width - 12, p = `
+        l = n.top + d + n.height / 2 - r.height / 2, c = n.left + a - r.width - 12, p = `
           right: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -440,7 +440,7 @@ class L {
         `;
         break;
       case "right":
-        l = n.top + d + n.height / 2 - r.height / 2, c = n.right + o + 12, p = `
+        l = n.top + d + n.height / 2 - r.height / 2, c = n.right + a + 12, p = `
           left: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -450,7 +450,7 @@ class L {
         break;
     }
     const f = window.innerWidth, b = window.innerHeight;
-    c < o ? c = o + 10 : c + r.width > o + f && (c = o + f - r.width - 10), l < d ? l = d + 10 : l + r.height > d + b && (l = d + b - r.height - 10), e.style.top = `${l}px`, e.style.left = `${c}px`, g && (g.style.cssText += p);
+    c < a ? c = a + 10 : c + r.width > a + f && (c = a + f - r.width - 10), l < d ? l = d + 10 : l + r.height > d + b && (l = d + b - r.height - 10), e.style.top = `${l}px`, e.style.left = `${c}px`, g && (g.style.cssText += p);
   }
   /**
    * Create container for guides
@@ -471,7 +471,7 @@ class L {
    */
   updatePositions(e) {
     this.renderedGuides.forEach((t, i) => {
-      const n = e.find((o) => o.id === i);
+      const n = e.find((a) => a.id === i);
       if (!n)
         return;
       const r = h.findElement(n.selector);
@@ -481,7 +481,7 @@ class L {
 }
 class M {
   constructor() {
-    this.iframe = null, this.dragHandle = null, this.messageCallback = null, this.isReady = !1, this.mode = null, this.isDragging = !1, this.dragStartX = 0, this.dragStartY = 0, this.currentX = 0, this.currentY = 0, this.dragThreshold = 3, this.mouseDownX = 0, this.mouseDownY = 0, this.isMouseDown = !1, this.handleMouseDown = (e) => {
+    this.iframe = null, this.dragHandle = null, this.gripButton = null, this.messageCallback = null, this.isReady = !1, this.mode = null, this.isDragging = !1, this.dragStartX = 0, this.dragStartY = 0, this.currentX = 0, this.currentY = 0, this.dragThreshold = 3, this.mouseDownX = 0, this.mouseDownY = 0, this.isMouseDown = !1, this.handleMouseDown = (e) => {
       if (!this.iframe || !this.dragHandle)
         return;
       this.mouseDownX = e.clientX, this.mouseDownY = e.clientY, this.isMouseDown = !0, this.isDragging = !1;
@@ -493,17 +493,17 @@ class M {
       if (!this.isDragging) {
         const l = Math.abs(e.clientX - this.mouseDownX), c = Math.abs(e.clientY - this.mouseDownY);
         if (Math.sqrt(l * l + c * c) > this.dragThreshold)
-          this.isDragging = !0, document.body.style.cursor = "move", document.body.style.userSelect = "none", document.documentElement.style.userSelect = "none";
+          this.isDragging = !0, document.body.style.cursor = "grabbing", document.documentElement.style.cursor = "grabbing", document.body.style.userSelect = "none", document.documentElement.style.userSelect = "none", this.iframe && (this.iframe.style.pointerEvents = "none"), this.gripButton && (this.gripButton.style.cursor = "grabbing");
         else
           return;
       }
       e.preventDefault(), e.stopPropagation();
-      const t = e.clientX - this.dragStartX, i = e.clientY - this.dragStartY, n = window.innerWidth, r = window.innerHeight, o = this.iframe.offsetWidth;
+      const t = e.clientX - this.dragStartX, i = e.clientY - this.dragStartY, n = window.innerWidth, r = window.innerHeight, a = this.iframe.offsetWidth;
       this.iframe.offsetHeight;
-      const d = Math.max(-o + 50, Math.min(t, n - 50)), g = Math.max(0, Math.min(i, r - 100));
+      const d = Math.max(-a + 50, Math.min(t, n - 50)), g = Math.max(0, Math.min(i, r - 100));
       this.currentX = d, this.currentY = g, this.iframe.style.left = `${d}px`, this.iframe.style.top = `${g}px`, this.iframe.style.right = "auto", this.iframe.style.bottom = "auto", this.dragHandle.style.left = `${d}px`, this.dragHandle.style.top = `${g}px`;
     }, this.handleMouseUp = (e) => {
-      this.isMouseDown && (this.isDragging = !1, this.isMouseDown = !1, document.body.style.cursor = "", document.body.style.userSelect = "", document.documentElement.style.userSelect = "", e.preventDefault(), e.stopPropagation());
+      this.isMouseDown && (this.isDragging = !1, this.isMouseDown = !1, document.body.style.cursor = "", document.documentElement.style.cursor = "", document.body.style.userSelect = "", document.documentElement.style.userSelect = "", this.iframe && (this.iframe.style.pointerEvents = ""), this.gripButton && (this.gripButton.style.cursor = "grab"), e.preventDefault(), e.stopPropagation());
     }, this.handleMessage = (e) => {
       const t = e.data;
       !t || !t.type || (this.messageCallback && this.messageCallback(t), (t.type === "CANCEL" || t.type === "GUIDE_SAVED" || t.type === "SAVE_TAG_FEATURE") && this.hide());
@@ -570,7 +570,7 @@ class M {
    * Destroy editor frame
    */
   destroy() {
-    window.removeEventListener("message", this.handleMessage), document.removeEventListener("mousemove", this.handleMouseMove, !0), document.removeEventListener("mouseup", this.handleMouseUp, !0), window.removeEventListener("mousemove", this.handleMouseMove, !0), window.removeEventListener("mouseup", this.handleMouseUp, !0), this.iframe && (this.iframe.remove(), this.iframe = null), this.dragHandle && (this.dragHandle.remove(), this.dragHandle = null), this.isReady = !1, this.messageCallback = null, this.isDragging = !1, this.isMouseDown = !1, document.body.style.cursor = "", document.body.style.userSelect = "", document.documentElement.style.userSelect = "";
+    window.removeEventListener("message", this.handleMessage), document.removeEventListener("mousemove", this.handleMouseMove, !0), document.removeEventListener("mouseup", this.handleMouseUp, !0), window.removeEventListener("mousemove", this.handleMouseMove, !0), window.removeEventListener("mouseup", this.handleMouseUp, !0), this.iframe && (this.iframe.remove(), this.iframe = null), this.dragHandle && (this.dragHandle.remove(), this.dragHandle = null), this.gripButton = null, this.isReady = !1, this.messageCallback = null, this.isDragging = !1, this.isMouseDown = !1, document.body.style.cursor = "", document.documentElement.style.cursor = "", document.body.style.userSelect = "", document.documentElement.style.userSelect = "";
   }
   /**
    * Send message to iframe
@@ -608,7 +608,9 @@ class M {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Visual Designer Editor</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js"><\/script>
   <style>
+    iconify-icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.125em; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: #f8fafc; color: #111827; line-height: 1.5; height: 100%; overflow-y: auto; }
     .editor-container { display: flex; flex-direction: column; gap: 20px; max-width: 100%; min-height: 100%; }
@@ -646,7 +648,7 @@ class M {
   <div class="editor-container">
     <div class="header">
       <h2>Create Guide</h2>
-      <button class="close-btn" id="closeBtn" aria-label="Close">×</button>
+      <button class="close-btn" id="closeBtn" aria-label="Close"><iconify-icon icon="mdi:close"></iconify-icon></button>
     </div>
     <div id="emptyState" class="empty-state">
       <div>Click on an element in the page to create a guide</div>
@@ -750,7 +752,9 @@ class M {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tag Page - Visual Designer</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js"><\/script>
   <style>
+    iconify-icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.125em; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif; background: #fff; color: #111827; height: 100%; overflow-y: auto; line-height: 1.5; }
     .tag-page-container { display: flex; flex-direction: column; min-height: 100%; }
@@ -834,8 +838,8 @@ class M {
     <div class="header">
       <h2>Tag Page</h2>
       <div class="header-actions">
-        <span title="Menu">&#8230;</span>
-        <span class="minimize-btn" id="minimizeBtn" title="Minimize">&#8212;</span>
+        <span title="Menu"><iconify-icon icon="mdi:dots-horizontal"></iconify-icon></span>
+        <span class="minimize-btn" id="minimizeBtn" title="Minimize"><iconify-icon icon="mdi:window-minimize"></iconify-icon></span>
       </div>
     </div>
     <div class="content">
@@ -850,20 +854,20 @@ class M {
               <div class="url" id="currentUrlDisplayTagged">-</div>
             </div>
           </div>
-          <span class="chevron">&#8250;</span>
+          <span class="chevron"><iconify-icon icon="mdi:chevron-right"></iconify-icon></span>
         </div>
         <button type="button" class="tag-page-btn" id="tagPageBtnFromTagged">Tag Page</button>
       </div>
       <!-- Tagged URL detail: list of tagged pages for current URL -->
       <div id="taggedPagesDetailView" class="tag-page-view tagged-detail">
-        <a href="#" class="back-link" id="backFromTaggedDetail">&#8592; Back to overview</a>
+        <a href="#" class="back-link" id="backFromTaggedDetail"><iconify-icon icon="mdi:arrow-left"></iconify-icon> Back to overview</a>
         <div class="current-url-header">
           <span class="badge" id="taggedCountBadge">0</span>
           <h3>Current URL</h3>
         </div>
         <div class="current-url-subtitle">List of tagged Pages on this URL</div>
         <div class="search-wrap">
-          <span class="search-icon">&#128269;</span>
+          <span class="search-icon"><iconify-icon icon="mdi:magnify"></iconify-icon></span>
           <input type="text" id="searchPagesInput" placeholder="Search Pages" />
           <button type="button" class="clear-btn" id="clearSearchBtn" style="display:none;">Clear</button>
         </div>
@@ -872,14 +876,14 @@ class M {
       </div>
       <!-- Overview: current URL not tagged -->
       <div id="overviewUntagged" class="tag-page-view overview-untagged">
-        <div class="illustration" aria-hidden="true">&#128197;</div>
+        <div class="illustration" aria-hidden="true"><iconify-icon icon="mdi:calendar" style="font-size:48px;"></iconify-icon></div>
         <h3>Let's start tagging!</h3>
         <p>Start by first tagging this page and then features to get going.</p>
         <button type="button" class="tag-page-btn" id="tagPageBtnFromUntagged">Tag Page</button>
       </div>
       <!-- Form: create/edit page -->
       <div id="tagPageFormView" class="tag-page-view tag-page-form">
-        <a href="#" class="back-link" id="backFromTagPageForm" style="display:block;color:#3b82f6;font-size:13px;margin-bottom:16px;">&#8592; Back</a>
+        <a href="#" class="back-link" id="backFromTagPageForm" style="display:block;color:#3b82f6;font-size:13px;margin-bottom:16px;"><iconify-icon icon="mdi:arrow-left"></iconify-icon> Back</a>
         <div class="section">
           <div class="section-title">PAGE SETUP</div>
           <div class="radio-group">
@@ -903,10 +907,10 @@ class M {
           </div>
         </div>
         <div class="section">
-          <div class="section-title">INCLUDE PAGE RULES <span class="info-icon" title="Define how this page is identified">&#8505;</span></div>
+          <div class="section-title">INCLUDE PAGE RULES <span class="info-icon" title="Define how this page is identified"><iconify-icon icon="mdi:information-outline"></iconify-icon></span></div>
           <div class="rule-header">
             <span>Include Rule 1</span>
-            <span class="rule-delete" id="deleteRule1" title="Delete rule">&#128465;</span>
+            <span class="rule-delete" id="deleteRule1" title="Delete rule"><iconify-icon icon="mdi:delete-outline"></iconify-icon></span>
           </div>
           <div class="radio-group">
             <div class="radio-item">
@@ -985,8 +989,8 @@ class M {
         item.className = 'page-list-item';
         item.innerHTML = '<span class="name">' + escapeHtml(name) + '</span>' +
           '<div class="actions">' +
-          '<span class="edit" title="Edit" data-page-name="' + escapeHtml(name) + '">&#9998;</span>' +
-          '<span class="delete" title="Delete" data-page-name="' + escapeHtml(name) + '">&#128465;</span>' +
+          '<span class="edit" title="Edit" data-page-name="' + escapeHtml(name) + '"><iconify-icon icon="mdi:pencil"></iconify-icon></span>' +
+          '<span class="delete" title="Delete" data-page-name="' + escapeHtml(name) + '"><iconify-icon icon="mdi:delete-outline"></iconify-icon></span>' +
           '</div>';
         list.appendChild(item);
       });
@@ -1125,7 +1129,9 @@ class M {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tag Feature - Visual Designer</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js"><\/script>
   <style>
+    iconify-icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.125em; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif; background: #f8fafc; color: #111827; height: 100%; overflow-y: auto; line-height: 1.5; }
     .tag-feature-container { display: flex; flex-direction: column; min-height: 100%; background: #fff; }
@@ -1191,8 +1197,8 @@ class M {
     <div class="header">
       <h2>Manage Pages, Features, and AI agents</h2>
       <div class="header-actions">
-        <span title="Menu">&#8230;</span>
-        <span id="minimizeBtn" title="Minimize">&#8212;</span>
+        <span title="Menu"><iconify-icon icon="mdi:dots-horizontal"></iconify-icon></span>
+        <span id="minimizeBtn" title="Minimize"><iconify-icon icon="mdi:window-minimize"></iconify-icon></span>
       </div>
     </div>
     <div class="tabs">
@@ -1213,7 +1219,7 @@ class M {
                   <div class="card-description">List of untagged elements on this page</div>
                 </div>
               </div>
-              <span class="chevron">&#8250;</span>
+              <span class="chevron"><iconify-icon icon="mdi:chevron-right"></iconify-icon></span>
             </div>
           </div>
           <div class="card">
@@ -1225,14 +1231,14 @@ class M {
                   <div class="card-description">List of tagged Features on this page</div>
                 </div>
               </div>
-              <span class="chevron">&#8250;</span>
+              <span class="chevron"><iconify-icon icon="mdi:chevron-right"></iconify-icon></span>
             </div>
           </div>
           <div class="heatmap-row">
             <span class="heatmap-label">Heatmap</span>
             <div class="heatmap-controls">
               <div class="toggle-switch" id="heatmapToggle"></div>
-              <div class="plus-icon">+</div>
+              <div class="plus-icon"><iconify-icon icon="mdi:plus"></iconify-icon></div>
             </div>
           </div>
           <button class="tag-feature-btn" id="tagFeatureBtn">Tag Feature</button>
@@ -1240,7 +1246,7 @@ class M {
       </div>
       <div id="selectorFormView" class="view" style="display: none;">
         <div style="padding: 20px; flex: 1;">
-          <a class="back-link" id="backFromForm">&#8592; Back to overview</a>
+          <a class="back-link" id="backFromForm"><iconify-icon icon="mdi:arrow-left"></iconify-icon> Back to overview</a>
           <h3 style="margin-bottom: 16px; font-size: 16px;">Tag Feature</h3>
           <div class="selector-form">
             <div class="form-group">
@@ -1375,41 +1381,21 @@ class M {
       top: 30%;
       left: 50%;
       transform: translate(-50%, -50%);
-      cursor: move;
+      cursor: grab;
       pointer-events: auto;
       padding: 6px 8px;
       border-radius: 6px;
-      background: #f1f5f9;
-      border: 1px solid #e2e8f0;
+      background: transparent;
+      border: none;
       z-index: 1;
       transition: background 0.2s, border-color 0.2s;
     `, e.onmouseenter = () => {
-      e.style.background = "#e2e8f0", e.style.borderColor = "#cbd5e1";
+      e.style.background = "transparent", e.style.border = "none";
     }, e.onmouseleave = () => {
-      e.style.background = "#f1f5f9", e.style.borderColor = "#e2e8f0";
+      e.style.background = "transparent", e.style.border = "none";
     };
-    const t = document.createElement("div");
-    t.style.cssText = `
-      display: grid;
-      grid-template-columns: repeat(3, 5px);
-      grid-template-rows: repeat(2, 5px);
-      gap: 4px;
-      pointer-events: none;
-    `;
-    for (let i = 0; i < 6; i++) {
-      const n = document.createElement("div");
-      n.style.cssText = `
-        width: 5px;
-        height: 5px;
-        min-width: 5px;
-        min-height: 5px;
-        background: #64748b;
-        border-radius: 50%;
-        display: block;
-        flex-shrink: 0;
-      `, t.appendChild(n);
-    }
-    e.appendChild(t), this.dragHandle.appendChild(e), e.addEventListener("mousedown", this.handleMouseDown, !0), document.addEventListener("mousemove", this.handleMouseMove, !0), document.addEventListener("mouseup", this.handleMouseUp, !0), window.addEventListener("mousemove", this.handleMouseMove, !0), window.addEventListener("mouseup", this.handleMouseUp, !0);
+    const t = document.createElement("iconify-icon");
+    t.setAttribute("icon", "pepicons-print:dots-x"), t.style.cssText = "font-size: 18px; color: #64748b; pointer-events: none;", e.appendChild(t), this.dragHandle.appendChild(e), this.gripButton = e, e.addEventListener("mousedown", this.handleMouseDown, !0), document.addEventListener("mousemove", this.handleMouseMove, !0), document.addEventListener("mouseup", this.handleMouseUp, !0), window.addEventListener("mousemove", this.handleMouseMove, !0), window.addEventListener("mouseup", this.handleMouseUp, !0);
   }
   /**
    * Update drag handle position to match iframe
@@ -1421,7 +1407,7 @@ class M {
     this.dragHandle.style.top = `${e.top}px`, this.dragHandle.style.left = `${e.left}px`, this.dragHandle.style.width = `${e.width}px`;
   }
 }
-const D = "visual-designer-guides", x = "1.0.0";
+const D = "visual-designer-guides", y = "1.0.0";
 class A {
   constructor(e = D) {
     this.storageKey = e;
@@ -1435,7 +1421,7 @@ class A {
       if (!e)
         return [];
       const t = JSON.parse(e);
-      return t.version !== x ? (console.warn("Storage version mismatch, clearing old data"), this.clear(), []) : t.guides || [];
+      return t.version !== y ? (console.warn("Storage version mismatch, clearing old data"), this.clear(), []) : t.guides || [];
     } catch (e) {
       return console.error("Error reading guides from storage:", e), [];
     }
@@ -1478,7 +1464,7 @@ class A {
   saveGuides(e) {
     const t = {
       guides: e,
-      version: x
+      version: y
     };
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(t));
@@ -1503,7 +1489,7 @@ class A {
     return this.getGuides().find((i) => i.id === e) || null;
   }
 }
-class y {
+class x {
   constructor(e = {}) {
     this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.loadingOverlay = null, this.config = e, this.storage = new A(e.storageKey), this.editorMode = new T(), this.guideRenderer = new L(), this.editorFrame = new M();
   }
@@ -1515,7 +1501,7 @@ class y {
       console.warn("SDK already initialized");
       return;
     }
-    this.isInitialized = !0, this.injectMontserratFont();
+    this.isInitialized = !0, this.injectMontserratFont(), this.injectIconifyScript();
     const e = this.shouldEnableEditorMode();
     console.log("[Visual Designer] init() called"), console.log("[Visual Designer] shouldEnableEditor:", e), console.log("[Visual Designer] localStorage designerMode:", localStorage.getItem("designerMode")), console.log("[Visual Designer] localStorage designerModeType:", localStorage.getItem("designerModeType")), console.log("[Visual Designer] __visualDesignerWasLaunched:", typeof window < "u" ? window.__visualDesignerWasLaunched : "N/A"), e ? (console.log("[Visual Designer] Enabling editor..."), this.showLoadingOverlay(), this.enableEditor()) : (console.log("[Visual Designer] Not enabling editor, loading guides instead"), this.loadGuides()), this.setupEventListeners();
   }
@@ -1560,7 +1546,7 @@ class y {
   saveGuide(e) {
     const t = {
       ...e,
-      id: B(),
+      id: S(),
       createdAt: (/* @__PURE__ */ new Date()).toISOString(),
       updatedAt: (/* @__PURE__ */ new Date()).toISOString()
     };
@@ -1705,6 +1691,14 @@ class y {
     e.id = "designer-montserrat-font", e.rel = "stylesheet", e.href = "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap", document.head.appendChild(e);
   }
   /**
+   * Inject Iconify icons script on host page so SDK UI can use iconify-icon
+   */
+  injectIconifyScript() {
+    if (typeof document > "u" || !document.head || document.getElementById("designer-iconify-script")) return;
+    const e = document.createElement("script");
+    e.id = "designer-iconify-script", e.src = "https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js", e.async = !0, document.head.appendChild(e);
+  }
+  /**
    * Create exit editor button
    */
   createExitEditorButton() {
@@ -1717,7 +1711,7 @@ class y {
         setTimeout(() => this.createExitEditorButton(), 100);
         return;
       }
-      this.exitEditorButton = document.createElement("button"), this.exitEditorButton.id = "designer-exit-editor-btn", this.exitEditorButton.textContent = "Exit Editor", this.exitEditorButton.style.cssText = `
+      this.exitEditorButton = document.createElement("button"), this.exitEditorButton.id = "designer-exit-editor-btn", this.exitEditorButton.innerHTML = '<iconify-icon icon="mdi:exit-to-app" style="vertical-align:-0.2em;margin-right:6px;"></iconify-icon>Exit Editor', this.exitEditorButton.style.cssText = `
       position: fixed;
       top: 20px;
       right: 20px;
@@ -1881,14 +1875,14 @@ class y {
   }
 }
 let s = null, E = !1;
-function u(a) {
-  return s || (s = new y(a), s.init(), s);
+function u(o) {
+  return s || (s = new x(o), s.init(), s);
 }
 function w() {
   return s;
 }
-function k(a) {
-  !a || !Array.isArray(a) || a.forEach((e) => {
+function k(o) {
+  !o || !Array.isArray(o) || o.forEach((e) => {
     if (!e || !Array.isArray(e) || e.length === 0)
       return;
     const t = e[0], i = e.slice(1);
@@ -1930,18 +1924,18 @@ function k(a) {
   });
 }
 if (typeof window < "u") {
-  const a = window.visualDesigner;
-  a && Array.isArray(a._q) && (E = !0, a.initialize = (e) => {
+  const o = window.visualDesigner;
+  o && Array.isArray(o._q) && (E = !0, o.initialize = (e) => {
     u(e);
-  }, a.identify = (e) => {
+  }, o.identify = (e) => {
     e && console.log("[Visual Designer] identify (snippet) called with:", e);
-  }, a.enableEditor = () => {
+  }, o.enableEditor = () => {
     (s ?? u()).enableEditor();
-  }, a.disableEditor = () => {
+  }, o.disableEditor = () => {
     s && s.disableEditor();
-  }, a.loadGuides = () => {
+  }, o.loadGuides = () => {
     s && s.loadGuides();
-  }, a.getGuides = () => s ? s.getGuides() : void 0, a.getInstance = w, a.init = u, k(a._q));
+  }, o.getGuides = () => s ? s.getGuides() : void 0, o.getInstance = w, o.init = u, k(o._q));
   try {
     const e = new URL(window.location.href), t = e.searchParams.get("designer"), i = e.searchParams.get("mode");
     if (t === "true") {
@@ -1953,20 +1947,20 @@ if (typeof window < "u") {
   }
 }
 if (typeof window < "u" && !s && !E) {
-  const a = () => {
+  const o = () => {
     s || u();
   };
-  document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", a) : a();
+  document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", o) : o();
 }
 typeof window < "u" && (window.VisualDesigner = {
   init: u,
   initialize: u,
   getInstance: w,
-  DesignerSDK: y,
+  DesignerSDK: x,
   _processQueue: k
 });
 export {
-  y as DesignerSDK,
+  x as DesignerSDK,
   k as _processQueue,
   w as getInstance,
   u as init

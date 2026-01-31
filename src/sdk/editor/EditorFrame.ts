@@ -6,6 +6,7 @@ import { EditorMessage, ElementSelectedMessage, SaveGuideMessage } from '../type
 export class EditorFrame {
   private iframe: HTMLIFrameElement | null = null;
   private dragHandle: HTMLElement | null = null;
+  private gripButton: HTMLElement | null = null;
   private messageCallback: ((message: EditorMessage) => void) | null = null;
   private isReady: boolean = false;
   private mode: string | null = null;
@@ -157,12 +158,14 @@ export class EditorFrame {
       this.dragHandle.remove();
       this.dragHandle = null;
     }
+    this.gripButton = null;
     this.isReady = false;
     this.messageCallback = null;
     this.isDragging = false;
     this.isMouseDown = false;
     // Restore cursor and selection
     document.body.style.cursor = '';
+    document.documentElement.style.cursor = '';
     document.body.style.userSelect = '';
     document.documentElement.style.userSelect = '';
   }
@@ -227,7 +230,9 @@ export class EditorFrame {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Visual Designer Editor</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js"></script>
   <style>
+    iconify-icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.125em; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; background: #f8fafc; color: #111827; line-height: 1.5; height: 100%; overflow-y: auto; }
     .editor-container { display: flex; flex-direction: column; gap: 20px; max-width: 100%; min-height: 100%; }
@@ -265,7 +270,7 @@ export class EditorFrame {
   <div class="editor-container">
     <div class="header">
       <h2>Create Guide</h2>
-      <button class="close-btn" id="closeBtn" aria-label="Close">×</button>
+      <button class="close-btn" id="closeBtn" aria-label="Close"><iconify-icon icon="mdi:close"></iconify-icon></button>
     </div>
     <div id="emptyState" class="empty-state">
       <div>Click on an element in the page to create a guide</div>
@@ -370,7 +375,9 @@ export class EditorFrame {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tag Page - Visual Designer</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js"></script>
   <style>
+    iconify-icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.125em; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif; background: #fff; color: #111827; height: 100%; overflow-y: auto; line-height: 1.5; }
     .tag-page-container { display: flex; flex-direction: column; min-height: 100%; }
@@ -454,8 +461,8 @@ export class EditorFrame {
     <div class="header">
       <h2>Tag Page</h2>
       <div class="header-actions">
-        <span title="Menu">&#8230;</span>
-        <span class="minimize-btn" id="minimizeBtn" title="Minimize">&#8212;</span>
+        <span title="Menu"><iconify-icon icon="mdi:dots-horizontal"></iconify-icon></span>
+        <span class="minimize-btn" id="minimizeBtn" title="Minimize"><iconify-icon icon="mdi:window-minimize"></iconify-icon></span>
       </div>
     </div>
     <div class="content">
@@ -470,20 +477,20 @@ export class EditorFrame {
               <div class="url" id="currentUrlDisplayTagged">-</div>
             </div>
           </div>
-          <span class="chevron">&#8250;</span>
+          <span class="chevron"><iconify-icon icon="mdi:chevron-right"></iconify-icon></span>
         </div>
         <button type="button" class="tag-page-btn" id="tagPageBtnFromTagged">Tag Page</button>
       </div>
       <!-- Tagged URL detail: list of tagged pages for current URL -->
       <div id="taggedPagesDetailView" class="tag-page-view tagged-detail">
-        <a href="#" class="back-link" id="backFromTaggedDetail">&#8592; Back to overview</a>
+        <a href="#" class="back-link" id="backFromTaggedDetail"><iconify-icon icon="mdi:arrow-left"></iconify-icon> Back to overview</a>
         <div class="current-url-header">
           <span class="badge" id="taggedCountBadge">0</span>
           <h3>Current URL</h3>
         </div>
         <div class="current-url-subtitle">List of tagged Pages on this URL</div>
         <div class="search-wrap">
-          <span class="search-icon">&#128269;</span>
+          <span class="search-icon"><iconify-icon icon="mdi:magnify"></iconify-icon></span>
           <input type="text" id="searchPagesInput" placeholder="Search Pages" />
           <button type="button" class="clear-btn" id="clearSearchBtn" style="display:none;">Clear</button>
         </div>
@@ -492,14 +499,14 @@ export class EditorFrame {
       </div>
       <!-- Overview: current URL not tagged -->
       <div id="overviewUntagged" class="tag-page-view overview-untagged">
-        <div class="illustration" aria-hidden="true">&#128197;</div>
+        <div class="illustration" aria-hidden="true"><iconify-icon icon="mdi:calendar" style="font-size:48px;"></iconify-icon></div>
         <h3>Let's start tagging!</h3>
         <p>Start by first tagging this page and then features to get going.</p>
         <button type="button" class="tag-page-btn" id="tagPageBtnFromUntagged">Tag Page</button>
       </div>
       <!-- Form: create/edit page -->
       <div id="tagPageFormView" class="tag-page-view tag-page-form">
-        <a href="#" class="back-link" id="backFromTagPageForm" style="display:block;color:#3b82f6;font-size:13px;margin-bottom:16px;">&#8592; Back</a>
+        <a href="#" class="back-link" id="backFromTagPageForm" style="display:block;color:#3b82f6;font-size:13px;margin-bottom:16px;"><iconify-icon icon="mdi:arrow-left"></iconify-icon> Back</a>
         <div class="section">
           <div class="section-title">PAGE SETUP</div>
           <div class="radio-group">
@@ -523,10 +530,10 @@ export class EditorFrame {
           </div>
         </div>
         <div class="section">
-          <div class="section-title">INCLUDE PAGE RULES <span class="info-icon" title="Define how this page is identified">&#8505;</span></div>
+          <div class="section-title">INCLUDE PAGE RULES <span class="info-icon" title="Define how this page is identified"><iconify-icon icon="mdi:information-outline"></iconify-icon></span></div>
           <div class="rule-header">
             <span>Include Rule 1</span>
-            <span class="rule-delete" id="deleteRule1" title="Delete rule">&#128465;</span>
+            <span class="rule-delete" id="deleteRule1" title="Delete rule"><iconify-icon icon="mdi:delete-outline"></iconify-icon></span>
           </div>
           <div class="radio-group">
             <div class="radio-item">
@@ -605,8 +612,8 @@ export class EditorFrame {
         item.className = 'page-list-item';
         item.innerHTML = '<span class="name">' + escapeHtml(name) + '</span>' +
           '<div class="actions">' +
-          '<span class="edit" title="Edit" data-page-name="' + escapeHtml(name) + '">&#9998;</span>' +
-          '<span class="delete" title="Delete" data-page-name="' + escapeHtml(name) + '">&#128465;</span>' +
+          '<span class="edit" title="Edit" data-page-name="' + escapeHtml(name) + '"><iconify-icon icon="mdi:pencil"></iconify-icon></span>' +
+          '<span class="delete" title="Delete" data-page-name="' + escapeHtml(name) + '"><iconify-icon icon="mdi:delete-outline"></iconify-icon></span>' +
           '</div>';
         list.appendChild(item);
       });
@@ -746,7 +753,9 @@ export class EditorFrame {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tag Feature - Visual Designer</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/3.0.2/iconify-icon.min.js"></script>
   <style>
+    iconify-icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.125em; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif; background: #f8fafc; color: #111827; height: 100%; overflow-y: auto; line-height: 1.5; }
     .tag-feature-container { display: flex; flex-direction: column; min-height: 100%; background: #fff; }
@@ -812,8 +821,8 @@ export class EditorFrame {
     <div class="header">
       <h2>Manage Pages, Features, and AI agents</h2>
       <div class="header-actions">
-        <span title="Menu">&#8230;</span>
-        <span id="minimizeBtn" title="Minimize">&#8212;</span>
+        <span title="Menu"><iconify-icon icon="mdi:dots-horizontal"></iconify-icon></span>
+        <span id="minimizeBtn" title="Minimize"><iconify-icon icon="mdi:window-minimize"></iconify-icon></span>
       </div>
     </div>
     <div class="tabs">
@@ -834,7 +843,7 @@ export class EditorFrame {
                   <div class="card-description">List of untagged elements on this page</div>
                 </div>
               </div>
-              <span class="chevron">&#8250;</span>
+              <span class="chevron"><iconify-icon icon="mdi:chevron-right"></iconify-icon></span>
             </div>
           </div>
           <div class="card">
@@ -846,14 +855,14 @@ export class EditorFrame {
                   <div class="card-description">List of tagged Features on this page</div>
                 </div>
               </div>
-              <span class="chevron">&#8250;</span>
+              <span class="chevron"><iconify-icon icon="mdi:chevron-right"></iconify-icon></span>
             </div>
           </div>
           <div class="heatmap-row">
             <span class="heatmap-label">Heatmap</span>
             <div class="heatmap-controls">
               <div class="toggle-switch" id="heatmapToggle"></div>
-              <div class="plus-icon">+</div>
+              <div class="plus-icon"><iconify-icon icon="mdi:plus"></iconify-icon></div>
             </div>
           </div>
           <button class="tag-feature-btn" id="tagFeatureBtn">Tag Feature</button>
@@ -861,7 +870,7 @@ export class EditorFrame {
       </div>
       <div id="selectorFormView" class="view" style="display: none;">
         <div style="padding: 20px; flex: 1;">
-          <a class="back-link" id="backFromForm">&#8592; Back to overview</a>
+          <a class="back-link" id="backFromForm"><iconify-icon icon="mdi:arrow-left"></iconify-icon> Back to overview</a>
           <h3 style="margin-bottom: 16px; font-size: 16px;">Tag Feature</h3>
           <div class="selector-form">
             <div class="form-group">
@@ -1003,52 +1012,34 @@ export class EditorFrame {
       top: 30%;
       left: 50%;
       transform: translate(-50%, -50%);
-      cursor: move;
+      cursor: grab;
       pointer-events: auto;
       padding: 6px 8px;
       border-radius: 6px;
-      background: #f1f5f9;
-      border: 1px solid #e2e8f0;
+      background: transparent;
+      border: none;
       z-index: 1;
       transition: background 0.2s, border-color 0.2s;
     `;
     gripButton.onmouseenter = () => {
-      gripButton.style.background = '#e2e8f0';
-      gripButton.style.borderColor = '#cbd5e1';
+      gripButton.style.background = 'transparent';
+      gripButton.style.border = 'none';
     };
     gripButton.onmouseleave = () => {
-      gripButton.style.background = '#f1f5f9';
-      gripButton.style.borderColor = '#e2e8f0';
+      gripButton.style.background = 'transparent';
+      gripButton.style.border = 'none';
     };
 
-    // Add grip icon (2x3 grid of dots - clean, minimal)
-    const gripIcon = document.createElement('div');
-    gripIcon.style.cssText = `
-      display: grid;
-      grid-template-columns: repeat(3, 5px);
-      grid-template-rows: repeat(2, 5px);
-      gap: 4px;
-      pointer-events: none;
-    `;
-    for (let i = 0; i < 6; i++) {
-      const dot = document.createElement('div');
-      dot.style.cssText = `
-        width: 5px;
-        height: 5px;
-        min-width: 5px;
-        min-height: 5px;
-        background: #64748b;
-        border-radius: 50%;
-        display: block;
-        flex-shrink: 0;
-      `;
-      gripIcon.appendChild(dot);
-    }
+    // Add grip icon (Iconify drag icon)
+    const gripIcon = document.createElement('iconify-icon');
+    gripIcon.setAttribute('icon', 'pepicons-print:dots-x');
+    gripIcon.style.cssText = 'font-size: 18px; color: #64748b; pointer-events: none;';
     gripButton.appendChild(gripIcon);
     this.dragHandle.appendChild(gripButton);
 
     // Mouse event handlers - ONLY on grip icon (not entire header)
     // Use capture phase to ensure we catch all events
+    this.gripButton = gripButton;
     gripButton.addEventListener('mousedown', this.handleMouseDown, true);
     document.addEventListener('mousemove', this.handleMouseMove, true);
     document.addEventListener('mouseup', this.handleMouseUp, true);
@@ -1114,10 +1105,13 @@ export class EditorFrame {
       if (distance > this.dragThreshold) {
         // Start dragging - once started, entire form becomes draggable
         this.isDragging = true;
-        document.body.style.cursor = 'move';
+        document.body.style.cursor = 'grabbing';
+        document.documentElement.style.cursor = 'grabbing';
         document.body.style.userSelect = 'none';
-        // Make entire document non-selectable during drag for better UX
         document.documentElement.style.userSelect = 'none';
+        // Let cursor show through iframe (iframe captures pointer and shows its own cursor otherwise)
+        if (this.iframe) this.iframe.style.pointerEvents = 'none';
+        if (this.gripButton) this.gripButton.style.cursor = 'grabbing';
       } else {
         // Not enough movement yet - wait for more movement
         return;
@@ -1171,10 +1165,12 @@ export class EditorFrame {
     this.isDragging = false;
     this.isMouseDown = false;
     
-    // Restore cursor and selection
     document.body.style.cursor = '';
+    document.documentElement.style.cursor = '';
     document.body.style.userSelect = '';
     document.documentElement.style.userSelect = '';
+    if (this.iframe) this.iframe.style.pointerEvents = '';
+    if (this.gripButton) this.gripButton.style.cursor = 'grab';
 
     // Prevent any default behavior
     e.preventDefault();
