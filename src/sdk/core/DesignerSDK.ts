@@ -4,6 +4,7 @@ import { FeatureHeatmapRenderer } from './FeatureHeatmapRenderer';
 import { EditorFrame } from '../editor/EditorFrame';
 import { Storage } from '../utils/storage';
 import { getCurrentPage, generateId } from '../utils/dom';
+import { apiClient } from '../api/client';
 import {
   Guide,
   SDKConfig,
@@ -344,19 +345,31 @@ export class DesignerSDK {
   }
 
   /**
-   * Handle save tag page – persist to localStorage so Tag Page panel can show "tagged" vs "untagged"
+   * Handle save tag page – POST /pages API, then persist to localStorage so Tag Page panel can show "tagged" vs "untagged"
    */
-  private handleSaveTagPage(message: SaveTagPageMessage): void {
-    console.log('[Visual Designer] Tag page saved:', message.payload);
+  private async handleSaveTagPage(message: SaveTagPageMessage): Promise<void> {
+    const payload = message.payload;
+    const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+    const slug = typeof window !== 'undefined' ? `${window.location.hostname}${window.location.pathname}` : '';
+
+    try {
+      await apiClient.post('/pages', {
+        name: payload.pageName,
+        slug,
+        description: payload.description,
+        status: 'active',
+      });
+    } catch (e) {
+      console.warn('[Visual Designer] Failed to create page via API:', e);
+      this.editorFrame.sendTagPageSavedAck();
+      return;
+    }
+
     const key = 'designerTaggedPages';
     try {
       const raw = localStorage.getItem(key) || '[]';
       const list: { pageName: string; url: string }[] = JSON.parse(raw);
-      const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
-      list.push({
-        pageName: message.payload.pageName,
-        url: currentUrl,
-      });
+      list.push({ pageName: payload.pageName, url: currentUrl });
       localStorage.setItem(key, JSON.stringify(list));
     } catch (e) {
       console.warn('[Visual Designer] Failed to persist tagged page:', e);

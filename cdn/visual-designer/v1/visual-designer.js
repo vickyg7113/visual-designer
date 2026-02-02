@@ -10,18 +10,18 @@ class h {
         method: "id"
       };
     if (e.hasAttribute("data-testid")) {
-      const r = e.getAttribute("data-testid");
+      const o = e.getAttribute("data-testid");
       return {
-        selector: `[data-testid="${this.escapeAttribute(r)}"]`,
+        selector: `[data-testid="${this.escapeAttribute(o)}"]`,
         confidence: "high",
         method: "data-testid"
       };
     }
     const t = this.getSemanticDataAttributes(e);
     if (t.length > 0) {
-      const r = t[0], o = e.getAttribute(r);
+      const o = t[0], a = e.getAttribute(o);
       return {
-        selector: `[${r}="${this.escapeAttribute(o)}"]`,
+        selector: `[${o}="${this.escapeAttribute(a)}"]`,
         confidence: "high",
         method: "data-attribute"
       };
@@ -78,8 +78,8 @@ class h {
     for (const n of t)
       e.hasAttribute(n) && i.push(n);
     for (let n = 0; n < e.attributes.length; n++) {
-      const r = e.attributes[n];
-      r.name.startsWith("data-") && !i.includes(r.name) && i.push(r.name);
+      const o = e.attributes[n];
+      o.name.startsWith("data-") && !i.includes(o.name) && i.push(o.name);
     }
     return i;
   }
@@ -87,18 +87,18 @@ class h {
    * Generate selector using ARIA attributes
    */
   static generateAriaSelector(e) {
-    var r;
+    var o;
     const t = e.getAttribute("role"), i = e.getAttribute("aria-label"), n = e.getAttribute("aria-labelledby");
     if (t) {
-      let o = `[role="${this.escapeAttribute(t)}"]`;
+      let a = `[role="${this.escapeAttribute(t)}"]`;
       if (i)
-        return o += `[aria-label="${this.escapeAttribute(i)}"]`, o;
+        return a += `[aria-label="${this.escapeAttribute(i)}"]`, a;
       if (n) {
         const s = document.getElementById(n);
-        if (s && ((r = s.textContent) == null ? void 0 : r.trim()))
-          return o;
+        if (s && ((o = s.textContent) == null ? void 0 : o.trim()))
+          return a;
       }
-      return o;
+      return a;
     }
     return null;
   }
@@ -115,20 +115,20 @@ class h {
         break;
       }
       if (i.className && typeof i.className == "string") {
-        const o = i.className.split(/\s+/).filter((s) => s && !s.startsWith("designer-")).slice(0, 2);
-        o.length > 0 && (n += "." + o.map((s) => this.escapeSelector(s)).join("."));
+        const a = i.className.split(/\s+/).filter((s) => s && !s.startsWith("designer-")).slice(0, 2);
+        a.length > 0 && (n += "." + a.map((s) => this.escapeSelector(s)).join("."));
       }
-      const r = i.parentElement;
-      if (r) {
-        const o = i.tagName, c = Array.from(r.children).filter(
-          (l) => l.tagName === o
+      const o = i.parentElement;
+      if (o) {
+        const a = i.tagName, c = Array.from(o.children).filter(
+          (l) => l.tagName === a
         );
         if (c.length > 1) {
           const l = c.indexOf(i) + 1;
           n += `:nth-of-type(${l})`;
         }
       }
-      if (t.unshift(n), i = r, t.length >= 5)
+      if (t.unshift(n), i = o, t.length >= 5)
         break;
     }
     return t.length > 0 ? t.join(" > ") : null;
@@ -146,40 +146,40 @@ class h {
     return e.replace(/"/g, '\\"').replace(/'/g, "\\'");
   }
 }
-function B(a) {
+function L(r) {
   var i, n;
-  const e = a.getBoundingClientRect(), t = {};
-  for (let r = 0; r < a.attributes.length; r++) {
-    const o = a.attributes[r];
-    t[o.name] = o.value;
+  const e = r.getBoundingClientRect(), t = {};
+  for (let o = 0; o < r.attributes.length; o++) {
+    const a = r.attributes[o];
+    t[a.name] = a.value;
   }
   return {
-    tagName: a.tagName.toLowerCase(),
-    id: a.id || void 0,
-    className: ((i = a.className) == null ? void 0 : i.toString()) || void 0,
-    textContent: ((n = a.textContent) == null ? void 0 : n.trim().substring(0, 50)) || void 0,
+    tagName: r.tagName.toLowerCase(),
+    id: r.id || void 0,
+    className: ((i = r.className) == null ? void 0 : i.toString()) || void 0,
+    textContent: ((n = r.textContent) == null ? void 0 : n.trim().substring(0, 50)) || void 0,
     attributes: t,
     boundingRect: e
   };
 }
-function v(a) {
-  const e = window.getComputedStyle(a);
-  return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && a.getBoundingClientRect().height > 0 && a.getBoundingClientRect().width > 0;
+function y(r) {
+  const e = window.getComputedStyle(r);
+  return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && r.getBoundingClientRect().height > 0 && r.getBoundingClientRect().width > 0;
 }
-function m() {
+function f() {
   return window.location.pathname || "/";
 }
-function y() {
+function x() {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
-function T(a) {
-  const e = a.getBoundingClientRect();
+function M(r) {
+  const e = r.getBoundingClientRect();
   return e.top >= 0 && e.left >= 0 && e.bottom <= (window.innerHeight || document.documentElement.clientHeight) && e.right <= (window.innerWidth || document.documentElement.clientWidth);
 }
-function I(a) {
-  T(a) || a.scrollIntoView({ behavior: "smooth", block: "center" });
+function A(r) {
+  M(r) || r.scrollIntoView({ behavior: "smooth", block: "center" });
 }
-class L {
+class D {
   constructor() {
     this.isActive = !1, this.highlightOverlay = null, this.selectedElement = null, this.messageCallback = null, this.handleMouseOver = (e) => {
       if (!this.isActive || !this.highlightOverlay)
@@ -190,7 +190,7 @@ class L {
           this.hideHighlight();
           return;
         }
-        if (!v(t)) {
+        if (!y(t)) {
           this.hideHighlight();
           return;
         }
@@ -200,7 +200,7 @@ class L {
       if (!this.isActive)
         return;
       const t = e.target;
-      t && (t.closest("#designer-editor-frame, #designer-highlight-overlay, #designer-exit-editor-btn, #designer-red-border-overlay, #designer-studio-badge") || (e.preventDefault(), e.stopPropagation(), e.stopImmediatePropagation(), v(t) && this.selectElement(t)));
+      t && (t.closest("#designer-editor-frame, #designer-highlight-overlay, #designer-exit-editor-btn, #designer-red-border-overlay, #designer-studio-badge") || (e.preventDefault(), e.stopPropagation(), e.stopImmediatePropagation(), y(t) && this.selectElement(t)));
     }, this.handleKeyDown = (e) => {
       this.isActive && e.key === "Escape" && (this.messageCallback && this.messageCallback({ type: "CANCEL" }), this.selectedElement = null, this.hideHighlight());
     };
@@ -284,7 +284,7 @@ class L {
    */
   selectElement(e) {
     this.selectedElement = e, this.highlightElement(e);
-    const t = h.generateSelector(e), i = B(e);
+    const t = h.generateSelector(e), i = L(e);
     this.messageCallback && this.messageCallback({
       type: "ELEMENT_SELECTED",
       selector: t.selector,
@@ -316,7 +316,7 @@ class L {
     e && e.remove();
   }
 }
-class M {
+class O {
   constructor() {
     this.renderedGuides = /* @__PURE__ */ new Map(), this.container = null;
   }
@@ -325,7 +325,7 @@ class M {
    */
   renderGuides(e) {
     this.clear();
-    const t = m();
+    const t = f();
     e.filter(
       (n) => n.page === t && n.status === "active"
     ).forEach((n) => {
@@ -341,7 +341,7 @@ class M {
       console.warn(`Guide "${e.id}" target not found: ${e.selector}`);
       return;
     }
-    I(t);
+    A(t);
     const i = this.createTooltip(e, t);
     this.renderedGuides.set(e.id, i), this.container || this.createContainer(), this.container && this.container.appendChild(i), this.positionTooltip(i, t, e.placement);
   }
@@ -379,8 +379,8 @@ class M {
     `;
     const n = document.createElement("div");
     n.style.cssText = "margin-bottom: 8px;", n.textContent = e.content, i.appendChild(n);
-    const r = document.createElement("button");
-    r.textContent = "Got it", r.style.cssText = `
+    const o = document.createElement("button");
+    o.textContent = "Got it", o.style.cssText = `
       background: #3b82f6;
       color: white;
       border: none;
@@ -390,30 +390,30 @@ class M {
       font-weight: 500;
       cursor: pointer;
       transition: background 0.2s;
-    `, r.onmouseover = () => {
-      r.style.background = "#2563eb";
-    }, r.onmouseout = () => {
-      r.style.background = "#3b82f6";
-    }, r.onclick = () => {
+    `, o.onmouseover = () => {
+      o.style.background = "#2563eb";
+    }, o.onmouseout = () => {
+      o.style.background = "#3b82f6";
+    }, o.onclick = () => {
       this.dismissGuide(e.id);
-    }, i.appendChild(r);
-    const o = document.createElement("div");
-    return o.className = "designer-guide-arrow", o.style.cssText = `
+    }, i.appendChild(o);
+    const a = document.createElement("div");
+    return a.className = "designer-guide-arrow", a.style.cssText = `
       position: absolute;
       width: 0;
       height: 0;
       border-style: solid;
-    `, i.appendChild(o), i;
+    `, i.appendChild(a), i;
   }
   /**
    * Position tooltip relative to target element
    */
   positionTooltip(e, t, i) {
-    const n = t.getBoundingClientRect(), r = e.getBoundingClientRect(), o = window.pageXOffset || document.documentElement.scrollLeft, s = window.pageYOffset || document.documentElement.scrollTop, c = e.querySelector(".designer-guide-arrow");
+    const n = t.getBoundingClientRect(), o = e.getBoundingClientRect(), a = window.pageXOffset || document.documentElement.scrollLeft, s = window.pageYOffset || document.documentElement.scrollTop, c = e.querySelector(".designer-guide-arrow");
     let l = 0, g = 0, p = "";
     switch (i) {
       case "top":
-        l = n.top + s - r.height - 12, g = n.left + o + n.width / 2 - r.width / 2, p = `
+        l = n.top + s - o.height - 12, g = n.left + a + n.width / 2 - o.width / 2, p = `
           bottom: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -422,7 +422,7 @@ class M {
         `;
         break;
       case "bottom":
-        l = n.bottom + s + 12, g = n.left + o + n.width / 2 - r.width / 2, p = `
+        l = n.bottom + s + 12, g = n.left + a + n.width / 2 - o.width / 2, p = `
           top: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -431,7 +431,7 @@ class M {
         `;
         break;
       case "left":
-        l = n.top + s + n.height / 2 - r.height / 2, g = n.left + o - r.width - 12, p = `
+        l = n.top + s + n.height / 2 - o.height / 2, g = n.left + a - o.width - 12, p = `
           right: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -440,7 +440,7 @@ class M {
         `;
         break;
       case "right":
-        l = n.top + s + n.height / 2 - r.height / 2, g = n.right + o + 12, p = `
+        l = n.top + s + n.height / 2 - o.height / 2, g = n.right + a + 12, p = `
           left: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -449,8 +449,8 @@ class M {
         `;
         break;
     }
-    const f = window.innerWidth, b = window.innerHeight;
-    g < o ? g = o + 10 : g + r.width > o + f && (g = o + f - r.width - 10), l < s ? l = s + 10 : l + r.height > s + b && (l = s + b - r.height - 10), e.style.top = `${l}px`, e.style.left = `${g}px`, c && (c.style.cssText += p);
+    const b = window.innerWidth, v = window.innerHeight;
+    g < a ? g = a + 10 : g + o.width > a + b && (g = a + b - o.width - 10), l < s ? l = s + 10 : l + o.height > s + v && (l = s + v - o.height - 10), e.style.top = `${l}px`, e.style.left = `${g}px`, c && (c.style.cssText += p);
   }
   /**
    * Create container for guides
@@ -471,15 +471,15 @@ class M {
    */
   updatePositions(e) {
     this.renderedGuides.forEach((t, i) => {
-      const n = e.find((o) => o.id === i);
+      const n = e.find((a) => a.id === i);
       if (!n)
         return;
-      const r = h.findElement(n.selector);
-      r && this.positionTooltip(t, r, n.placement);
+      const o = h.findElement(n.selector);
+      o && this.positionTooltip(t, o, n.placement);
     });
   }
 }
-const x = [
+const E = [
   "rgba(251, 191, 36, 0.35)",
   // yellow-amber
   "rgba(34, 197, 94, 0.35)",
@@ -487,7 +487,7 @@ const x = [
   "rgba(249, 115, 22, 0.35)"
   // orange
 ];
-class A {
+class P {
   constructor() {
     this.overlays = /* @__PURE__ */ new Map(), this.container = null;
   }
@@ -499,13 +499,13 @@ class A {
       return;
     const i = this.getCurrentUrl(), n = this.normalizeUrl(i);
     e.filter(
-      (o) => o.url && this.normalizeUrl(o.url) === n
-    ).forEach((o, s) => {
-      const c = h.findElement(o.selector);
+      (a) => a.url && this.normalizeUrl(a.url) === n
+    ).forEach((a, s) => {
+      const c = h.findElement(a.selector);
       if (!c)
         return;
-      const l = x[s % x.length], g = this.createOverlay(c, l, o.featureName);
-      this.overlays.set(o.id, g), this.container || this.createContainer(), this.container && this.container.appendChild(g);
+      const l = E[s % E.length], g = this.createOverlay(c, l, a.featureName);
+      this.overlays.set(a.id, g), this.container || this.createContainer(), this.container && this.container.appendChild(g);
     }), this.updatePositions(e);
   }
   /**
@@ -515,10 +515,10 @@ class A {
     this.overlays.forEach((t, i) => {
       const n = e.find((l) => l.id === i);
       if (!n) return;
-      const r = h.findElement(n.selector);
-      if (!r) return;
-      const o = r.getBoundingClientRect(), s = window.pageXOffset || document.documentElement.scrollLeft, c = window.pageYOffset || document.documentElement.scrollTop;
-      t.style.left = `${o.left + s}px`, t.style.top = `${o.top + c}px`, t.style.width = `${o.width}px`, t.style.height = `${o.height}px`;
+      const o = h.findElement(n.selector);
+      if (!o) return;
+      const a = o.getBoundingClientRect(), s = window.pageXOffset || document.documentElement.scrollLeft, c = window.pageYOffset || document.documentElement.scrollTop;
+      t.style.left = `${a.left + s}px`, t.style.top = `${a.top + c}px`, t.style.width = `${a.width}px`, t.style.height = `${a.height}px`;
     });
   }
   /**
@@ -534,11 +534,11 @@ class A {
     this.clear(), this.container && (this.container.remove(), this.container = null);
   }
   createOverlay(e, t, i) {
-    const n = e.getBoundingClientRect(), r = window.pageXOffset || document.documentElement.scrollLeft, o = window.pageYOffset || document.documentElement.scrollTop, s = document.createElement("div");
+    const n = e.getBoundingClientRect(), o = window.pageXOffset || document.documentElement.scrollLeft, a = window.pageYOffset || document.documentElement.scrollTop, s = document.createElement("div");
     return s.className = "designer-feature-heatmap-overlay", s.title = i, s.style.cssText = `
       position: absolute;
-      left: ${n.left + r}px;
-      top: ${n.top + o}px;
+      left: ${n.left + o}px;
+      top: ${n.top + a}px;
       width: ${n.width}px;
       height: ${n.height}px;
       background-color: ${t};
@@ -571,7 +571,7 @@ class A {
     return (e || "").replace(/^https?:\/\//i, "").replace(/\/$/, "").trim() || "";
   }
 }
-class D {
+class z {
   constructor() {
     this.iframe = null, this.dragHandle = null, this.gripButton = null, this.messageCallback = null, this.isReady = !1, this.mode = null, this.isDragging = !1, this.dragStartX = 0, this.dragStartY = 0, this.currentX = 0, this.currentY = 0, this.dragThreshold = 3, this.mouseDownX = 0, this.mouseDownY = 0, this.isMouseDown = !1, this.handleMouseDown = (e) => {
       if (!this.iframe || !this.dragHandle)
@@ -590,9 +590,9 @@ class D {
           return;
       }
       e.preventDefault(), e.stopPropagation();
-      const t = e.clientX - this.dragStartX, i = e.clientY - this.dragStartY, n = window.innerWidth, r = window.innerHeight, o = this.iframe.offsetWidth;
+      const t = e.clientX - this.dragStartX, i = e.clientY - this.dragStartY, n = window.innerWidth, o = window.innerHeight, a = this.iframe.offsetWidth;
       this.iframe.offsetHeight;
-      const s = Math.max(-o + 50, Math.min(t, n - 50)), c = Math.max(0, Math.min(i, r - 100));
+      const s = Math.max(-a + 50, Math.min(t, n - 50)), c = Math.max(0, Math.min(i, o - 100));
       this.currentX = s, this.currentY = c, this.iframe.style.left = `${s}px`, this.iframe.style.top = `${c}px`, this.iframe.style.right = "auto", this.iframe.style.bottom = "auto", this.dragHandle.style.left = `${s}px`, this.dragHandle.style.top = `${c}px`;
     }, this.handleMouseUp = (e) => {
       this.isMouseDown && (this.isDragging = !1, this.isMouseDown = !1, document.body.style.cursor = "", document.documentElement.style.cursor = "", document.body.style.userSelect = "", document.documentElement.style.userSelect = "", this.iframe && (this.iframe.style.pointerEvents = ""), this.gripButton && (this.gripButton.style.cursor = "grab"), e.preventDefault(), e.stopPropagation());
@@ -1553,9 +1553,9 @@ class D {
     this.dragHandle.style.top = `${e.top}px`, this.dragHandle.style.left = `${e.left}px`, this.dragHandle.style.width = `${e.width}px`;
   }
 }
-const O = "visual-designer-guides", E = "1.0.0";
-class z {
-  constructor(e = O) {
+const F = "visual-designer-guides", w = "1.0.0";
+class U {
+  constructor(e = F) {
     this.storageKey = e;
   }
   /**
@@ -1567,7 +1567,7 @@ class z {
       if (!e)
         return [];
       const t = JSON.parse(e);
-      return t.version !== E ? (console.warn("Storage version mismatch, clearing old data"), this.clear(), []) : t.guides || [];
+      return t.version !== w ? (console.warn("Storage version mismatch, clearing old data"), this.clear(), []) : t.guides || [];
     } catch (e) {
       return console.error("Error reading guides from storage:", e), [];
     }
@@ -1583,7 +1583,7 @@ class z {
    */
   saveGuide(e) {
     try {
-      const t = this.getGuides(), i = t.findIndex((r) => r.id === e.id), n = {
+      const t = this.getGuides(), i = t.findIndex((o) => o.id === e.id), n = {
         ...e,
         updatedAt: (/* @__PURE__ */ new Date()).toISOString(),
         createdAt: e.createdAt || (/* @__PURE__ */ new Date()).toISOString()
@@ -1610,7 +1610,7 @@ class z {
   saveGuides(e) {
     const t = {
       guides: e,
-      version: E
+      version: w
     };
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(t));
@@ -1635,9 +1635,65 @@ class z {
     return this.getGuides().find((i) => i.id === e) || null;
   }
 }
-class w {
+const G = "https://devgw.revgain.ai/rg-pex", S = "designerIud";
+function N() {
+  if (typeof window > "u") return null;
+  try {
+    return localStorage.getItem(S);
+  } catch {
+    return null;
+  }
+}
+function m(r) {
+  const e = {
+    "Content-Type": "application/json",
+    ...r
+  }, t = N();
+  return t && (e.iud = t), e;
+}
+const k = {
+  baseUrl: G,
+  async get(r, e) {
+    const t = r.startsWith("http") ? r : `${this.baseUrl}${r.startsWith("/") ? "" : "/"}${r}`, i = await fetch(t, {
+      ...e,
+      headers: { ...m(), ...e == null ? void 0 : e.headers }
+    });
+    if (!i.ok) throw new Error(`API error: ${i.status} ${i.statusText}`);
+    return i.json();
+  },
+  async post(r, e, t) {
+    const i = r.startsWith("http") ? r : `${this.baseUrl}${r.startsWith("/") ? "" : "/"}${r}`, n = await fetch(i, {
+      method: "POST",
+      ...t,
+      headers: { ...m(), ...t == null ? void 0 : t.headers },
+      body: e !== void 0 ? JSON.stringify(e) : void 0
+    });
+    if (!n.ok) throw new Error(`API error: ${n.status} ${n.statusText}`);
+    return n.json();
+  },
+  async put(r, e, t) {
+    const i = r.startsWith("http") ? r : `${this.baseUrl}${r.startsWith("/") ? "" : "/"}${r}`, n = await fetch(i, {
+      method: "PUT",
+      ...t,
+      headers: { ...m(), ...t == null ? void 0 : t.headers },
+      body: e !== void 0 ? JSON.stringify(e) : void 0
+    });
+    if (!n.ok) throw new Error(`API error: ${n.status} ${n.statusText}`);
+    return n.json();
+  },
+  async delete(r, e) {
+    const t = r.startsWith("http") ? r : `${this.baseUrl}${r.startsWith("/") ? "" : "/"}${r}`, i = await fetch(t, {
+      method: "DELETE",
+      ...e,
+      headers: { ...m(), ...e == null ? void 0 : e.headers }
+    });
+    if (!i.ok) throw new Error(`API error: ${i.status} ${i.statusText}`);
+    return i.json();
+  }
+};
+class C {
   constructor(e = {}) {
-    this.heatmapEnabled = !1, this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.loadingOverlay = null, this.config = e, this.storage = new z(e.storageKey), this.editorMode = new L(), this.guideRenderer = new M(), this.featureHeatmapRenderer = new A(), this.editorFrame = new D();
+    this.heatmapEnabled = !1, this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.loadingOverlay = null, this.config = e, this.storage = new U(e.storageKey), this.editorMode = new D(), this.guideRenderer = new O(), this.featureHeatmapRenderer = new P(), this.editorFrame = new z();
   }
   /**
    * Initialize the SDK
@@ -1683,7 +1739,7 @@ class w {
    * Get guides for current page
    */
   getGuidesForCurrentPage() {
-    const e = m();
+    const e = f();
     return this.storage.getGuidesByPage(e);
   }
   /**
@@ -1692,7 +1748,7 @@ class w {
   saveGuide(e) {
     const t = {
       ...e,
-      id: y(),
+      id: x(),
       createdAt: (/* @__PURE__ */ new Date()).toISOString(),
       updatedAt: (/* @__PURE__ */ new Date()).toISOString()
     };
@@ -1771,24 +1827,32 @@ class w {
   handleSaveGuide(e) {
     const t = this.saveGuide({
       ...e.guide,
-      page: m()
+      page: f()
     });
     console.log("Guide saved:", t);
   }
   /**
-   * Handle save tag page – persist to localStorage so Tag Page panel can show "tagged" vs "untagged"
+   * Handle save tag page – POST /pages API, then persist to localStorage so Tag Page panel can show "tagged" vs "untagged"
    */
-  handleSaveTagPage(e) {
-    console.log("[Visual Designer] Tag page saved:", e.payload);
-    const t = "designerTaggedPages";
+  async handleSaveTagPage(e) {
+    const t = e.payload, i = typeof window < "u" ? window.location.href : "", n = typeof window < "u" ? `${window.location.hostname}${window.location.pathname}` : "";
     try {
-      const i = localStorage.getItem(t) || "[]", n = JSON.parse(i), r = typeof window < "u" ? window.location.href : "";
-      n.push({
-        pageName: e.payload.pageName,
-        url: r
-      }), localStorage.setItem(t, JSON.stringify(n));
-    } catch (i) {
-      console.warn("[Visual Designer] Failed to persist tagged page:", i);
+      await k.post("/pages", {
+        name: t.pageName,
+        slug: n,
+        description: t.description,
+        status: "active"
+      });
+    } catch (a) {
+      console.warn("[Visual Designer] Failed to create page via API:", a), this.editorFrame.sendTagPageSavedAck();
+      return;
+    }
+    const o = "designerTaggedPages";
+    try {
+      const a = localStorage.getItem(o) || "[]", s = JSON.parse(a);
+      s.push({ pageName: t.pageName, url: i }), localStorage.setItem(o, JSON.stringify(s));
+    } catch (a) {
+      console.warn("[Visual Designer] Failed to persist tagged page:", a);
     }
     this.editorFrame.sendTagPageSavedAck();
   }
@@ -1803,15 +1867,15 @@ class w {
       return;
     }
     try {
-      const n = localStorage.getItem(t) || "[]", r = JSON.parse(n), o = typeof window < "u" ? window.location.href : "", s = {
-        id: y(),
+      const n = localStorage.getItem(t) || "[]", o = JSON.parse(n), a = typeof window < "u" ? window.location.href : "", s = {
+        id: x(),
         featureName: i.featureName,
         selector: i.selector,
-        url: o,
+        url: a,
         elementInfo: i.elementInfo,
         createdAt: (/* @__PURE__ */ new Date()).toISOString()
       };
-      r.push(s), localStorage.setItem(t, JSON.stringify(r)), this.editorFrame.sendTagFeatureSavedAck(), this.renderFeatureHeatmap();
+      o.push(s), localStorage.setItem(t, JSON.stringify(o)), this.editorFrame.sendTagFeatureSavedAck(), this.renderFeatureHeatmap();
     } catch (n) {
       console.warn("[Visual Designer] Failed to persist tagged feature:", n);
     }
@@ -1863,11 +1927,11 @@ class w {
   setupEventListeners() {
     let e, t;
     const i = () => {
-      const r = this.storage.getGuides();
-      this.guideRenderer.updatePositions(r);
+      const o = this.storage.getGuides();
+      this.guideRenderer.updatePositions(o);
     }, n = () => {
-      const r = this.getTaggedFeatures();
-      this.featureHeatmapRenderer.updatePositions(r);
+      const o = this.getTaggedFeatures();
+      this.featureHeatmapRenderer.updatePositions(o);
     };
     window.addEventListener("resize", () => {
       clearTimeout(e), e = window.setTimeout(() => {
@@ -2077,15 +2141,15 @@ class w {
     this.loadingOverlay && (this.loadingOverlay.remove(), this.loadingOverlay = null);
   }
 }
-let d = null, S = !1;
-function u(a) {
-  return d || (d = new w(a), d.init(), d);
+let d = null, T = !1;
+function u(r) {
+  return d || (d = new C(r), d.init(), d);
 }
-function k() {
+function B() {
   return d;
 }
-function C(a) {
-  !a || !Array.isArray(a) || a.forEach((e) => {
+function I(r) {
+  !r || !Array.isArray(r) || r.forEach((e) => {
     if (!e || !Array.isArray(e) || e.length === 0)
       return;
     const t = e[0], i = e.slice(1);
@@ -2127,44 +2191,46 @@ function C(a) {
   });
 }
 if (typeof window < "u") {
-  const a = window.visualDesigner;
-  a && Array.isArray(a._q) && (S = !0, a.initialize = (e) => {
+  const r = window.visualDesigner;
+  r && Array.isArray(r._q) && (T = !0, r.initialize = (e) => {
     u(e);
-  }, a.identify = (e) => {
+  }, r.identify = (e) => {
     e && console.log("[Visual Designer] identify (snippet) called with:", e);
-  }, a.enableEditor = () => {
+  }, r.enableEditor = () => {
     (d ?? u()).enableEditor();
-  }, a.disableEditor = () => {
+  }, r.disableEditor = () => {
     d && d.disableEditor();
-  }, a.loadGuides = () => {
+  }, r.loadGuides = () => {
     d && d.loadGuides();
-  }, a.getGuides = () => d ? d.getGuides() : void 0, a.getInstance = k, a.init = u, C(a._q));
+  }, r.getGuides = () => d ? d.getGuides() : void 0, r.getInstance = B, r.init = u, I(r._q));
   try {
-    const e = new URL(window.location.href), t = e.searchParams.get("designer"), i = e.searchParams.get("mode");
+    const e = new URL(window.location.href), t = e.searchParams.get("designer"), i = e.searchParams.get("mode"), n = e.searchParams.get("iud");
     if (t === "true") {
-      i && (window.__visualDesignerMode = i, localStorage.setItem("designerModeType", i)), localStorage.setItem("designerMode", "true"), e.searchParams.delete("designer"), e.searchParams.delete("mode");
-      const n = e.toString();
-      window.history.replaceState({}, "", n), window.__visualDesignerWasLaunched = !0;
+      i && (window.__visualDesignerMode = i, localStorage.setItem("designerModeType", i)), localStorage.setItem("designerMode", "true"), n && localStorage.setItem(S, n), e.searchParams.delete("designer"), e.searchParams.delete("mode"), e.searchParams.delete("iud");
+      const o = e.toString();
+      window.history.replaceState({}, "", o), window.__visualDesignerWasLaunched = !0;
     }
   } catch {
   }
 }
-if (typeof window < "u" && !d && !S) {
-  const a = () => {
+if (typeof window < "u" && !d && !T) {
+  const r = () => {
     d || u();
   };
-  document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", a) : a();
+  document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", r) : r();
 }
 typeof window < "u" && (window.VisualDesigner = {
   init: u,
   initialize: u,
-  getInstance: k,
-  DesignerSDK: w,
-  _processQueue: C
+  getInstance: B,
+  DesignerSDK: C,
+  apiClient: k,
+  _processQueue: I
 });
 export {
-  w as DesignerSDK,
-  C as _processQueue,
-  k as getInstance,
+  C as DesignerSDK,
+  I as _processQueue,
+  k as apiClient,
+  B as getInstance,
   u as init
 };

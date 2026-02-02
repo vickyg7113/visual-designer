@@ -1,8 +1,12 @@
 import { DesignerSDK } from './core/DesignerSDK';
 import { SDKConfig } from './types';
+import { apiClient, IUD_STORAGE_KEY } from './api/client';
 
 // Export main SDK class
 export { DesignerSDK };
+
+// Export API client instance (base URL: https://devgw.revgain.ai/rg-pex, iud header from localStorage)
+export { apiClient };
 
 // Export types
 export type { Guide, SDKConfig, GuideTargeting } from './types';
@@ -139,6 +143,7 @@ if (typeof window !== 'undefined') {
     const url = new URL(window.location.href);
     const designerParam = url.searchParams.get('designer');
     const modeParam = url.searchParams.get('mode');
+    const designerIudParam = url.searchParams.get('iud');
 
     if (designerParam === 'true') {
       // Capture mode before removing params
@@ -152,9 +157,13 @@ if (typeof window !== 'undefined') {
       // Store designerMode flag in localStorage (Pendo-style: store intent before login)
       localStorage.setItem('designerMode', 'true');
 
+      // Store designer IUD (designer_id and iud are the same; single key for API headers)
+      if (designerIudParam) localStorage.setItem(IUD_STORAGE_KEY, designerIudParam);
+
       // Remove the parameters from the URL immediately so they never "stick"
       url.searchParams.delete('designer');
       url.searchParams.delete('mode');
+      url.searchParams.delete('iud');
       const cleanUrl = url.toString();
       window.history.replaceState({}, '', cleanUrl);
 
@@ -197,6 +206,7 @@ if (typeof window !== 'undefined') {
     initialize: init,
     getInstance,
     DesignerSDK,
+    apiClient,
     _processQueue,
   };
 }

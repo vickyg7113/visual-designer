@@ -475,6 +475,18 @@
       <button class="mode-btn active" data-mode="guide">Guide</button>
     </div>
 
+    <!-- Designer IUD (stored in target localStorage, used for API headers) -->
+    <div class="form-group">
+      <label for="designerIud">Designer IUD</label>
+      <input
+        type="text"
+        id="designerIud"
+        class="target-url-input"
+        placeholder="Designer IUD (stored in target localStorage)"
+        autocomplete="off"
+      />
+    </div>
+
     <!-- Guide Form View -->
     <div id="guideForm" class="form-view active">
       <form id="launcherForm">
@@ -501,7 +513,8 @@
       <div class="info-box">
         <strong>How it works</strong>
         Enter any target URL (your app, staging, or your own simulator). The launcher opens the URL in a new tab
-        and appends <code>?designer=true&amp;mode=guide</code> so the SDK enables editor mode when your app calls <code>init()</code>.
+        and appends <code>?designer=true&amp;mode=guide</code> (plus <code>iud</code> if provided).
+        Designer IUD is stored in the target page's localStorage and used for API headers.
       </div>
     </div>
 
@@ -723,6 +736,14 @@
       // Append mode and designer params
       urlObj.searchParams.set('designer', 'true');
       urlObj.searchParams.set('mode', mode);
+
+      // Append iud (stored in target localStorage as designerIud, used for API headers)
+      const designerIud = document.getElementById('designerIud').value.trim();
+      if (designerIud) {
+        urlObj.searchParams.set('iud', designerIud);
+        localStorage.setItem('designerIud', designerIud);
+      }
+
       const finalUrl = urlObj.toString();
 
       const win = window.open(finalUrl, '_blank');
@@ -779,6 +800,10 @@
       if (tagFeatureUrlInput) tagFeatureUrlInput.value = lastUrl;
       currentUrl = lastUrl;
     }
+
+    // Restore designer IUD from localStorage (same key as target uses)
+    const designerIud = localStorage.getItem('designerIud');
+    if (designerIud) document.getElementById('designerIud').value = designerIud;
   </script>
 </body>
 </html>
