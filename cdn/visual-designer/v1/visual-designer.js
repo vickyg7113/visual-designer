@@ -19,9 +19,9 @@ class h {
     }
     const t = this.getSemanticDataAttributes(e);
     if (t.length > 0) {
-      const r = t[0], a = e.getAttribute(r);
+      const r = t[0], o = e.getAttribute(r);
       return {
-        selector: `[${r}="${this.escapeAttribute(a)}"]`,
+        selector: `[${r}="${this.escapeAttribute(o)}"]`,
         confidence: "high",
         method: "data-attribute"
       };
@@ -90,15 +90,15 @@ class h {
     var r;
     const t = e.getAttribute("role"), i = e.getAttribute("aria-label"), n = e.getAttribute("aria-labelledby");
     if (t) {
-      let a = `[role="${this.escapeAttribute(t)}"]`;
+      let o = `[role="${this.escapeAttribute(t)}"]`;
       if (i)
-        return a += `[aria-label="${this.escapeAttribute(i)}"]`, a;
+        return o += `[aria-label="${this.escapeAttribute(i)}"]`, o;
       if (n) {
-        const d = document.getElementById(n);
-        if (d && ((r = d.textContent) == null ? void 0 : r.trim()))
-          return a;
+        const s = document.getElementById(n);
+        if (s && ((r = s.textContent) == null ? void 0 : r.trim()))
+          return o;
       }
-      return a;
+      return o;
     }
     return null;
   }
@@ -115,16 +115,16 @@ class h {
         break;
       }
       if (i.className && typeof i.className == "string") {
-        const a = i.className.split(/\s+/).filter((d) => d && !d.startsWith("designer-")).slice(0, 2);
-        a.length > 0 && (n += "." + a.map((d) => this.escapeSelector(d)).join("."));
+        const o = i.className.split(/\s+/).filter((s) => s && !s.startsWith("designer-")).slice(0, 2);
+        o.length > 0 && (n += "." + o.map((s) => this.escapeSelector(s)).join("."));
       }
       const r = i.parentElement;
       if (r) {
-        const a = i.tagName, g = Array.from(r.children).filter(
-          (l) => l.tagName === a
+        const o = i.tagName, c = Array.from(r.children).filter(
+          (l) => l.tagName === o
         );
-        if (g.length > 1) {
-          const l = g.indexOf(i) + 1;
+        if (c.length > 1) {
+          const l = c.indexOf(i) + 1;
           n += `:nth-of-type(${l})`;
         }
       }
@@ -146,40 +146,40 @@ class h {
     return e.replace(/"/g, '\\"').replace(/'/g, "\\'");
   }
 }
-function B(o) {
+function B(a) {
   var i, n;
-  const e = o.getBoundingClientRect(), t = {};
-  for (let r = 0; r < o.attributes.length; r++) {
-    const a = o.attributes[r];
-    t[a.name] = a.value;
+  const e = a.getBoundingClientRect(), t = {};
+  for (let r = 0; r < a.attributes.length; r++) {
+    const o = a.attributes[r];
+    t[o.name] = o.value;
   }
   return {
-    tagName: o.tagName.toLowerCase(),
-    id: o.id || void 0,
-    className: ((i = o.className) == null ? void 0 : i.toString()) || void 0,
-    textContent: ((n = o.textContent) == null ? void 0 : n.trim().substring(0, 50)) || void 0,
+    tagName: a.tagName.toLowerCase(),
+    id: a.id || void 0,
+    className: ((i = a.className) == null ? void 0 : i.toString()) || void 0,
+    textContent: ((n = a.textContent) == null ? void 0 : n.trim().substring(0, 50)) || void 0,
     attributes: t,
     boundingRect: e
   };
 }
-function v(o) {
-  const e = window.getComputedStyle(o);
-  return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && o.getBoundingClientRect().height > 0 && o.getBoundingClientRect().width > 0;
+function v(a) {
+  const e = window.getComputedStyle(a);
+  return e.display !== "none" && e.visibility !== "hidden" && e.opacity !== "0" && a.getBoundingClientRect().height > 0 && a.getBoundingClientRect().width > 0;
 }
 function m() {
   return window.location.pathname || "/";
 }
-function S() {
+function y() {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
-function C(o) {
-  const e = o.getBoundingClientRect();
+function T(a) {
+  const e = a.getBoundingClientRect();
   return e.top >= 0 && e.left >= 0 && e.bottom <= (window.innerHeight || document.documentElement.clientHeight) && e.right <= (window.innerWidth || document.documentElement.clientWidth);
 }
-function I(o) {
-  C(o) || o.scrollIntoView({ behavior: "smooth", block: "center" });
+function I(a) {
+  T(a) || a.scrollIntoView({ behavior: "smooth", block: "center" });
 }
-class T {
+class L {
   constructor() {
     this.isActive = !1, this.highlightOverlay = null, this.selectedElement = null, this.messageCallback = null, this.handleMouseOver = (e) => {
       if (!this.isActive || !this.highlightOverlay)
@@ -316,7 +316,7 @@ class T {
     e && e.remove();
   }
 }
-class L {
+class M {
   constructor() {
     this.renderedGuides = /* @__PURE__ */ new Map(), this.container = null;
   }
@@ -397,23 +397,23 @@ class L {
     }, r.onclick = () => {
       this.dismissGuide(e.id);
     }, i.appendChild(r);
-    const a = document.createElement("div");
-    return a.className = "designer-guide-arrow", a.style.cssText = `
+    const o = document.createElement("div");
+    return o.className = "designer-guide-arrow", o.style.cssText = `
       position: absolute;
       width: 0;
       height: 0;
       border-style: solid;
-    `, i.appendChild(a), i;
+    `, i.appendChild(o), i;
   }
   /**
    * Position tooltip relative to target element
    */
   positionTooltip(e, t, i) {
-    const n = t.getBoundingClientRect(), r = e.getBoundingClientRect(), a = window.pageXOffset || document.documentElement.scrollLeft, d = window.pageYOffset || document.documentElement.scrollTop, g = e.querySelector(".designer-guide-arrow");
-    let l = 0, c = 0, p = "";
+    const n = t.getBoundingClientRect(), r = e.getBoundingClientRect(), o = window.pageXOffset || document.documentElement.scrollLeft, s = window.pageYOffset || document.documentElement.scrollTop, c = e.querySelector(".designer-guide-arrow");
+    let l = 0, g = 0, p = "";
     switch (i) {
       case "top":
-        l = n.top + d - r.height - 12, c = n.left + a + n.width / 2 - r.width / 2, p = `
+        l = n.top + s - r.height - 12, g = n.left + o + n.width / 2 - r.width / 2, p = `
           bottom: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -422,7 +422,7 @@ class L {
         `;
         break;
       case "bottom":
-        l = n.bottom + d + 12, c = n.left + a + n.width / 2 - r.width / 2, p = `
+        l = n.bottom + s + 12, g = n.left + o + n.width / 2 - r.width / 2, p = `
           top: -8px;
           left: 50%;
           transform: translateX(-50%);
@@ -431,7 +431,7 @@ class L {
         `;
         break;
       case "left":
-        l = n.top + d + n.height / 2 - r.height / 2, c = n.left + a - r.width - 12, p = `
+        l = n.top + s + n.height / 2 - r.height / 2, g = n.left + o - r.width - 12, p = `
           right: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -440,7 +440,7 @@ class L {
         `;
         break;
       case "right":
-        l = n.top + d + n.height / 2 - r.height / 2, c = n.right + a + 12, p = `
+        l = n.top + s + n.height / 2 - r.height / 2, g = n.right + o + 12, p = `
           left: -8px;
           top: 50%;
           transform: translateY(-50%);
@@ -450,7 +450,7 @@ class L {
         break;
     }
     const f = window.innerWidth, b = window.innerHeight;
-    c < a ? c = a + 10 : c + r.width > a + f && (c = a + f - r.width - 10), l < d ? l = d + 10 : l + r.height > d + b && (l = d + b - r.height - 10), e.style.top = `${l}px`, e.style.left = `${c}px`, g && (g.style.cssText += p);
+    g < o ? g = o + 10 : g + r.width > o + f && (g = o + f - r.width - 10), l < s ? l = s + 10 : l + r.height > s + b && (l = s + b - r.height - 10), e.style.top = `${l}px`, e.style.left = `${g}px`, c && (c.style.cssText += p);
   }
   /**
    * Create container for guides
@@ -471,7 +471,7 @@ class L {
    */
   updatePositions(e) {
     this.renderedGuides.forEach((t, i) => {
-      const n = e.find((a) => a.id === i);
+      const n = e.find((o) => o.id === i);
       if (!n)
         return;
       const r = h.findElement(n.selector);
@@ -479,7 +479,99 @@ class L {
     });
   }
 }
-class M {
+const x = [
+  "rgba(251, 191, 36, 0.35)",
+  // yellow-amber
+  "rgba(34, 197, 94, 0.35)",
+  // green
+  "rgba(249, 115, 22, 0.35)"
+  // orange
+];
+class A {
+  constructor() {
+    this.overlays = /* @__PURE__ */ new Map(), this.container = null;
+  }
+  /**
+   * Render heatmap overlays for tagged features on the current page
+   */
+  render(e, t) {
+    if (this.clear(), !t || e.length === 0)
+      return;
+    const i = this.getCurrentUrl(), n = this.normalizeUrl(i);
+    e.filter(
+      (o) => o.url && this.normalizeUrl(o.url) === n
+    ).forEach((o, s) => {
+      const c = h.findElement(o.selector);
+      if (!c)
+        return;
+      const l = x[s % x.length], g = this.createOverlay(c, l, o.featureName);
+      this.overlays.set(o.id, g), this.container || this.createContainer(), this.container && this.container.appendChild(g);
+    }), this.updatePositions(e);
+  }
+  /**
+   * Update overlay positions (on scroll/resize)
+   */
+  updatePositions(e) {
+    this.overlays.forEach((t, i) => {
+      const n = e.find((l) => l.id === i);
+      if (!n) return;
+      const r = h.findElement(n.selector);
+      if (!r) return;
+      const o = r.getBoundingClientRect(), s = window.pageXOffset || document.documentElement.scrollLeft, c = window.pageYOffset || document.documentElement.scrollTop;
+      t.style.left = `${o.left + s}px`, t.style.top = `${o.top + c}px`, t.style.width = `${o.width}px`, t.style.height = `${o.height}px`;
+    });
+  }
+  /**
+   * Clear all overlays
+   */
+  clear() {
+    this.overlays.forEach((e) => e.remove()), this.overlays.clear();
+  }
+  /**
+   * Destroy container and overlays
+   */
+  destroy() {
+    this.clear(), this.container && (this.container.remove(), this.container = null);
+  }
+  createOverlay(e, t, i) {
+    const n = e.getBoundingClientRect(), r = window.pageXOffset || document.documentElement.scrollLeft, o = window.pageYOffset || document.documentElement.scrollTop, s = document.createElement("div");
+    return s.className = "designer-feature-heatmap-overlay", s.title = i, s.style.cssText = `
+      position: absolute;
+      left: ${n.left + r}px;
+      top: ${n.top + o}px;
+      width: ${n.width}px;
+      height: ${n.height}px;
+      background-color: ${t};
+      pointer-events: none;
+      z-index: 999995;
+      box-sizing: border-box;
+      border-radius: 4px;
+      border: 2px solid ${t};
+    `, s;
+  }
+  createContainer() {
+    this.container || (this.container = document.createElement("div"), this.container.id = "designer-feature-heatmap-container", this.container.style.cssText = `
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999994;
+    `, document.body.appendChild(this.container));
+  }
+  getCurrentUrl() {
+    try {
+      return window.location.href || "";
+    } catch {
+      return "";
+    }
+  }
+  normalizeUrl(e) {
+    return (e || "").replace(/^https?:\/\//i, "").replace(/\/$/, "").trim() || "";
+  }
+}
+class D {
   constructor() {
     this.iframe = null, this.dragHandle = null, this.gripButton = null, this.messageCallback = null, this.isReady = !1, this.mode = null, this.isDragging = !1, this.dragStartX = 0, this.dragStartY = 0, this.currentX = 0, this.currentY = 0, this.dragThreshold = 3, this.mouseDownX = 0, this.mouseDownY = 0, this.isMouseDown = !1, this.handleMouseDown = (e) => {
       if (!this.iframe || !this.dragHandle)
@@ -491,22 +583,22 @@ class M {
       if (!this.isMouseDown || !this.iframe || !this.dragHandle)
         return;
       if (!this.isDragging) {
-        const l = Math.abs(e.clientX - this.mouseDownX), c = Math.abs(e.clientY - this.mouseDownY);
-        if (Math.sqrt(l * l + c * c) > this.dragThreshold)
+        const l = Math.abs(e.clientX - this.mouseDownX), g = Math.abs(e.clientY - this.mouseDownY);
+        if (Math.sqrt(l * l + g * g) > this.dragThreshold)
           this.isDragging = !0, document.body.style.cursor = "grabbing", document.documentElement.style.cursor = "grabbing", document.body.style.userSelect = "none", document.documentElement.style.userSelect = "none", this.iframe && (this.iframe.style.pointerEvents = "none"), this.gripButton && (this.gripButton.style.cursor = "grabbing");
         else
           return;
       }
       e.preventDefault(), e.stopPropagation();
-      const t = e.clientX - this.dragStartX, i = e.clientY - this.dragStartY, n = window.innerWidth, r = window.innerHeight, a = this.iframe.offsetWidth;
+      const t = e.clientX - this.dragStartX, i = e.clientY - this.dragStartY, n = window.innerWidth, r = window.innerHeight, o = this.iframe.offsetWidth;
       this.iframe.offsetHeight;
-      const d = Math.max(-a + 50, Math.min(t, n - 50)), g = Math.max(0, Math.min(i, r - 100));
-      this.currentX = d, this.currentY = g, this.iframe.style.left = `${d}px`, this.iframe.style.top = `${g}px`, this.iframe.style.right = "auto", this.iframe.style.bottom = "auto", this.dragHandle.style.left = `${d}px`, this.dragHandle.style.top = `${g}px`;
+      const s = Math.max(-o + 50, Math.min(t, n - 50)), c = Math.max(0, Math.min(i, r - 100));
+      this.currentX = s, this.currentY = c, this.iframe.style.left = `${s}px`, this.iframe.style.top = `${c}px`, this.iframe.style.right = "auto", this.iframe.style.bottom = "auto", this.dragHandle.style.left = `${s}px`, this.dragHandle.style.top = `${c}px`;
     }, this.handleMouseUp = (e) => {
       this.isMouseDown && (this.isDragging = !1, this.isMouseDown = !1, document.body.style.cursor = "", document.documentElement.style.cursor = "", document.body.style.userSelect = "", document.documentElement.style.userSelect = "", this.iframe && (this.iframe.style.pointerEvents = ""), this.gripButton && (this.gripButton.style.cursor = "grab"), e.preventDefault(), e.stopPropagation());
     }, this.handleMessage = (e) => {
       const t = e.data;
-      !t || !t.type || (this.messageCallback && this.messageCallback(t), (t.type === "CANCEL" || t.type === "GUIDE_SAVED" || t.type === "SAVE_TAG_FEATURE") && this.hide());
+      !t || !t.type || (this.messageCallback && this.messageCallback(t), (t.type === "CANCEL" || t.type === "GUIDE_SAVED") && this.hide());
     };
   }
   /**
@@ -565,6 +657,9 @@ class M {
   }
   sendTagPageSavedAck() {
     this.sendMessage({ type: "TAG_PAGE_SAVED_ACK" });
+  }
+  sendTagFeatureSavedAck() {
+    this.sendMessage({ type: "TAG_FEATURE_SAVED_ACK" });
   }
   /**
    * Destroy editor frame
@@ -1172,6 +1267,10 @@ class M {
     .plus-icon:hover { border-color: #3b82f6; color: #3b82f6; background: #eff6ff; }
     .tag-feature-btn { width: 100%; padding: 12px 20px; background: #14b8a6; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Montserrat', inherit; margin-top: 24px; box-shadow: 0 2px 8px rgba(20,184,166,0.25); }
     .tag-feature-btn:hover { background: #0d9488; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(20,184,166,0.35); }
+    .overview-actions { display: flex; gap: 12px; margin-top: 24px; }
+    .overview-actions .tag-feature-btn { margin-top: 0; flex: 1; }
+    .clear-selection-btn { padding: 12px 20px; background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Montserrat', inherit; transition: all 0.2s; }
+    .clear-selection-btn:hover { background: #e2e8f0; color: #0f172a; }
     .view { display: none; }
     .view.active { display: flex; flex-direction: column; min-height: 100%; }
     .selector-form .form-group { margin-bottom: 16px; }
@@ -1241,7 +1340,10 @@ class M {
               <div class="plus-icon"><iconify-icon icon="mdi:plus"></iconify-icon></div>
             </div>
           </div>
-          <button class="tag-feature-btn" id="tagFeatureBtn">Tag Feature</button>
+          <div class="overview-actions">
+            <button class="tag-feature-btn" id="tagFeatureBtn">Tag Feature</button>
+            <button class="clear-selection-btn" id="overviewClearSelectionBtn">Clear Selection</button>
+          </div>
         </div>
       </div>
       <div id="selectorFormView" class="view" style="display: none;">
@@ -1274,8 +1376,34 @@ class M {
   </div>
   <script>
     function sendMessage(m) { window.parent.postMessage(m, '*'); }
+    var FEATURES_STORAGE_KEY = 'designerTaggedFeatures';
+    var HEATMAP_STORAGE_KEY = 'designerHeatmapEnabled';
     var currentSelector = '';
     var currentElementInfo = null;
+    function getCurrentUrl() {
+      try {
+        var p = window.parent.location;
+        return (p.host || p.hostname || '') + (p.pathname || '/') + (p.search || '') + (p.hash || '');
+      } catch (e) { return window.location.href || ''; }
+    }
+    function normalizeUrl(u) {
+      u = (u || '').replace(/^https?:\\/\\//i, '').replace(/\\/$/, '');
+      return u || '';
+    }
+    function getTaggedFeatures() {
+      try {
+        var raw = localStorage.getItem(FEATURES_STORAGE_KEY) || '[]';
+        return JSON.parse(raw);
+      } catch (e) { return []; }
+    }
+    function getFeaturesForCurrentUrl() {
+      var current = normalizeUrl(getCurrentUrl());
+      return getTaggedFeatures().filter(function(f) { return f && normalizeUrl(f.url) === current; });
+    }
+    function refreshTaggedCount() {
+      var count = getFeaturesForCurrentUrl().length;
+      document.getElementById('taggedCount').textContent = String(count);
+    }
     function showOverview() {
       document.getElementById('overviewView').style.display = 'block';
       document.getElementById('selectorFormView').style.display = 'none';
@@ -1285,10 +1413,14 @@ class M {
       document.getElementById('elementInfoGroup').style.display = 'none';
       document.getElementById('featureNameInput').value = '';
       document.getElementById('featureNameError').classList.remove('show');
+      refreshTaggedCount();
     }
     document.getElementById('minimizeBtn').addEventListener('click', function() { sendMessage({ type: 'CANCEL' }); });
     document.getElementById('tagFeatureBtn').addEventListener('click', function() {
       sendMessage({ type: 'TAG_FEATURE_CLICKED' });
+    });
+    document.getElementById('overviewClearSelectionBtn').addEventListener('click', function() {
+      sendMessage({ type: 'CLEAR_SELECTION_CLICKED' });
     });
     document.getElementById('clearSelectionBtn').addEventListener('click', function() {
       sendMessage({ type: 'CLEAR_SELECTION_CLICKED' });
@@ -1303,7 +1435,12 @@ class M {
         if (panel) panel.classList.add('active');
       });
     });
-    document.getElementById('heatmapToggle').addEventListener('click', function() { this.classList.toggle('active'); });
+    document.getElementById('heatmapToggle').addEventListener('click', function() {
+      this.classList.toggle('active');
+      var enabled = this.classList.contains('active');
+      try { localStorage.setItem(HEATMAP_STORAGE_KEY, String(enabled)); } catch (e) {}
+      sendMessage({ type: 'HEATMAP_TOGGLE', enabled: enabled });
+    });
     document.getElementById('backFromForm').addEventListener('click', function() { showOverview(); });
     document.getElementById('formCancelBtn').addEventListener('click', function() { showOverview(); });
     document.getElementById('formSaveBtn').addEventListener('click', function() {
@@ -1347,8 +1484,17 @@ class M {
       if (d.type === 'CLEAR_SELECTION_ACK') {
         showOverview();
       }
+      if (d.type === 'TAG_FEATURE_SAVED_ACK') {
+        showOverview();
+      }
     });
-    window.addEventListener('load', function() { sendMessage({ type: 'EDITOR_READY' }); });
+    window.addEventListener('load', function() {
+      refreshTaggedCount();
+      var heatmapEnabled = localStorage.getItem(HEATMAP_STORAGE_KEY) === 'true';
+      var toggleEl = document.getElementById('heatmapToggle');
+      if (heatmapEnabled && toggleEl) toggleEl.classList.add('active');
+      sendMessage({ type: 'EDITOR_READY' });
+    });
   <\/script>
 </body>
 </html>`;
@@ -1407,9 +1553,9 @@ class M {
     this.dragHandle.style.top = `${e.top}px`, this.dragHandle.style.left = `${e.left}px`, this.dragHandle.style.width = `${e.width}px`;
   }
 }
-const D = "visual-designer-guides", y = "1.0.0";
-class A {
-  constructor(e = D) {
+const O = "visual-designer-guides", E = "1.0.0";
+class z {
+  constructor(e = O) {
     this.storageKey = e;
   }
   /**
@@ -1421,7 +1567,7 @@ class A {
       if (!e)
         return [];
       const t = JSON.parse(e);
-      return t.version !== y ? (console.warn("Storage version mismatch, clearing old data"), this.clear(), []) : t.guides || [];
+      return t.version !== E ? (console.warn("Storage version mismatch, clearing old data"), this.clear(), []) : t.guides || [];
     } catch (e) {
       return console.error("Error reading guides from storage:", e), [];
     }
@@ -1464,7 +1610,7 @@ class A {
   saveGuides(e) {
     const t = {
       guides: e,
-      version: y
+      version: E
     };
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(t));
@@ -1489,9 +1635,9 @@ class A {
     return this.getGuides().find((i) => i.id === e) || null;
   }
 }
-class x {
+class w {
   constructor(e = {}) {
-    this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.loadingOverlay = null, this.config = e, this.storage = new A(e.storageKey), this.editorMode = new T(), this.guideRenderer = new L(), this.editorFrame = new M();
+    this.heatmapEnabled = !1, this.isInitialized = !1, this.isEditorMode = !1, this.exitEditorButton = null, this.redBorderOverlay = null, this.studioBadge = null, this.loadingOverlay = null, this.config = e, this.storage = new z(e.storageKey), this.editorMode = new L(), this.guideRenderer = new M(), this.featureHeatmapRenderer = new A(), this.editorFrame = new D();
   }
   /**
    * Initialize the SDK
@@ -1503,7 +1649,7 @@ class x {
     }
     this.isInitialized = !0, this.injectMontserratFont(), this.injectIconifyScript();
     const e = this.shouldEnableEditorMode();
-    console.log("[Visual Designer] init() called"), console.log("[Visual Designer] shouldEnableEditor:", e), console.log("[Visual Designer] localStorage designerMode:", localStorage.getItem("designerMode")), console.log("[Visual Designer] localStorage designerModeType:", localStorage.getItem("designerModeType")), console.log("[Visual Designer] __visualDesignerWasLaunched:", typeof window < "u" ? window.__visualDesignerWasLaunched : "N/A"), e ? (console.log("[Visual Designer] Enabling editor..."), this.showLoadingOverlay(), this.enableEditor()) : (console.log("[Visual Designer] Not enabling editor, loading guides instead"), this.loadGuides()), this.setupEventListeners();
+    console.log("[Visual Designer] init() called"), console.log("[Visual Designer] shouldEnableEditor:", e), console.log("[Visual Designer] localStorage designerMode:", localStorage.getItem("designerMode")), console.log("[Visual Designer] localStorage designerModeType:", localStorage.getItem("designerModeType")), console.log("[Visual Designer] __visualDesignerWasLaunched:", typeof window < "u" ? window.__visualDesignerWasLaunched : "N/A"), e ? (console.log("[Visual Designer] Enabling editor..."), this.showLoadingOverlay(), this.enableEditor()) : (console.log("[Visual Designer] Not enabling editor, loading guides instead"), this.loadGuides()), this.heatmapEnabled = localStorage.getItem("designerHeatmapEnabled") === "true", this.renderFeatureHeatmap(), this.setupEventListeners();
   }
   /**
    * Enable editor mode
@@ -1525,7 +1671,7 @@ class x {
    * Disable editor mode
    */
   disableEditor() {
-    this.isEditorMode && (window.close(), this.isEditorMode = !1, this.editorMode.deactivate(), this.editorFrame.destroy(), this.removeExitEditorButton(), this.removeRedBorderOverlay(), this.removeStudioBadge(), localStorage.removeItem("designerMode"), localStorage.removeItem("designerModeType"), this.hideLoadingOverlay(), this.loadGuides());
+    this.isEditorMode && (window.close(), this.isEditorMode = !1, this.editorMode.deactivate(), this.editorFrame.destroy(), this.removeExitEditorButton(), this.removeRedBorderOverlay(), this.removeStudioBadge(), this.featureHeatmapRenderer.destroy(), localStorage.removeItem("designerMode"), localStorage.removeItem("designerModeType"), this.hideLoadingOverlay(), this.loadGuides());
   }
   /**
    * Get all guides
@@ -1546,7 +1692,7 @@ class x {
   saveGuide(e) {
     const t = {
       ...e,
-      id: S(),
+      id: y(),
       createdAt: (/* @__PURE__ */ new Date()).toISOString(),
       updatedAt: (/* @__PURE__ */ new Date()).toISOString()
     };
@@ -1597,6 +1743,9 @@ class x {
       case "SAVE_TAG_FEATURE":
         this.handleSaveTagFeature(e);
         break;
+      case "HEATMAP_TOGGLE":
+        this.handleHeatmapToggle(e.enabled);
+        break;
       case "CANCEL":
         this.handleCancel();
         break;
@@ -1644,10 +1793,57 @@ class x {
     this.editorFrame.sendTagPageSavedAck();
   }
   /**
-   * Handle save tag feature (from overview form or from element selection)
+   * Handle save tag feature – persist to localStorage like tag pages
    */
   handleSaveTagFeature(e) {
-    console.log("[Visual Designer] Tag feature saved:", e.payload), this.editorFrame.hide();
+    console.log("[Visual Designer] Tag feature saved:", e.payload);
+    const t = "designerTaggedFeatures", i = e.payload;
+    if (!i.selector || !i.featureName) {
+      console.warn("[Visual Designer] Tag feature missing selector or featureName");
+      return;
+    }
+    try {
+      const n = localStorage.getItem(t) || "[]", r = JSON.parse(n), o = typeof window < "u" ? window.location.href : "", s = {
+        id: y(),
+        featureName: i.featureName,
+        selector: i.selector,
+        url: o,
+        elementInfo: i.elementInfo,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString()
+      };
+      r.push(s), localStorage.setItem(t, JSON.stringify(r)), this.editorFrame.sendTagFeatureSavedAck(), this.renderFeatureHeatmap();
+    } catch (n) {
+      console.warn("[Visual Designer] Failed to persist tagged feature:", n);
+    }
+  }
+  /**
+   * Handle heatmap toggle – show/hide feature overlays
+   */
+  handleHeatmapToggle(e) {
+    this.heatmapEnabled = e;
+    try {
+      localStorage.setItem("designerHeatmapEnabled", String(e));
+    } catch {
+    }
+    this.renderFeatureHeatmap();
+  }
+  /**
+   * Get tagged features from localStorage
+   */
+  getTaggedFeatures() {
+    try {
+      const e = localStorage.getItem("designerTaggedFeatures") || "[]";
+      return JSON.parse(e);
+    } catch {
+      return [];
+    }
+  }
+  /**
+   * Render feature heatmap overlays
+   */
+  renderFeatureHeatmap() {
+    const e = this.getTaggedFeatures();
+    this.featureHeatmapRenderer.render(e, this.heatmapEnabled);
   }
   /**
    * Handle cancel
@@ -1662,18 +1858,25 @@ class x {
     this.disableEditor();
   }
   /**
-   * Set up event listeners for guide positioning
+   * Set up event listeners for guide positioning and feature heatmap
    */
   setupEventListeners() {
     let e, t;
     const i = () => {
-      const n = this.storage.getGuides();
-      this.guideRenderer.updatePositions(n);
+      const r = this.storage.getGuides();
+      this.guideRenderer.updatePositions(r);
+    }, n = () => {
+      const r = this.getTaggedFeatures();
+      this.featureHeatmapRenderer.updatePositions(r);
     };
     window.addEventListener("resize", () => {
-      clearTimeout(e), e = window.setTimeout(i, 100);
+      clearTimeout(e), e = window.setTimeout(() => {
+        i(), n();
+      }, 100);
     }), window.addEventListener("scroll", () => {
-      clearTimeout(t), t = window.setTimeout(i, 50);
+      clearTimeout(t), t = window.setTimeout(() => {
+        i(), n();
+      }, 50);
     }, !0);
   }
   /**
@@ -1874,15 +2077,15 @@ class x {
     this.loadingOverlay && (this.loadingOverlay.remove(), this.loadingOverlay = null);
   }
 }
-let s = null, E = !1;
-function u(o) {
-  return s || (s = new x(o), s.init(), s);
+let d = null, S = !1;
+function u(a) {
+  return d || (d = new w(a), d.init(), d);
 }
-function w() {
-  return s;
+function k() {
+  return d;
 }
-function k(o) {
-  !o || !Array.isArray(o) || o.forEach((e) => {
+function C(a) {
+  !a || !Array.isArray(a) || a.forEach((e) => {
     if (!e || !Array.isArray(e) || e.length === 0)
       return;
     const t = e[0], i = e.slice(1);
@@ -1899,20 +2102,20 @@ function k(o) {
           break;
         }
         case "enableEditor": {
-          (s ?? u()).enableEditor();
+          (d ?? u()).enableEditor();
           break;
         }
         case "disableEditor": {
-          s && s.disableEditor();
+          d && d.disableEditor();
           break;
         }
         case "loadGuides": {
-          s && s.loadGuides();
+          d && d.loadGuides();
           break;
         }
         case "getGuides": {
-          if (s)
-            return s.getGuides();
+          if (d)
+            return d.getGuides();
           break;
         }
         default:
@@ -1924,18 +2127,18 @@ function k(o) {
   });
 }
 if (typeof window < "u") {
-  const o = window.visualDesigner;
-  o && Array.isArray(o._q) && (E = !0, o.initialize = (e) => {
+  const a = window.visualDesigner;
+  a && Array.isArray(a._q) && (S = !0, a.initialize = (e) => {
     u(e);
-  }, o.identify = (e) => {
+  }, a.identify = (e) => {
     e && console.log("[Visual Designer] identify (snippet) called with:", e);
-  }, o.enableEditor = () => {
-    (s ?? u()).enableEditor();
-  }, o.disableEditor = () => {
-    s && s.disableEditor();
-  }, o.loadGuides = () => {
-    s && s.loadGuides();
-  }, o.getGuides = () => s ? s.getGuides() : void 0, o.getInstance = w, o.init = u, k(o._q));
+  }, a.enableEditor = () => {
+    (d ?? u()).enableEditor();
+  }, a.disableEditor = () => {
+    d && d.disableEditor();
+  }, a.loadGuides = () => {
+    d && d.loadGuides();
+  }, a.getGuides = () => d ? d.getGuides() : void 0, a.getInstance = k, a.init = u, C(a._q));
   try {
     const e = new URL(window.location.href), t = e.searchParams.get("designer"), i = e.searchParams.get("mode");
     if (t === "true") {
@@ -1946,22 +2149,22 @@ if (typeof window < "u") {
   } catch {
   }
 }
-if (typeof window < "u" && !s && !E) {
-  const o = () => {
-    s || u();
+if (typeof window < "u" && !d && !S) {
+  const a = () => {
+    d || u();
   };
-  document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", o) : o();
+  document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", a) : a();
 }
 typeof window < "u" && (window.VisualDesigner = {
   init: u,
   initialize: u,
-  getInstance: w,
-  DesignerSDK: x,
-  _processQueue: k
+  getInstance: k,
+  DesignerSDK: w,
+  _processQueue: C
 });
 export {
-  x as DesignerSDK,
-  k as _processQueue,
-  w as getInstance,
+  w as DesignerSDK,
+  C as _processQueue,
+  k as getInstance,
   u as init
 };

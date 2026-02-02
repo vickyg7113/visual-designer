@@ -140,6 +140,10 @@ export class EditorFrame {
     this.sendMessage({ type: 'TAG_PAGE_SAVED_ACK' });
   }
 
+  sendTagFeatureSavedAck(): void {
+    this.sendMessage({ type: 'TAG_FEATURE_SAVED_ACK' });
+  }
+
   /**
    * Destroy editor frame
    */
@@ -796,6 +800,10 @@ export class EditorFrame {
     .plus-icon:hover { border-color: #3b82f6; color: #3b82f6; background: #eff6ff; }
     .tag-feature-btn { width: 100%; padding: 12px 20px; background: #14b8a6; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Montserrat', inherit; margin-top: 24px; box-shadow: 0 2px 8px rgba(20,184,166,0.25); }
     .tag-feature-btn:hover { background: #0d9488; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(20,184,166,0.35); }
+    .overview-actions { display: flex; gap: 12px; margin-top: 24px; }
+    .overview-actions .tag-feature-btn { margin-top: 0; flex: 1; }
+    .clear-selection-btn { padding: 12px 20px; background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Montserrat', inherit; transition: all 0.2s; }
+    .clear-selection-btn:hover { background: #e2e8f0; color: #0f172a; }
     .view { display: none; }
     .view.active { display: flex; flex-direction: column; min-height: 100%; }
     .selector-form .form-group { margin-bottom: 16px; }
@@ -865,7 +873,10 @@ export class EditorFrame {
               <div class="plus-icon"><iconify-icon icon="mdi:plus"></iconify-icon></div>
             </div>
           </div>
-          <button class="tag-feature-btn" id="tagFeatureBtn">Tag Feature</button>
+          <div class="overview-actions">
+            <button class="tag-feature-btn" id="tagFeatureBtn">Tag Feature</button>
+            <button class="clear-selection-btn" id="overviewClearSelectionBtn">Clear Selection</button>
+          </div>
         </div>
       </div>
       <div id="selectorFormView" class="view" style="display: none;">
@@ -898,8 +909,34 @@ export class EditorFrame {
   </div>
   <script>
     function sendMessage(m) { window.parent.postMessage(m, '*'); }
+    var FEATURES_STORAGE_KEY = 'designerTaggedFeatures';
+    var HEATMAP_STORAGE_KEY = 'designerHeatmapEnabled';
     var currentSelector = '';
     var currentElementInfo = null;
+    function getCurrentUrl() {
+      try {
+        var p = window.parent.location;
+        return (p.host || p.hostname || '') + (p.pathname || '/') + (p.search || '') + (p.hash || '');
+      } catch (e) { return window.location.href || ''; }
+    }
+    function normalizeUrl(u) {
+      u = (u || '').replace(/^https?:\\/\\//i, '').replace(/\\/$/, '');
+      return u || '';
+    }
+    function getTaggedFeatures() {
+      try {
+        var raw = localStorage.getItem(FEATURES_STORAGE_KEY) || '[]';
+        return JSON.parse(raw);
+      } catch (e) { return []; }
+    }
+    function getFeaturesForCurrentUrl() {
+      var current = normalizeUrl(getCurrentUrl());
+      return getTaggedFeatures().filter(function(f) { return f && normalizeUrl(f.url) === current; });
+    }
+    function refreshTaggedCount() {
+      var count = getFeaturesForCurrentUrl().length;
+      document.getElementById('taggedCount').textContent = String(count);
+    }
     function showOverview() {
       document.getElementById('overviewView').style.display = 'block';
       document.getElementById('selectorFormView').style.display = 'none';
@@ -909,10 +946,14 @@ export class EditorFrame {
       document.getElementById('elementInfoGroup').style.display = 'none';
       document.getElementById('featureNameInput').value = '';
       document.getElementById('featureNameError').classList.remove('show');
+      refreshTaggedCount();
     }
     document.getElementById('minimizeBtn').addEventListener('click', function() { sendMessage({ type: 'CANCEL' }); });
     document.getElementById('tagFeatureBtn').addEventListener('click', function() {
       sendMessage({ type: 'TAG_FEATURE_CLICKED' });
+    });
+    document.getElementById('overviewClearSelectionBtn').addEventListener('click', function() {
+      sendMessage({ type: 'CLEAR_SELECTION_CLICKED' });
     });
     document.getElementById('clearSelectionBtn').addEventListener('click', function() {
       sendMessage({ type: 'CLEAR_SELECTION_CLICKED' });
@@ -927,7 +968,12 @@ export class EditorFrame {
         if (panel) panel.classList.add('active');
       });
     });
-    document.getElementById('heatmapToggle').addEventListener('click', function() { this.classList.toggle('active'); });
+    document.getElementById('heatmapToggle').addEventListener('click', function() {
+      this.classList.toggle('active');
+      var enabled = this.classList.contains('active');
+      try { localStorage.setItem(HEATMAP_STORAGE_KEY, String(enabled)); } catch (e) {}
+      sendMessage({ type: 'HEATMAP_TOGGLE', enabled: enabled });
+    });
     document.getElementById('backFromForm').addEventListener('click', function() { showOverview(); });
     document.getElementById('formCancelBtn').addEventListener('click', function() { showOverview(); });
     document.getElementById('formSaveBtn').addEventListener('click', function() {
@@ -971,8 +1017,17 @@ export class EditorFrame {
       if (d.type === 'CLEAR_SELECTION_ACK') {
         showOverview();
       }
+      if (d.type === 'TAG_FEATURE_SAVED_ACK') {
+        showOverview();
+      }
     });
-    window.addEventListener('load', function() { sendMessage({ type: 'EDITOR_READY' }); });
+    window.addEventListener('load', function() {
+      refreshTaggedCount();
+      var heatmapEnabled = localStorage.getItem(HEATMAP_STORAGE_KEY) === 'true';
+      var toggleEl = document.getElementById('heatmapToggle');
+      if (heatmapEnabled && toggleEl) toggleEl.classList.add('active');
+      sendMessage({ type: 'EDITOR_READY' });
+    });
   </script>
 </body>
 </html>`;
@@ -1196,12 +1251,8 @@ export class EditorFrame {
     }
 
     // Handle specific message types (hide editor on cancel or after save)
-    // SAVE_TAG_PAGE: do NOT hide - keep panel open so user can click "Tag Page" again to reopen form
-    if (
-      message.type === 'CANCEL' ||
-      message.type === 'GUIDE_SAVED' ||
-      message.type === 'SAVE_TAG_FEATURE'
-    ) {
+    // SAVE_TAG_PAGE / SAVE_TAG_FEATURE: do NOT hide - keep panel open so user can tag more
+    if (message.type === 'CANCEL' || message.type === 'GUIDE_SAVED') {
       this.hide();
     }
   };

@@ -77,6 +77,16 @@ export interface TagFeaturePayload {
   elementInfo?: ElementInfo;
 }
 
+/** Tagged feature stored in localStorage */
+export interface TaggedFeature {
+  id: string;
+  featureName: string;
+  selector: string;
+  url: string;
+  elementInfo?: ElementInfo;
+  createdAt: string;
+}
+
 /**
  * Editor message types
  */
@@ -92,7 +102,9 @@ export type EditorMessageType =
   | 'CANCEL'
   | 'EDITOR_READY'
   | 'GUIDE_SAVED'
-  | 'EXIT_EDITOR_MODE';
+  | 'EXIT_EDITOR_MODE'
+  | 'HEATMAP_TOGGLE'
+  | 'TAG_FEATURE_SAVED_ACK';
 
 /**
  * Messages sent from SDK to Editor iframe
@@ -148,6 +160,15 @@ export interface TagPageSavedAckMessage {
   type: 'TAG_PAGE_SAVED_ACK';
 }
 
+export interface HeatmapToggleMessage {
+  type: 'HEATMAP_TOGGLE';
+  enabled: boolean;
+}
+
+export interface TagFeatureSavedAckMessage {
+  type: 'TAG_FEATURE_SAVED_ACK';
+}
+
 export interface SaveTagPageMessage {
   type: 'SAVE_TAG_PAGE';
   payload: TagPagePayload;
@@ -171,6 +192,8 @@ export type EditorMessage =
   | ClearSelectionClickMessage
   | ClearSelectionAckMessage
   | TagPageSavedAckMessage
+  | TagFeatureSavedAckMessage
+  | HeatmapToggleMessage
   | CancelMessage
   | EditorReadyMessage
   | GuideSavedMessage

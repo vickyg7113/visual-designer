@@ -1,5 +1,6 @@
 import { EditorMode } from './EditorMode';
 import { GuideRenderer } from './GuideRenderer';
+import { FeatureHeatmapRenderer } from './FeatureHeatmapRenderer';
 import { EditorFrame } from '../editor/EditorFrame';
 import { Storage } from '../utils/storage';
 import { getCurrentPage, generateId } from '../utils/dom';
@@ -11,6 +12,8 @@ import {
   SaveTagPageMessage,
   SaveTagFeatureMessage,
   ElementSelectedMessage,
+  TaggedFeature,
+  HeatmapToggleMessage,
 } from '../types';
 
 /**
@@ -21,7 +24,9 @@ export class DesignerSDK {
   private storage: Storage;
   private editorMode: EditorMode;
   private guideRenderer: GuideRenderer;
+  private featureHeatmapRenderer: FeatureHeatmapRenderer;
   private editorFrame: EditorFrame;
+  private heatmapEnabled: boolean = false;
   private isInitialized: boolean = false;
   private isEditorMode: boolean = false;
   private exitEditorButton: HTMLElement | null = null;
@@ -34,6 +39,7 @@ export class DesignerSDK {
     this.storage = new Storage(config.storageKey);
     this.editorMode = new EditorMode();
     this.guideRenderer = new GuideRenderer();
+    this.featureHeatmapRenderer = new FeatureHeatmapRenderer();
     this.editorFrame = new EditorFrame();
   }
 
@@ -74,6 +80,11 @@ export class DesignerSDK {
       // Load and render guides for end users
       this.loadGuides();
     }
+
+    // Load heatmap state and render if enabled (for tag-feature mode)
+    this.heatmapEnabled =
+      localStorage.getItem('designerHeatmapEnabled') === 'true';
+    this.renderFeatureHeatmap();
 
     // Set up scroll/resize listeners for guide positioning
     this.setupEventListeners();
@@ -154,6 +165,9 @@ export class DesignerSDK {
     
     // Remove studio badge
     this.removeStudioBadge();
+
+    // Destroy feature heatmap
+    this.featureHeatmapRenderer.destroy();
     
     // Remove editor mode and mode type from localStorage
     localStorage.removeItem('designerMode');
@@ -287,6 +301,10 @@ export class DesignerSDK {
         this.handleSaveTagFeature(message);
         break;
 
+      case 'HEATMAP_TOGGLE':
+        this.handleHeatmapToggle((message as HeatmapToggleMessage).enabled);
+        break;
+
       case 'CANCEL':
         this.handleCancel();
         break;
@@ -347,11 +365,69 @@ export class DesignerSDK {
   }
 
   /**
-   * Handle save tag feature (from overview form or from element selection)
+   * Handle save tag feature – persist to localStorage like tag pages
    */
   private handleSaveTagFeature(message: SaveTagFeatureMessage): void {
     console.log('[Visual Designer] Tag feature saved:', message.payload);
-    this.editorFrame.hide();
+    const key = 'designerTaggedFeatures';
+    const payload = message.payload;
+    if (!payload.selector || !payload.featureName) {
+      console.warn('[Visual Designer] Tag feature missing selector or featureName');
+      return;
+    }
+    try {
+      const raw = localStorage.getItem(key) || '[]';
+      const list: TaggedFeature[] = JSON.parse(raw);
+      const currentUrl =
+        typeof window !== 'undefined' ? window.location.href : '';
+      const feature: TaggedFeature = {
+        id: generateId(),
+        featureName: payload.featureName,
+        selector: payload.selector,
+        url: currentUrl,
+        elementInfo: payload.elementInfo,
+        createdAt: new Date().toISOString(),
+      };
+      list.push(feature);
+      localStorage.setItem(key, JSON.stringify(list));
+      this.editorFrame.sendTagFeatureSavedAck();
+      this.renderFeatureHeatmap();
+    } catch (e) {
+      console.warn('[Visual Designer] Failed to persist tagged feature:', e);
+    }
+  }
+
+  /**
+   * Handle heatmap toggle – show/hide feature overlays
+   */
+  private handleHeatmapToggle(enabled: boolean): void {
+    this.heatmapEnabled = enabled;
+    try {
+      localStorage.setItem('designerHeatmapEnabled', String(enabled));
+    } catch {
+      // ignore
+    }
+    this.renderFeatureHeatmap();
+  }
+
+  /**
+   * Get tagged features from localStorage
+   */
+  private getTaggedFeatures(): TaggedFeature[] {
+    try {
+      const raw = localStorage.getItem('designerTaggedFeatures') || '[]';
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+
+  /**
+   * Render feature heatmap overlays
+   */
+  private renderFeatureHeatmap(): void {
+    const features = this.getTaggedFeatures();
+    this.featureHeatmapRenderer.render(features, this.heatmapEnabled);
   }
 
   /**
@@ -371,7 +447,7 @@ export class DesignerSDK {
   }
 
   /**
-   * Set up event listeners for guide positioning
+   * Set up event listeners for guide positioning and feature heatmap
    */
   private setupEventListeners(): void {
     let resizeTimeout: number;
@@ -382,14 +458,25 @@ export class DesignerSDK {
       this.guideRenderer.updatePositions(guides);
     };
 
+    const updateHeatmap = () => {
+      const features = this.getTaggedFeatures();
+      this.featureHeatmapRenderer.updatePositions(features);
+    };
+
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimeout);
-      resizeTimeout = window.setTimeout(updateGuides, 100);
+      resizeTimeout = window.setTimeout(() => {
+        updateGuides();
+        updateHeatmap();
+      }, 100);
     });
 
     window.addEventListener('scroll', () => {
       clearTimeout(scrollTimeout);
-      scrollTimeout = window.setTimeout(updateGuides, 50);
+      scrollTimeout = window.setTimeout(() => {
+        updateGuides();
+        updateHeatmap();
+      }, 50);
     }, true);
   }
 
